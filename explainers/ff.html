@@ -1,0 +1,285 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Fill-Factor Limit</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="The Fill-Factor Limit: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1038/s41566-026-01946-8">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Nature Photonics 2026</span>
+  <h1>Why organic solar cells hit a fill-factor ceiling, and how to get past it</h1>
+  <p class="dek">Making a solar cell waste less voltage seemed to cost it fill factor. We traced that trade-off to a single step, the moment an exciton becomes a charge pair, and to the electric field inside the device.</p>
+  <p class="cite">H. Zhang, J. Yuan, T. Wang, … D. Neher, T. Kirchartz, F. Gao. <i>Overcoming the fill-factor limit of organic solar cells.</i> Nature Photonics 20, 1040–1047 (2026). <a href="https://doi.org/10.1038/s41566-026-01946-8">doi:10.1038/s41566-026-01946-8</a></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE NUMBER</span><h2>Fill factor: how square is the curve?</h2>
+      <p>Sweep the voltage across a solar cell under light and the current stays almost constant, then collapses near the open-circuit voltage V<sub>oc</sub>. The fill factor is the area of the largest power rectangle that fits under the curve, divided by the area of the outer box.</p>
+      <div class="eq">FF = P<sub>max</sub> / (J<sub>sc</sub> · V<sub>oc</sub>)</div>
+      <p>A perfectly square curve would give FF = 1. The best silicon cells sit near 0.85. Organic cells are all over the place, from below 0.3 to about 0.8.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · THE PATTERN</span><h2>A border nobody could explain</h2>
+      <p>We plotted fill factor against voltage loss, the gap between the optical gap and V<sub>oc</sub>, for a large set of organic cells. Two things stand out. The best achievable FF rises as voltage loss falls, as theory for an ideal diode predicts. But at the smallest losses there is a sharp edge: FF drops steeply, forming a "left border".</p>
+      <p>That border is the trade-off. Push voltage loss down and fill factor falls off a cliff.</p>
+      <p class="note">Points in the drawing are schematic, after Fig. 1b of the paper.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · THE USUAL SUSPECTS</span><h2>Slow charges and recombination are not enough</h2>
+      <p>The textbook explanation for a low FF is transport: charges move too slowly and recombine before they are collected. That picture reproduces the upper envelope, but not the border.</p>
+      <p>For one blend, PTO2:Y1, transport and recombination alone predict FF = 0.58. The measured value is 0.27. Time-delayed collection-field experiments show the missing piece: the number of free charges <em>generated</em> depends on the applied voltage, and it falls as the cell approaches V<sub>oc</sub>.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · WHERE CHARGES ARE BORN</span><h2>From exciton to charge pair</h2>
+      <p>Light does not create free charges directly in an organic semiconductor. It creates an exciton, a tightly bound electron–hole pair, here in the acceptor. The exciton wanders until it meets the donor, where the hole hops across and leaves a charge-transfer (CT) state: electron and hole on neighbouring molecules, still attracted.</p>
+      <p>The energy step from exciton to CT state is the offset ΔE. A large offset makes the hop easy but throws away voltage. Modern low-loss blends have offsets of only a few tens of meV.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · THE FIELD TILTS THE LADDER</span><h2>The electric field moves the CT energy</h2>
+      <p>A CT state is a dipole about 3.5 nm long. Inside a working cell the field is roughly 10<sup>5</sup> V cm<sup>−1</sup> (1 V across 100 nm). The energy of a dipole in a field shifts by</p>
+      <div class="eq">ΔE ≈ −Δμ · F  ≈ 3.5 nm × 10⁵ V cm⁻¹ ≈ 35 meV</div>
+      <p>That is as large as the thermal energy k<sub>B</sub>T and as large as the offset itself. Interfaces facing one way have their CT energy pushed down and become easy doors; interfaces facing the other way are pushed up and close. Electroabsorption spectra confirm the first-order (dipole) Stark effect dominates; the second-order term is a thousand times smaller.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · LOSING THE FIELD</span><h2>Near V<sub>oc</sub>, the doors close</h2>
+      <p>At short circuit the internal field is strong, and an exciton finds a favourable interface easily. As the voltage approaches V<sub>oc</sub>, the field fades, the helpful energy shift disappears, and the small offset alone is not enough. Fewer excitons become charges, the current sags early, and the J–V curve rounds off.</p>
+      <p>Bias-dependent photoluminescence shows the same thing directly: excitons are quenched less as the field drops. This is field-dependent free-charge generation, and it gets worse the smaller the offset, which is exactly the left border.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · A RACE AGAINST THE CLOCK</span><h2>Exciton lifetime decides who wins</h2>
+      <p>Every exciton is racing two clocks: finding a good interface, or decaying back to the ground state. When the field is weak, good interfaces are rarer, so the exciton needs more time to find one.</p>
+      <p>A longer exciton lifetime buys that time. In the simulation on the right, the same blend is shown with a short and then a long lifetime. Drift–diffusion modelling in the paper predicts that lifetimes above about 1 ns can lift FF above 82% even with minimal voltage loss.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · THE TEST</span><h2>A guest that lends time</h2>
+      <p>PM6:L8-BO has a long exciton lifetime (990 ps) and FF = 79.5%, with a voltage loss of 0.545 V. PM6:Y18-C3 loses less voltage (0.502 V) but its lifetime is shorter (690 ps) and FF drops to 68.8%.</p>
+      <p>Mixing the two acceptors 0.86 : 0.14 gives an exciton lifetime of 870 ps, FF = 81.1%, voltage loss 0.516 V, and 20.1% efficiency. Fill factor and voltage both improve, breaking the trade-off. Morphology barely changes, which points to exciton dynamics as the cause.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · THE BIGGER PICTURE</span><h2>Why the Y6 era jumped ahead</h2>
+      <p>Grouping published acceptors by era shows the same story. Y6-type acceptors after 2019 combine higher fill factors with lower voltage losses than ITIC-based ones (2015–2019) and older systems. They also have longer exciton lifetimes.</p>
+      <p>The design rule that follows is simple to state: when you shrink the energy offset to save voltage, give the exciton more time.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>A toy cell on your desk</h2>
+  <p class="intro">Move the sliders to change the exciton-to-CT offset and the exciton lifetime. The curve is a deliberately simple model built for intuition, not the paper's drift–diffusion simulation. Generation efficiency is η = k<sub>CT</sub>(F) / (k<sub>CT</sub>(F) + 1/τ), with the CT step helped by a field-induced shift of up to 35 meV at short circuit.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="J–V curve of a toy solar cell that responds to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="off"><span class="row">Energy offset ΔE (exciton → CT)<output id="offv">40 meV</output></span><input id="off" type="range" min="0" max="160" step="2" value="40"></label>
+      <label for="tau"><span class="row">Exciton lifetime τ<output id="tauv">700 ps</output></span><input id="tau" type="range" min="200" max="2000" step="20" value="700"></label>
+      <label for="fld"><span class="row">Stark shift at short circuit<output id="fldv">35 meV</output></span><input id="fld" type="range" min="0" max="60" step="1" value="35"></label>
+      <div class="read"><div><b id="rff">–</b><span>fill factor</span></div><div><b id="rvl">–</b><span>voltage loss (V)</span></div><div><b id="rpce">–</b><span>relative power</span></div></div>
+      <p class="note">Try this: set ΔE to 20 meV and τ to 400 ps, then slide τ up to 1500 ps. Then set the Stark shift to zero and watch the field-dependence vanish.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1038/s41566-026-01946-8">Read the full paper in Nature Photonics ↗</a>
+  <span class="note">Numbers quoted on this page (FF 0.58 vs 0.27 for PTO2:Y1; 990, 690 and 870 ps; FF 79.5%, 68.8%, 81.1%; 20.1% PCE; 35 meV Stark shift) are from the paper. Scatter points, era clouds and the lab model are schematic.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=140){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=a;ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,a));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=a;ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=a;ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)}
+};return g}
+
+// ---- shared J–V machinery (normalised units) ----
+function jvFF(J,Voc){let best=0;for(let v=0;v<=Voc;v+=Voc/400)best=Math.max(best,v*J(v));return best/(J(0)*Voc)}
+function vocOf(J,lo=0,hi=1.6){for(let i=0;i<60;i++){const m=(lo+hi)/2;J(m)>0?lo=m:hi=m}return(lo+hi)/2}
+
+// ---- toy model for lab and scene 6 ----
+function toy(offmeV,taups,starkmeV){
+  const Eg=1.40,kT=25.7,k0=1/40,Estar=60,vloss=0.47+offmeV/1000,Vt=Eg-vloss,n=1.25,Vbi=Vt+0.12;
+  const eta=V=>{const F=Math.max(0,(Vbi-V)/Vbi),d=starkmeV*F,k=k0/(1+Math.exp(-(offmeV+d-Estar)/kT));return k/(k+1/taups)};
+  const J=V=>eta(V)-eta(Vt)*Math.exp((V-Vt)/(n*0.0257));
+  const Voc=vocOf(J),FF=jvFF(J,Voc);return{J,eta,Voc,FF,vloss:Eg-Voc,P:FF*J(0)*Voc}
+}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+
+// precomputed curves for scene 2 (PTO2:Y1 predicted 0.58 vs measured 0.27)
+const P2=(()=>{const Voc=.8;const mk=s=>v=>1-Math.exp((v-Voc)/s);let lo=.01,hi=.6;for(let i=0;i<50;i++){const m=(lo+hi)/2;jvFF(mk(m),Voc)>.58?lo=m:hi=m}const pred=mk((lo+hi)/2);
+  // field-dependent generation: photocurrent falls roughly linearly as the internal field (Vb - V) shrinks
+  const meas=Vb=>v=>{const G=x=>.06+.94*Math.max(0,(Vb-x)/Vb);return G(v)-G(Voc)*Math.exp((v-Voc)/.04)};let a=Voc,b=1.0;for(let i=0;i<50;i++){const m=(a+b)/2;jvFF(meas(m),Voc)>.27?b=m:a=m}
+  const mJ=meas((a+b)/2),s=mJ(0);return{Voc,pred,meas:v=>mJ(v)/s,ffp:jvFF(pred,Voc),ffm:jvFF(v=>mJ(v)/s,Voc)}})();
+
+// morphology for scenes 4-6: two-phase field on a grid
+const MG=(()=>{const nx=48,ny=30,R=rng(21),ph=[];const waves=Array.from({length:6},()=>[R()*6+1,R()*6+1,R()*TAU,R()*TAU]);
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){let s=0;waves.forEach(([a,b,p,q])=>s+=Math.sin(i/nx*a*2+p)*Math.cos(j/ny*b*2+q));ph.push(s>0?1:0)}
+  const at=(i,j)=>ph[Math.max(0,Math.min(ny-1,j))*nx+Math.max(0,Math.min(nx-1,i))];
+  const segs=[];for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const a=at(i,j);if(i<nx-1&&at(i+1,j)!=a)segs.push({i:i+1,j,v:1,s:a?-1:1});if(j<ny-1&&at(i,j+1)!=a)segs.push({i,j:j+1,v:0,s:a?-1:1})}
+  return{nx,ny,ph,at,segs}})();
+const MX=40,MY=40,MW=520,MH=325,cw=MW/MG.nx,ch=MH/MG.ny;
+function drawMorph(alpha,F,showDoors){
+  for(let j=0;j<MG.ny;j++)for(let i=0;i<MG.nx;i++){const a=MG.ph[j*MG.nx+i];g.rect(MX+i*cw,MY+j*ch,cw+.5,ch+.5,a?C.blue:C.amber,a?.13*alpha:.10*alpha)}
+  MG.segs.forEach(s=>{ // acceptor(1)->donor(0) normal; field along +x (left to right) favours interfaces whose A->D direction is +x on vertical segments
+    let fav=0;if(s.v)fav=s.s;else fav=0; // horizontal interfaces are neutral to a horizontal field
+    const x0=MX+s.i*cw,y0=MY+s.j*ch,p=s.v?[[x0,y0],[x0,y0+ch]]:[[x0,y0],[x0+cw,y0]];
+    if(!showDoors||fav==0)g.line(p,C.ink,1,0,.18*alpha);else g.line(p,fav>0?C.green:C.red,2,8*F,alpha*(.25+.75*F))})}
+const exc=[];function resetExc(n){exc.length=0;const R=rng(5);for(let k=0;k<n;k++)spawnExc(R)}
+function spawnExc(R=Math.random){let i,j;do{i=Math.floor(R()*MG.nx);j=Math.floor(R()*MG.ny)}while(!MG.at(i,j));exc.push({x:i+.5,y:j+.5,age:0,life:0,st:'x',tt:0})}
+let tally={c:0,d:0};
+function stepExc(dt,tauScale,F){ // random walk inside acceptor; vertical green interfaces convert; ages out after lifetime
+  for(const e of exc){if(e.st!='x'){e.tt+=dt;continue}e.age+=dt;for(let k=0;k<3;k++){const ang=Math.random()*TAU,nx=e.x+Math.cos(ang)*.35,ny=e.y+Math.sin(ang)*.35,i=Math.floor(nx),j=Math.floor(ny);
+      if(i<0||j<0||i>=MG.nx||j>=MG.ny)continue;if(MG.at(i,j)){e.x=nx;e.y=ny}else{const fav=(i!=Math.floor(e.x))?((i>Math.floor(e.x))?1:-1):0; // crossed vertical boundary going +x => A->D along +x => favourable
+        const pFav=fav>0?(.15+.8*F):fav<0?.02:(.06+.1*F);if(Math.random()<pFav*.35){e.st='c';e.tt=0;e.cx=e.x;e.cy=e.y;tally.c++;break}}}
+    if(e.st=='x'&&e.age>tauScale){e.st='d';e.tt=0;tally.d++}}
+  for(let k=exc.length-1;k>=0;k--)if(exc[k].st!='x'&&exc[k].tt>1.2){exc.splice(k,1);spawnExc()}}
+function drawExc(alpha){for(const e of exc){const x=MX+e.x*cw,y=MY+e.y*ch;
+  if(e.st=='x')g.dot(x,y,4,'#fff',alpha,14);
+  else if(e.st=='c'){const q=ss(e.tt/1.2);g.dot(x-q*22,y-q*6,3.2,C.amber,alpha*(1-q*.5),10);g.dot(x+q*22,y+q*6,3.2,C.blue,alpha*(1-q*.5),10)}
+  else{const q=e.tt/1.2;g.ring(x,y,4+q*16,C.violet,1.4,alpha*(1-q),8)}}}
+resetExc(26);
+
+const SC=[
+ // 0 FF definition
+ (t,a)=>{const X=v=>90+v*520/1.0*.82,Y=j=>390-j*300,Voc=.86,J=v=>1-Math.exp((v-Voc)/.035);g.axes(90,390,560,60);
+  const p=(t%7)/7,v=Math.min(Voc,ss(p/.75)*Voc);let mv=0;for(let q=0;q<=Voc;q+=.002)if(q*J(q)>mv*J(mv))mv=q;
+  g.line([[X(0),Y(1)],[X(Voc),Y(1)],[X(Voc),Y(0)]],C.ink,1.2,0,.35*a,[5,5]);const pm=Math.min(v,mv);g.rect(X(0),Y(J(pm)),X(pm)-X(0),Y(0)-Y(J(pm)),C.blue,(.14+.14*(v>=mv))*a);
+  g.fn(x=>Y(J((x-90)/(520*.82))),90,X(v),C.blue,3,16,a);g.dot(X(v),Y(J(v)),5,'#fff',a,16);
+  g.text('Jsc',96,Y(1)-10,'left',.8*a);g.text('Voc',X(Voc),412,'center',.8*a);g.text('voltage →',560,432,'right',.5*a);g.text('current',96,52,'left',.5*a);
+  if(v>=mv){g.text('FF = '+jvFF(J,Voc).toFixed(2),X(mv)/2+45,Y(.5),'center',.9*a,18)}},
+ // 1 FF vs voltage loss scatter with left border
+ (t,a)=>{const X=x=>90+(x-.4)/(.5)*460,Y=f=>390-(f-.2)/(.7)*320;g.axes(90,390,560,60);
+  const env=x=>Math.min(.86-.32*(x-.45),.20+3.8*(x-.42));const R=rng(4);
+  for(let k=0;k<110;k++){const x=.44+R()*.44,top=env(x),f=Math.max(.24,top-Math.pow(R(),1.8)*.42);g.dot(X(x),Y(f),3,C.ink,.45*a)}
+  g.fn(x=>Y(.86-.32*(x-.45)),X(.5),X(.9),C.blue,2,10,.8*a,[6,5]);const pulse=.6+.4*Math.sin(t*2.4);
+  g.fn(x=>Y(.20+3.8*((x-90)/460*.5+.4-.42)),X(.44),X(.582),C.red,3,18*pulse,a);
+  g.text('left border',X(.47),Y(.9),'left',.9*a,15,C.red);g.text('ideal-diode limit',X(.88),Y(.62),'right',.7*a,13,C.blue);
+  [0.4,0.5,0.6,0.7,0.8,0.9].forEach(x=>g.text(x.toFixed(1),X(x),410,'center',.5*a,12));[.3,.5,.7,.9].forEach(f=>g.text(f.toFixed(1),80,Y(f)+4,'right',.5*a,12));
+  g.text('voltage loss Eg/q − Voc (V)',325,436,'center',.6*a,13);g.text('FF',70,58,'right',.7*a);g.text('schematic, after Fig. 1b',560,58,'right',.4*a,11)},
+ // 2 predicted vs measured
+ (t,a)=>{const X=v=>90+v/P2.Voc*440,Y=j=>390-j*300;g.axes(90,390,560,60);const p=ss(((t%9)/9)/.35);
+  g.fn(x=>Y(P2.pred((x-90)/440*P2.Voc)),90,X(P2.Voc),C.ink,2,0,.55*a,[6,5]);
+  g.fn(x=>Y(Math.max(0,P2.meas((x-90)/440*P2.Voc))),90,90+440*p,C.amber,3,16,a);
+  g.text('transport + recombination only: FF '+P2.ffp.toFixed(2),X(.02),Y(1.06),'left',.7*a,14);
+  g.text('measured: FF '+P2.ffm.toFixed(2),X(.08),Y(.30),'left',.9*a,15,C.amber);g.text('PTO2:Y1',560,80,'right',.6*a);
+  g.text('generation falls as the field weakens',X(.30),Y(.78),'left',.6*a*p,13);g.text('voltage →',560,432,'right',.5*a)},
+ // 3 exciton -> CT -> CS energy ladder + blend cartoon
+ (t,a)=>{drawMorph(a*.9,0,false);const p=(t%6)/6;
+  const lx=380,ly=[110,150,200];g.rect(330,70,240,200,'#0b0e14',.85*a);
+  g.line([[350,ly[0]],[420,ly[0]]],'#fff',3,12,a);g.text('exciton (LE)',430,ly[0]+5,'left',.85*a,13);
+  g.line([[350,ly[1]],[420,ly[1]]],C.violet,3,12,a);g.text('CT state',430,ly[1]+5,'left',.85*a,13);
+  g.line([[350,ly[2]+40],[420,ly[2]+40]],C.green,3,12,a);g.text('free charges',430,ly[2]+45,'left',.85*a,13);
+  g.line([[360,ly[0]],[360,ly[1]]],C.amber,1.5,0,.9*a);g.text('ΔE',356,(ly[0]+ly[1])/2+4,'right',.9*a,13,C.amber);
+  const st=p<.33?0:p<.66?1:2,q=[ly[0],ly[1],ly[2]+40][st];g.dot(395,q,5,'#fff',a,16);
+  const ex=MX+ (8+20*ss(Math.min(1,p*1.6)))*cw,ey=MY+14*ch;g.dot(ex,ey,5,'#fff',a,16);g.text('acceptor',MX+6,MY+MH+22,'left',.6*a,12,C.blue);g.text('donor',MX+90,MY+MH+22,'left',.6*a,12,C.amber)},
+ // 4 field shifts CT energies: doors
+ (t,a)=>{const F=.5+.5*Math.sin(t*1.1);drawMorph(a,F,true);
+  for(let k=0;k<5;k++){const y=MY+30+k*62,x=MX+((t*60+k*90)%MW);g.arrow(x,y,x+34,y,C.ink,1.5,.35*a*F)}
+  g.rect(40,378,520,52,'#0b0e14',.7*a);g.text('field F →  (strength '+Math.round(F*100)+'%)',50,398,'left',.8*a,14);
+  g.text('CT lowered: open door',50,420,'left',.9*a,13,C.green);g.text('CT raised: closed',300,420,'left',.9*a,13,C.red);g.text('Δ ≈ 35 meV at 10⁵ V/cm',550,398,'right',.6*a,13)},
+ // 5 near Voc doors close: J–V sweep linked to field
+ (t,a)=>{const p=(t%7)/7,V=ss(p/.85),F=1-V;drawMorph(a*.85,F,true);
+  const X=v=>360+v*200,Y=j=>170-j*110,toyc=toy(30,600,35);g.rect(345,40,230,160,'#0b0e14',.85*a);g.axes(360,170,570,50);
+  g.fn(x=>Y(Math.max(0,toyc.J((x-360)/200*toyc.Voc)/toyc.J(0))),360,X(V),C.amber,2.6,12,a);
+  g.text('V → Voc',565,190,'right',.6*a,12);g.text('J–V',565,64,'right',.5*a,12);g.text('field '+Math.round(F*100)+'%',356,64,'left',.8*a,13);g.text('doors closing',360,190,'left',.8*a*(1-F),13,C.red)},
+ // 6 race against the clock: exciton random walks with short then long lifetime
+ (t,a)=>{const long=(Math.floor(t/9)%2)==1;drawMorph(a*.9,.45,true);drawExc(a);
+  g.rect(40,378,520,52,'#0b0e14',.75*a);g.text(long?'long lifetime (≈1 ns)':'short lifetime',50,398,'left',.95*a,15,long?C.green:C.violet);
+  const tot=tally.c+tally.d||1;g.text('became charges: '+Math.round(100*tally.c/tot)+'%',50,420,'left',.8*a,13,C.amber);g.text('decayed (light/heat): '+Math.round(100*tally.d/tot)+'%',300,420,'left',.8*a,13,C.violet)},
+ // 7 ternary result on FF vs voltage-loss plane (real numbers)
+ (t,a)=>{const X=x=>110+(x-.49)/.07*420,Y=f=>380-(f-.66)/.18*300;g.axes(100,380,560,60);
+  [.50,.52,.54,.56].forEach(x=>g.text(x.toFixed(2),X(x),400,'center',.5*a,12));[.70,.75,.80].forEach(f=>g.text((f*100).toFixed(0)+'%',90,Y(f)+4,'right',.5*a,12));
+  const pts=[['PM6:L8-BO',.545,.795,990,C.blue],['PM6:Y18-C3',.502,.688,690,C.violet],['ternary 0.86:0.14',.516,.811,870,C.green]],p=ss(((t%6)/6)/.5);
+  g.line([[X(.545),Y(.795)],[X(.502),Y(.688)]],C.ink,1,0,.35*a,[4,4]);g.text('trade-off',X(.526)+10,Y(.745)+18,'left',.5*a,12);
+  pts.forEach(([n,x,f,tau,c],i)=>{const show=i<2?1:p;const r=tau/60;g.ring(X(x),Y(f),r*(1+.06*Math.sin(t*2+i)),c,1.5,.6*a*show,10);g.dot(X(x),Y(f),5,c,a*show,16);
+    g.text(n,X(x)+(i==1?14:-14),Y(f)-(r+8),i==1?'left':'right',.9*a*show,13,c);g.text('FF '+(f*100).toFixed(1)+'% · τ '+tau+' ps',X(x)+(i==1?14:-14),Y(f)-(r-8),i==1?'left':'right',.65*a*show,12)});
+  if(p>.9)g.text('PCE 20.1%',X(.516),Y(.811)+40,'center',.9*a,15,C.green);
+  g.text('voltage loss (V)',330,430,'center',.6*a,13);g.text('ring size ∝ exciton lifetime',560,58,'right',.45*a,11)},
+ // 8 eras
+ (t,a)=>{const X=x=>90+(x-.45)/.5*460,Y=f=>390-(f-.4)/.45*320;g.axes(90,390,560,60);
+  const eras=[['pre-2015',.80,.60,C.ink],['ITIC era 2015–19',.66,.68,C.amber],['Y6 era 2019–',.55,.76,C.blue]];
+  eras.forEach(([n,x,f,c],i)=>{const R=rng(10+i);for(let k=0;k<26;k++){const dx=(R()-.5)*.12,df=(R()-.5)*.12;g.dot(X(x+dx),Y(f+df),3,c,.55*a,6)}g.halo(X(x),Y(f),70,c,.12*a);g.text(n,X(x),Y(f)-62,'center',.85*a,13,c)});
+  const s=ss(((t%5)/5));g.arrow(X(.80),Y(.60),X(lerp(.80,.56,s)),Y(lerp(.60,.75,s)),'#fff',1.5,.6*a,8);
+  g.text('voltage loss →',560,432,'right',.5*a,13);g.text('FF',70,62,'right',.7*a);g.text('schematic, after Fig. 5f',560,58,'right',.4*a,11)}
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0;if(cur==6){tally={c:0,d:0};resetExc(26)}}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0,lastLong=null;
+function frame(now){const t=(now-t0)/1000+3,dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  if(cur==6){const long=(Math.floor(t/9)%2)==1;if(long!==lastLong){tally={c:0,d:0};lastLong=long}stepExc(dt*3,long?4.5:1.3,.45)}
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce)requestAnimationFrame(frame)}
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+function lab(){const off=+$('off').value,tau=+$('tau').value,st=+$('fld').value;$('offv').value=off+' meV';$('tauv').value=tau+' ps';$('fldv').value=st+' meV';
+  const m=toy(off,tau,st),ref=toy(100,2000,35);lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const X=v=>80+v/1.0*480,Y=j=>380-j*300;lg.axes(80,380,570,50);
+  lg.fn(x=>Y(Math.max(0,m.eta((x-80)/480))),80,X(1.05),C.violet,1.5,0,.6,[4,4]);lg.text('generation efficiency η(V)',X(.05),Y(m.eta(0))-10,'left',.6,12,C.violet);
+  let mv=0;for(let v=0;v<=m.Voc;v+=.002)if(v*m.J(v)>mv*m.J(mv))mv=v;lg.rect(X(0),Y(m.J(mv)),X(mv)-X(0),Y(0)-Y(m.J(mv)),C.blue,.15);
+  lg.line([[X(0),Y(m.J(0))],[X(m.Voc),Y(m.J(0))],[X(m.Voc),Y(0)]],C.ink,1,0,.3,[4,4]);
+  lg.fn(x=>Y(Math.max(0,m.J((x-80)/480))),80,X(m.Voc),C.blue,3,14);lg.dot(X(mv),Y(m.J(mv)),5,'#fff',1,14);
+  [0,.2,.4,.6,.8,1].forEach(v=>lg.text(v.toFixed(1),X(v),400,'center',.5,12));lg.text('voltage (V)',560,430,'right',.6,13);lg.text('J / J₀',72,56,'right',.6,13);
+  $('rff').textContent=(m.FF*100).toFixed(1)+'%';$('rvl').textContent=m.vloss.toFixed(3);$('rpce').textContent=Math.round(100*m.P/ref.P)+'%'}
+['off','tau','fld'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>

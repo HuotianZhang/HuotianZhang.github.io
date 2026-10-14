@@ -1,0 +1,282 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Huotian Zhang Homepage</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Huotian Zhang - device physicist working on organic solar cells, University of Potsdam."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: colah-style. Dark top bar; one column of themed sections; each section a grid of figure cards (drawn thumbnail, title, one line, venue tag). */
+:root{
+  --bg:#ffffff; --fg:#1f2328; --muted:#5f6670; --rule:#e3e5e8; --thumb:#f3f5f7; --bar:#16191d; --barfg:#e9ebee;
+  --c1:#2f6db3; --c2:#c9822b; --c3:#3c8a6a; --c4:#8b4fa8;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121417;--fg:#e6e8eb;--muted:#a1a8b2;--rule:#2a2e34;--thumb:#1b1e23;--bar:#0b0c0e;--barfg:#e6e8eb;--c1:#7fb0ea;--c2:#e2a45a;--c3:#6fc29d;--c4:#c296dc;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121417;--fg:#e6e8eb;--muted:#a1a8b2;--rule:#2a2e34;--thumb:#1b1e23;--bar:#0b0c0e;--barfg:#e6e8eb;--c1:#7fb0ea;--c2:#e2a45a;--c3:#6fc29d;--c4:#c296dc;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:17px/1.55 var(--sans)}
+a{color:inherit}
+a:focus-visible{outline:2px solid var(--c1);outline-offset:3px}
+.top{background:var(--bar);color:var(--barfg)}
+.top .in{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 24px}
+.top .nm{font-weight:700;font-size:19px;text-decoration:none}
+.top nav{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:15.5px}
+.top nav a{text-decoration:none;opacity:.85}.top nav a:hover{opacity:1;text-decoration:underline}
+main{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:36px 64px;display:grid;gap:46px}
+.about{display:grid;gap:10px;max-width:68ch}
+.about h1{font-size:32px;line-height:1.15;margin:0;font-weight:700;text-wrap:balance}
+.about p{margin:0;color:var(--muted)}
+.about p b{color:var(--fg);font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:15.5px}
+.links a{color:var(--c1)}
+.links .todo{color:var(--muted);font-family:var(--mono);font-size:13px}
+section h2{font-size:23px;font-weight:700;margin:0 0 4px;text-wrap:balance}
+section .q{color:var(--muted);margin:0 0 16px;max-width:68ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:26px 22px}
+.card{display:grid;gap:6px;align-content:start;text-decoration:none;min-width:0}
+.card canvas{width:100%;max-width:100%;aspect-ratio:16/10;display:block;background:#0c1016;border-radius:4px;transition:transform .25s ease,box-shadow .25s ease}
+.card:hover canvas{transform:translateY(-2px);box-shadow:0 8px 22px -10px rgba(0,0,0,.55)}
+.grid.g4{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+#hero{display:block;width:100%;height:170px;background:#0b0e14}
+@media (min-width:900px){.grid.g4{grid-template-columns:repeat(4,1fr)}}
+.card .t{font-weight:600;font-size:16.5px;line-height:1.3}
+.card:hover .t{text-decoration:underline}
+.card .d{font-size:14.5px;color:var(--muted);line-height:1.45}
+.card .v{font:500 12px var(--mono);letter-spacing:.02em}
+.list{margin:0;padding:0;list-style:none;display:grid;gap:6px;max-width:72ch}
+.list li{display:grid;grid-template-columns:5.5rem 1fr;gap:12px}
+.list .y{font:13px var(--mono);color:var(--muted);padding-top:3px}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--rule);padding-top:16px}
+@media (max-width:520px){.list li{grid-template-columns:1fr;gap:0}}
+</style>
+
+<header class="top"><div class="in">
+  <a class="nm" href="#">Huotian Zhang</a>
+  <nav><a href="#research">Research</a><a href="#tools">Tools</a><a href="cv.html">CV</a></nav>
+</div></header>
+<canvas id="hero" aria-label="Animation: photons are absorbed and split into electrons and holes that drift to opposite electrodes"></canvas>
+
+<main>
+  <div class="about">
+    <h1>Where does the energy go in an organic solar cell?</h1>
+    <p>I'm <b>Huotian Zhang</b>, a device physicist and postdoctoral researcher in Dieter Neher's group at the University of Potsdam. I combine ultrafast and steady-state spectroscopy with device modelling to trace how light becomes current in organic semiconductors, and where it is lost on the way. Before Potsdam I did my PhD and postdoc in Linköping, with stays at Imperial College London and FAU Erlangen.</p>
+    <div class="links"><a href="cv.html">CV</a><a href="https://x.com/HuotianZ">X @HuotianZ</a><a href="https://scholar.google.com/citations?hl=en&amp;user=BUc0XmUAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">Google Scholar</a><a href="https://github.com/HuotianZhang">GitHub</a><a href="https://orcid.org/0000-0002-9302-4129">ORCID</a></div>
+  </div>
+
+  <div id="sections"></div>
+
+  <section>
+    <h2>Traditional papers</h2>
+    <p class="q">The complete list of journal articles is in the <a href="cv.html">CV</a> and on <a href="https://scholar.google.com/citations?hl=en&amp;user=BUc0XmUAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">Google Scholar</a>.</p>
+  </section>
+
+  <footer>Huotian Zhang · University of Potsdam, Institute of Physics and Astronomy</footer>
+</main>
+
+<script>
+const S=[
+ {id:'highlights',h:'Recent highlights',q:'',items:[
+  ['ff','Overcoming the fill-factor limit of organic solar cells','The internal field caps fill factor as voltage loss shrinks. Longer-lived excitons lift the cap.','Nature Photonics 2026 · explainer','explainers/ff.html',1],
+  ['cocrystal','20.5% efficiency via co-crystallizable acceptors','A guest acceptor co-crystallises with L8-BO. Ordered packing gives 20.5% ternary cells.','Advanced Materials 2026 · explainer','explainers/cocrystal.html',2],
+  ['lockring','Conformationally locked macrocyclic acceptors','Ring acceptors soften backbone vibrations. PLQY reaches 14.5%; cells reach 17.1%.','Advanced Materials 2025 · explainer','explainers/lockring.html',4]]},
+ {id:'research',h:'Voltage losses',q:'Why do organic solar cells deliver less voltage than their light absorption allows?',items:[
+  ['barrierless','Barrierless free charge generation in PM6:Y6','Generation ignores field and photon energy, with Ea only 6 meV. Y6 electrostatics offset the Coulomb pull.','Advanced Materials 2020 · explainer','explainers/barrierless.html',1],
+  ['vloss','Reducing voltage losses in A-DA′D-A acceptor solar cells','Where the voltage goes in cells built on Y-type A-DA′D-A acceptors.','Chem 2020','https://doi.org/10.1016/j.chempr.2020.08.003',1],
+  ['ternary','Origins of the open-circuit voltage in ternary cells','Thermal population of CT and local-exciton states sets non-radiative loss; a bright guest with matched CT energy keeps Voc high.','Nature Energy 2023','https://doi.org/10.1038/s41560-023-01309-5',1],
+  ['optgap','Optical gaps as a reference for voltage losses','Different ways of defining the optical gap change the reported voltage loss; a consistent reference makes systems comparable.','Advanced Energy Materials 2018','https://doi.org/10.1002/aenm.201801352',1]]},
+ {id:'dynamics',h:'Charge dynamics',q:'What happens in the first nanoseconds after a photon is absorbed?',items:[
+  ['arrhenius','The role of thermally activated charge separation','In low-offset blends, separation is thermally activated: the lower the activation energy, the higher the separation efficiency.','Advanced Energy Materials 2024','https://doi.org/10.1002/aenm.202403675',3],
+  ['backtransfer','Charge separation versus hole back transfer','With a small HOMO offset, holes can transfer back to the acceptor; the balance decides device efficiency.','Organic Electronics 2022','https://doi.org/10.1016/j.orgel.2022.106601',3],
+  ['tta','Triplet–triplet annihilation in non-fullerene cells','Two triplets can fuse into an emissive singlet; in crystalline Y11 domains this could recover tens of millivolts.','Advanced Energy Materials 2023','https://doi.org/10.1002/aenm.202301357',3],
+  ['timeline','From generation to extraction','Sub-picosecond to microsecond probes follow charges from absorption to extraction; ~100 meV offset still gives >70% hole transfer.','J. Phys. Chem. C 2020','https://doi.org/10.1021/acs.jpcc.0c05263',3]]},
+ {id:'molecules',h:'Molecules, with chemists',q:'Physics that feeds back into molecular design.',items:[
+  ['damacro','A multiple D–A conjugated macrocycle','A ring of alternating donor and acceptor units with a 1.33 eV gap and 0.20 eV non-radiative loss: 14.2% cells.','Angewandte Chemie 2023','https://doi.org/10.1002/anie.202311645',4],
+  ['tpa','Luminescent triphenylamine-functionalised acceptor','A luminescent triphenylamine-fused acceptor raises PLQY in ternary blends, lowering non-radiative loss.','Energy & Environmental Science 2025','https://doi.org/10.1039/d5ee01525a',4],
+  ['giwaxs','High crystallinity and photoluminescence, >20%','Moving the side-chain branching point breaks the usual crystallinity–PLQY trade-off: 20.42% single-junction cells.','Nature Materials 2025','https://doi.org/10.1038/s41563-024-02087-5',4]]},
+ {id:'beyond',h:'Beyond solar cells',q:'The same spectroscopy, applied to other light-emitting and light-sensing materials.',items:[
+  ['whitelight','White-light emission in ZIF glasses','Vitrification, pressure and annealing turn ZIF-62 glass into a broadband white emitter.','Advanced Materials 2026','https://doi.org/10.1002/adma.72968',2],
+  ['photodet','Self-driven single-component organic photodetector','A neat oligothiophene film separates charges at zero bias, without a donor–acceptor blend.','Advanced Materials 2024','https://doi.org/10.1002/adma.202402834',2],
+  ['laser','Lower thresholds for perovskite lasers','A PTAA hole-transport layer speeds hot-carrier cooling and suppresses Auger loss, lowering the ASE threshold.','Advanced Materials 2023','https://doi.org/10.1002/adma.202300922',2]]},
+ {id:'tools',h:'Tools & teaching',q:'Things built so others can measure and learn.',items:[
+  ['console','JV Console','Open-source software for analysing solar-cell current–voltage measurements.','Software · GitHub','https://github.com/HuotianZhang',3],
+  ['tas','TAS Guide','Lab manual for transient-absorption spectroscopy.','Lab manual · Linköping','',1],
+  ['spectrograph','Guide for Spectrograph','Lab manual for optical measurements.','Lab manual · Linköping','',1],
+  ['ofet','Organic transistor module','Lecturer and examiner, graduate polymer lab classes.','Teaching · Potsdam 2026','',4]]},
+];
+const root=document.getElementById('sections');let ix=0;
+root.innerHTML=S.map(sec=>`<section id="${sec.id}"><h2>${sec.h}</h2>${sec.q?`<p class="q">${sec.q}</p>`:''}<div class="grid g${sec.items.length}">${sec.items.map(([k,t,d,v,u,ci])=>{
+  const tag=u?'a':'div';const href=u?` href="${u}"`:'';
+  return `<${tag} class="card"${href}><canvas data-k="${k}" data-c="${ci}" data-i="${ix++}" role="img" aria-label="${t}"></canvas><span class="t">${t}</span><span class="d">${d}</span><span class="v" style="color:var(--c${ci})">${v}</span></${tag}>`}).join('')}</div></section>`).join('');
+// ---------- animated thumbnails: luminous drawings on a dark "spectrometer window" ----------
+const BRIGHT=['','#7db8ff','#ffb85c','#62e0a8','#cfa2ff'];
+const TAU=Math.PI*2, W=260, H=160;
+const ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function hexRGBA(h,a){const n=parseInt(h.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+function wl2rgb(n){ // nm -> css colour
+  const s=[[400,'#7b5cff'],[460,'#3d8bff'],[500,'#2fd4e0'],[540,'#5fe07a'],[580,'#f2e04a'],[620,'#ff9a3c'],[700,'#ff4d4d']];
+  for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return '#ff4d4d'}
+function G(ctx){ // small drawing toolkit bound to a context
+  const g={
+    line(pts,col,w=2,glow=0,alpha=1,dash){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';
+      if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();ctx.restore()},
+    fn(f,x0,x1,col,w,glow,alpha,dash,n=90){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,alpha,dash)},
+    dot(x,y,r,col,alpha=1,glow=0){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+    halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,hexRGBA(col,a));gr.addColorStop(1,hexRGBA(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+    hex(x,y,r,col,w=1.6,rot=0,alpha=1,glow=0,fill){const p=[];for(let j=0;j<=6;j++){const b=j/6*TAU+rot;p.push([x+r*Math.cos(b),y+r*Math.sin(b)])}
+      if(fill){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=fill;ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.fill();ctx.restore()}g.line(p,col,w,glow,alpha)},
+    text(s,x,y,a='left',alpha=.55,size=9.5){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle='#e8eef7';ctx.font=`${size}px "Source Code Pro",ui-monospace,monospace`;ctx.textAlign=a;ctx.fillText(s,x,y);ctx.restore()},
+    rect(x,y,w,h,col,alpha=1,glow=0){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+    axes(x0=30,y0=134,x1=240,y1=16){g.line([[x0,y1],[x0,y0],[x1,y0]],'#e8eef7',1,0,.22)},
+    wave(x,y,ang,len,col,alpha=1){const p=[];for(let i=0;i<=16;i++){const s=i/16*len,o=Math.sin(i/16*TAU*2)*2.2;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.4,6,alpha)}
+  };return g}
+const JV=(n,Voc)=>v=>Math.max(0,1-(Math.exp(v/(.0259*n))-1)/(Math.exp(Voc/(.0259*n))-1));
+
+const ART={
+ff(ctx,g,t,c){const X=v=>30+v*220,Y=j=>134-j*104,s=ss((Math.sin(TAU*t/8)+1)/2*1.4-.2);
+  // same toy model as the explainer: eta(F)=k(F)/(k(F)+1/tau); short vs long exciton lifetime at small offset
+  const mk=tau=>{const kT=25.7,k0=1/40,Vt=.93,Vbi=Vt+.12,eta=V=>{const F=Math.max(0,(Vbi-V)/Vbi),k=k0/(1+Math.exp(-(0+35*F-60)/kT));return k/(k+1/tau)};return V=>Math.max(0,eta(V)-eta(Vt)*Math.exp((V-Vt)/(1.25*.0257)))};
+  const A=mk(300),B=mk(1500),J=v=>A(v)+(B(v)-A(v))*s,J0=B(0),Voc=.93;
+  g.axes();g.line([[X(0),Y(1)],[X(Voc),Y(1)],[X(Voc),Y(0)]],'#e8eef7',1,0,.25,[3,4]);
+  let mv=0;for(let v=0;v<=Voc;v+=.003)if(v*J(v)>mv*J(mv))mv=v;g.rect(X(0),Y(J(mv)/J0),X(mv)-X(0),Y(0)-Y(J(mv)/J0),c,.16);
+  g.fn(x=>Y(J((x-30)/220)/J0),30,X(Voc),c,2.6,12);g.dot(X(mv),Y(J(mv)/J0),3.6,'#fff',1,14);
+  g.text(s<.5?'short exciton lifetime':'long exciton lifetime',X(.42),Y(.45),'center',.85);g.text('Jsc',36,Y(1)-6);g.text('Voc',X(Voc),150,'center',.6)},
+cocrystal(ctx,g,t,c){const R=rng(7),o=ss(.5-.5*Math.cos(TAU*t/8)*1.15);
+  for(let r=0;r<4;r++)for(let q=0;q<6;q++){const A=(q+r)%2,x0=48+q*30+(r%2)*15,y0=36+r*28,rx=20+R()*220,ry=14+R()*130,ra=R()*TAU,
+    x=rx+(x0-rx)*o+Math.sin(t*1.3+q+r)*(1-o)*4,y=ry+(y0-ry)*o,a=ra+((-.42)-ra)*o;
+    ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.globalAlpha=A?.95:.55;ctx.fillStyle=A?c:'#dfe7f2';if(A){ctx.shadowColor=c;ctx.shadowBlur=8*o}ctx.beginPath();ctx.roundRect(-12,-3.5,24,7,3.5);ctx.fill();ctx.restore()}
+  if(o>.92){g.text('1:1 co-crystal, mixed π-stacking',130,152,'center',.75*(o-.92)/.08)}else g.text('in solution',130,152,'center',.5)},
+lockring(ctx,g,t,c){const lock=ss((Math.sin(TAU*t/7)+1)/2*1.4-.2),n=6;
+  for(let i=0;i<n;i++){const a=i/n*TAU+t*.15,wob=(1-lock)*Math.sin(t*5+i*2)*.45,x=118+40*Math.cos(a),y=80+40*Math.sin(a);g.hex(x,y,12,c,1.8,a+wob,1,lock*10)}
+  g.text(lock>.7?'locked':'flexible',118,84,'center',.65);
+  for(let k=0;k<4;k++){const ph=((t*.6+k/4)%1);g.line(Array.from({length:40},(_,i)=>{const an=-1+i/39*2;return[118+(58+ph*90)*Math.cos(an),80+(58+ph*90)*Math.sin(an)]}),c,1.4,6,lock*(1-ph)*.9)}},
+barrierless(ctx,g,t,c){g.axes();const U=x=>(x-40)/190;
+  // dashed: bare Coulomb potential (barrier); solid: with interfacial electrostatic field (downhill)
+  const E0=x=>{const u=U(x);return 100-62*(1-Math.exp(-u*4))},E1=x=>{const u=U(x);return 100+28*ss(u)};
+  g.fn(E0,40,230,'#e8eef7',1.3,0,.45,[4,4]);g.fn(E1,40,230,c,2.4,10);
+  g.text('Coulomb only',228,30,'right',.55);g.text('+ interfacial field',150,104,'center',.8);g.text('CT',44,90,'center');
+  for(let k=0;k<6;k++){const p=((t*.22+k/6)%1),x=40+190*ss(p),y=E1(x)-6,sep=2+p*12;g.dot(x-sep,y,2.6,'#7db8ff',1,8);g.dot(x+sep,y,2.6,'#ffb85c',1,8)}
+  g.text('Ea ≈ 6 meV',36,26,'left',.6);g.text('e–h distance →',135,150,'center',.45)},
+vloss(ctx,g,t,c){const y0=130,s=100,nr=.2-.1*ss((Math.sin(TAU*t/6)+1)/2),rad=.16,v=1-nr-rad,x=98,w=64;
+  g.rect(x,y0-v*s,w,v*s,c,.85,12);g.rect(x,y0-(v+rad)*s,w,rad*s,c,.4);g.rect(x,y0-s,w,nr*s,'#ff6b6b',.35);
+  g.line([[88,y0-s],[172,y0-s]],'#e8eef7',1,0,.5);g.line([[88,y0],[172,y0]],'#e8eef7',1,0,.5);
+  const R=rng(3);for(let k=0;k<14;k++){const p=(t*.5+R())%1;g.dot(x+R()*w+Math.sin(t*3+k)*4,y0-s+nr*s*R()-p*30,1.6,'#ff8f8f',(1-p)*.8,6)}
+  g.text('Eg/q',82,y0-s+3,'right');g.text('Voc',178,y0-v*s/2+3);g.text('ΔV rad',178,y0-(v+rad/2)*s+3,'left',.6);g.text('ΔV non-rad',178,y0-s+nr*s/2+3,'left',.75);g.text('heat',x+w/2,y0-s-20,'center',.4)},
+ternary(ctx,g,t,c){ // host CT, guest CT and guest LE states in thermal exchange; emission from LE
+  const L=[[46,116,'CT host'],[120,108,'CT guest'],[194,52,'LE guest']],R=rng(5);
+  L.forEach(([x,y,l],i)=>{g.line([[x-28,y],[x+28,y]],i==2?'#ffffff':c,2.4,10,.9);g.text(l,x,y+16,'center',.6)});
+  for(let k=0;k<14;k++){const ph=(t*.35+R())%1,a=Math.floor(R()*2),b=a+1,f=ss(Math.min(1,Math.abs(Math.sin(ph*Math.PI))*1.2));
+    const [xa,ya]=L[a],[xb,yb]=L[k%5==0?2:a==0?1:0];const x=xa+(xb-xa)*f+(R()-.5)*30,y=ya+(yb-ya)*f-4;g.dot(x,y,2.2,'#fff',.85,8)}
+  for(let k=0;k<3;k++){const p=(t*.5+k/3)%1;g.wave(194+18*Math.cos(-1.2),52-20-p*30,-Math.PI/2,12,'#ffffff',(1-p)*.8)}
+  g.text('thermal population sets non-radiative loss',130,150,'center',.5,8.5);g.text('matched CT energies',82,70,'center',.6)},
+optgap(ctx,g,t,c){g.axes();const eqe=x=>134-108/(1+Math.exp((x-128)/9)),el=x=>134-72*Math.exp(-Math.pow((x-110)/22,2));
+  g.fn(eqe,40,234,c,2.4,10);g.fn(el,40,200,'#ffb85c',1.6,8,.7);
+  const M=[[128,'inflection'],[119,'EQE–EL crossing'],[146,'onset']],k=Math.floor(t/2.2)%3,[xe,lab]=M[k],fade=ss((t%2.2)/.4);
+  const xv=72;g.line([[xe,24],[xe,134]],'#fff',1,8,.7*fade,[2,3]);g.line([[xv,30],[xv,134]],'#e8eef7',1.2,0,.6);g.text('qVoc',xv,146,'center',.7);
+  g.line([[xv,40],[xe,40]],'#ffffff',1.4,8,.85*fade);g.text('ΔV',(xv+xe)/2,52,'center',.8*fade);
+  g.text('Eg: '+lab,232,20,'right',.75*fade);g.text('EQE',206,44);g.text('EL',140,92,'center',.6);g.text('photon energy →',236,150,'right',.45)},
+arrhenius(ctx,g,t,c){g.axes();const pts=[[52,30],[70,44],[88,46],[104,62],[122,70],[140,84],[156,90],[176,104],[196,112],[216,122]],p=(t%7)/7,n=Math.floor(ss(p/.7)*pts.length+.001);
+  g.line([[44,30],[228,126]],c,1.6,8,ss((p-.65)/.15)*.9,[5,4]);
+  pts.forEach(([x,y],i)=>{if(i<n){g.dot(x,y,4,i%3?c:'#fff',1,12)}});
+  // tiny thermometer: warming helps pairs over a small activation energy
+  const T=.5+.5*Math.sin(t*1.3);g.rect(222,22,6,40,'#e8eef7',.2);g.rect(222,62-34*T,6,34*T,'#ff8f6b',.9,8);g.dot(225,66,5,'#ff8f6b',1,10);
+  g.text('activation energy Ea →',135,150,'center',.6);g.text('CSE',22,80,'center',.7)},
+backtransfer(ctx,g,t,c){ // electron-energy picture: D levels above A; hole moves A-HOMO -> D-HOMO (forward) or back
+  g.line([[40,40],[110,40]],'#e8eef7',2.4,0,.5);g.line([[150,56],[220,56]],'#e8eef7',2.4,0,.5);g.line([[40,100],[110,100]],c,2.6,10);g.line([[150,110],[220,110]],c,2.6,10);
+  g.text('donor',75,30,'center');g.text('acceptor',185,46,'center');g.text('LUMO',34,43,'right',.45);g.text('HOMO',34,103,'right',.45);g.text('small HOMO offset',130,128,'center',.55);
+  for(let k=0;k<5;k++){const p=(t*.35+k/5)%1,back=k%3==0,sn=Math.sin(Math.PI*p);
+    if(back){const x=75+p*110,y=100+10*p+sn*16;g.dot(x,y,3,'#ff8f8f',.85,10)}else{const x=185-p*110,y=110-10*p-sn*20;ctx.save();ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.shadowColor='#fff';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(x,y,3.2,0,TAU);ctx.stroke();ctx.restore()}}
+  g.text('hole transfer  ⇄  back transfer',130,146,'center',.55)},
+tta(ctx,g,t,c){const p=(t%5)/5;[[40,92],[100,92],[170,92]].forEach(()=>0);
+  g.line([[36,118],[224,118]],'#e8eef7',1.2,0,.3);g.line([[36,84],[224,84]],c,1.4,0,.35,[3,4]);g.line([[36,34],[224,34]],'#fff',1.2,0,.3,[3,4]);
+  g.text('S₁',30,37,'right');g.text('T₁',30,87,'right');g.text('S₀',30,121,'right');
+  const m=ss(p/.45),x1=50+80*m,x2=210-80*m;if(p<.5){g.dot(x1,84,4,c,1,14);g.dot(x2,84,4,c,1,14)}
+  if(p>=.45){const q=ss((p-.45)/.25);g.halo(130,84-50*q,30*(1-Math.abs(.5-q)),'#ffffff',.6);g.dot(130,84-50*q,4.5,'#fff',1,18);g.dot(130,84+34*q,3,c,.6*(1-q),8);
+    if(p>.7){const r=(p-.7)/.3;g.line(Array.from({length:50},(_,i)=>[130+60*r*Math.cos(i/49*TAU),34+60*r*Math.sin(i/49*TAU)*.5]),'#fff',1.2,6,1-r)}}
+  g.text('T₁ + T₁ → S₁ + S₀',130,148,'center',.5)},
+timeline(ctx,g,t,c){g.line([[28,96],[236,96]],'#e8eef7',1,0,.3);const st=[['fs',40,'absorb'],['ps',95,'hole transfer'],['ns',150,'geminate loss'],['µs',205,'extraction']],px=28+((t*.25)%1)*215;
+  g.halo(px,96,26,c,.55);g.line([[Math.max(28,px-60),96],[px,96]],c,2.2,12,.9);
+  st.forEach(([u,x,l],i)=>{const on=Math.exp(-Math.pow((px-x)/22,2));g.dot(x,96,5+i,i==2?'#ff8f8f':c,.35+.65*on,on*20);g.text(u,x,120,'center',.6);g.text(l,x,72-(i%2)*14,'center',.4+.5*on)});
+  g.text('sub-ps to µs transient probes',132,148,'center',.45)},
+damacro(ctx,g,t,c){const n=8,rot=t*.15;g.line(Array.from({length:61},(_,i)=>[130+46*Math.cos(i/60*TAU),80+46*Math.sin(i/60*TAU)]),'#e8eef7',1,0,.25);
+  const pos=i=>{const a=i/n*TAU-1.57+rot;return[130+46*Math.cos(a),80+46*Math.sin(a),a]},on=Math.floor(t*1.2)%4,f=Math.sin(((t*1.2)%1)*Math.PI);
+  for(let i=0;i<n;i++){const[x,y,a]=pos(i),lit=Math.floor(i/2)==on;if(i%2)g.dot(x,y,8,c,.6+.4*lit*f,10+14*lit*f);else g.hex(x,y,9,'#e8eef7',1.6,a,.8)}
+  for(let k=0;k<3;k++){const p=(t*.5+k/3)%1,an=k/3*TAU+t*.2;g.wave(130+(62+p*30)*Math.cos(an),80+(62+p*30)*Math.sin(an),an,12,'#ffb0ff',(1-p)*.8)}
+  g.text('D–A ring',130,78,'center');g.text('Eg 1.33 eV',130,90,'center',.5)},
+tpa(ctx,g,t,c){const br=.5+.5*Math.sin(t*1.6);g.halo(130,84,58+10*br,c,.35+.2*br);
+  [-1.5708,0.5236,2.618].forEach((a0,i)=>{const a=a0+Math.sin(t*.6)*.08,x=130+40*Math.cos(a),y=84+40*Math.sin(a);g.line([[130,84],[130+26*Math.cos(a),84+26*Math.sin(a)]],c,1.8,6);g.hex(x,y,14,c,1.8,a,1,8,'#0c1016')});
+  g.dot(130,84,7,c,1,14);g.text('N',130,87.5,'center',.95,9);
+  for(let k=0;k<6;k++){const p=(t*.4+k/6)%1,an=k/6*TAU+.3;g.wave(130+(66+p*50)*Math.cos(an),84+(66+p*50)*Math.sin(an),an,14,c,(1-p)*.9)}},
+giwaxs(ctx,g,t,c){ // usual trade-off: more crystalline -> less emissive; asymmetric branching escapes it
+  g.axes();const tr=x=>40+(x-40)*.55,R=rng(9);for(let k=0;k<11;k++){const x=50+k*17,y=tr(x)+(R()-.5)*12;g.dot(x,y,3,'#e8eef7',.45)}
+  g.line([[44,42],[232,146-10]],'#e8eef7',1,0,.3,[4,4]);g.text('usual trade-off',52,128,'left',.45);
+  const p=ss(((t%6)/6)/.7),x=120+90*p,y=tr(120)-p*60;for(let k=1;k<10;k++){const q=Math.max(0,p-k*.03);g.dot(120+90*q,tr(120)-q*60,2.4,c,.5*(1-k/10))}
+  g.dot(x,y,4.5,'#fff',1,16);g.halo(x,y,22,c,.4);if(p>.95)g.text('L8-BO-C4',x-8,y-10,'right',.85);
+  g.text('crystallinity →',135,150,'center',.6);g.text('PLQY',22,80,'center',.7)},
+whitelight(ctx,g,t,c){g.axes(40,134,240,16);const k=Math.floor(t/2.6)%3,f0=ss((t%2.6)/.8);
+  const P=[{c:150-40,w:22,a:.55,l:'vitrified: blue'},{c:150-30,w:46,a:.85,l:'pressurized: broader'},{c:150+5,w:58,a:1,l:'annealed: white, QY 12%'}];
+  const A=P[(k+2)%3],B=P[k],m=p=>A[p]+(B[p]-A[p])*f0,f=x=>134-92*m('a')*Math.exp(-Math.pow((x-m('c'))/m('w'),2));
+  for(let x=44;x<236;x+=2){const nm=400+(x-44)/192*350;g.rect(x,f(x),2.2,134-f(x),wl2rgb(nm),.55)}
+  g.fn(f,44,236,'#fff',1.4,10,.9);g.text(B.l,140,150,'center',.5+.4*f0);g.text('ZIF-62 glass',46,24,'left',.55);g.text('400',46,150);g.text('750 nm',236,150,'right')},
+photodet(ctx,g,t,c){g.rect(60,70,140,8,'#e8eef7',.25);g.rect(60,78,140,22,c,.55,8);g.rect(60,100,140,8,'#e8eef7',.35);g.text('neat DCV2-5T',130,93,'center',.85);
+  for(let k=0;k<5;k++){const p=(t*.45+k/5)%1,x0=50+k*22;if(p<.6){const q=p/.6;g.wave(x0+q*36,10+q*58,.98,14,wl2rgb(450+k*50),1)}else{const q=(p-.6)/.4;g.dot(x0+40-q*8,86,2.2,'#7db8ff',1-q,8);g.dot(x0+40+q*8,90,2.2,'#ffb85c',1-q,8)}}
+  g.line([[200,104],[226,104],[226,130],[150,130]],'#e8eef7',1.3,0,.45);const cp=(t*.8)%1;
+  if(cp<.35)g.dot(226,104+cp/.35*26,2.4,'#fff',1,10);else g.dot(226-(cp-.35)/.65*76,130,2.4,'#fff',1,10);g.text('no blend, no bias',136,148,'center',.6)},
+laser(ctx,g,t,c){g.axes();const p=(t%6)/6,P=40+190*p,out=x=>x<118?134-(x-40)*.08:134-6.2-(x-118)*.95;
+  g.fn(x=>Math.max(20,out(x)),40,P,c,2.4,10);g.dot(P,Math.max(20,out(P)),3.5,'#fff',1,14);g.line([[118,20],[118,134]],'#e8eef7',1,0,.35,[2,3]);g.text('ASE threshold',122,18);
+  g.line([[150,20],[150,134]],'#e8eef7',1,0,.18,[2,3]);g.text('without PTAA',154,48,'left',.4);
+  g.rect(44,22,62,42,'#000',.35);const on=P>118,amp=on?Math.min(1,(P-118)/60):.15;
+  g.fn(x=>60-(on?34*amp*Math.exp(-Math.pow((x-75)/2.4,2))+4:8*Math.exp(-Math.pow((x-75)/12,2))),48,102,on?'#fff':c,on?1.6:1.2,on?16:4);
+  g.text(on?'ASE':'spontaneous',75,74,'center',.6);g.text('pump →',236,150,'right',.45)},
+console(ctx,g,t,c){g.rect(26,16,208,128,'#ffffff',.05);g.line([[26,30],[234,30]],'#e8eef7',1,0,.25);[34,42,50].forEach(x=>g.dot(x,23,2.3,'#e8eef7',.4));
+  g.line([[42,128],[140,128]],'#e8eef7',.8,0,.35);g.line([[42,128],[42,40]],'#e8eef7',.8,0,.35);
+  const f=JV(1.5,.88),p=(t%6)/6,n=Math.floor(ss(p/.7)*30);for(let i=0;i<n;i++){const v=i/29*.88;g.dot(42+v/.88*94,128-f(v)*82,1.8,c,1,8)}
+  ['Voc','Jsc','FF','PCE'].forEach((s,i)=>{g.text(s,154,56+i*20,'left',.7);g.rect(186,50+i*20,34*ss((p-.55-i*.06)/.2),5,c,.75,8)})},
+tas(ctx,g,t,c){const sh=(t*2)%13;for(let i=0;i<14;i++)for(let j=0;j<9;j++){const tt=j+sh*0,v=Math.exp(-Math.pow((i-4-Math.sin(t*.5))/2.2,2))*Math.exp(-(j)/3.4)-.55*Math.exp(-Math.pow((i-10)/1.8,2))*Math.exp(-j/5.5);
+  const a=Math.min(.95,Math.abs(v)*(1.1+.3*Math.sin(t*2-j*.6))+.06);g.rect(52+i*12,22+j*12,11.5,11.5,v>=0?c:'#7db8ff',a)}
+  const sy=22+((t*.4)%1)*108;g.line([[52,sy],[220,sy]],'#fff',1,8,.5);g.text('wavelength →',136,150,'center',.5);g.text('ΔA',226,34);g.text('t',44,28,'center',.6)},
+spectrograph(ctx,g,t,c){g.line([[20,80],[104,80]],'#fff',2.4,10,.9);for(let k=0;k<3;k++){const x=20+((t*.9+k/3)%1)*84;g.dot(x,80,2.4,'#fff',1,10)}
+  g.rect(104,56,9,48,'#e8eef7',.5);[440,480,520,560,600,640].forEach((nm,i)=>{const yy=30+i*20,col=wl2rgb(nm);g.line([[113,80],[214,yy]],col,1.6,8,.75+.25*Math.sin(t*2+i));const q=(t*.9+i/6)%1;g.dot(113+q*101,80+(yy-80)*q,1.8,col,1,8);g.rect(214,yy-6,9,12,col,.7,10)});
+  g.text('light',56,72,'center');g.text('grating',108,120,'center');g.text('CCD',218,152,'center')},
+ofet(ctx,g,t,c){const on=ss((Math.sin(TAU*t/5)+1)/2*1.6-.3);g.rect(40,112,180,16,'#e8eef7',.25+.4*on,on*14);g.rect(40,98,180,14,'#e8eef7',.12);
+  g.rect(60,74,140,24,c,.35+.35*on,on*10);g.rect(60,62,34,12,'#e8eef7',.6);g.rect(166,62,34,12,'#e8eef7',.6);
+  for(let k=0;k<7;k++){const p=(t*.5+k/7)%1;g.dot(94+p*72,92-(k%3)*4,2.2,'#fff',on,10)}
+  g.text('S',77,56,'center');g.text('D',183,56,'center');g.text(on>.5?'gate on':'gate off',130,146,'center',.6);g.text('polymer',204,88,'left',.5)},
+};
+
+// ---------- hero: photons in, charges out ----------
+function hero(cv){const ctx=cv.getContext('2d');let w=0,h=0;const ps=[],R=rng(11);
+  function size(){const d=Math.min(2,devicePixelRatio||1);w=cv.clientWidth;h=cv.clientHeight;cv.width=w*d;cv.height=h*d;ctx.setTransform(d,0,0,d,0,0)}
+  size();addEventListener('resize',size);
+  function spawn(){const nm=400+R()*330;ps.push({k:'ph',x:R()*w*.9+w*.05,y:-10,nm,v:60+R()*40})}
+  function draw(dt,t){ctx.globalCompositeOperation='source-over';ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,w,h);const g=G(ctx),by=h*.62;
+    const gr=ctx.createLinearGradient(0,by-14,0,by+14);gr.addColorStop(0,'rgba(125,184,255,0)');gr.addColorStop(.5,'rgba(125,184,255,.13)');gr.addColorStop(1,'rgba(125,184,255,0)');ctx.fillStyle=gr;ctx.fillRect(0,by-14,w,28);
+    g.rect(0,by-14,4,28,'#ffb85c',.8,14);g.rect(w-4,by-14,4,28,'#7db8ff',.8,14);
+    ctx.globalCompositeOperation='lighter';
+    for(let i=ps.length-1;i>=0;i--){const p=ps[i];
+      if(p.k=='ph'){p.y+=p.v*dt;g.wave(p.x,p.y-14,Math.PI/2,14,wl2rgb(p.nm),.95);if(p.y>=by){ps.splice(i,1);ps.push({k:'e',x:p.x,y:by,vx:40+R()*30,life:0},{k:'h',x:p.x,y:by,vx:-(40+R()*30),life:0},{k:'f',x:p.x,y:by,life:0})}}
+      else if(p.k=='f'){p.life+=dt;g.halo(p.x,p.y,18*(1-p.life*2),'#ffffff',.6*(1-p.life*2));if(p.life>.5)ps.splice(i,1)}
+      else{p.x+=p.vx*dt;p.y=by+Math.sin(p.x*.05+t)*4*(p.k=='e'?1:-1);g.dot(p.x,p.y,2.2,p.k=='e'?'#7db8ff':'#ffb85c',.95,10);if(p.x<0||p.x>w)ps.splice(i,1)}}
+    ctx.globalCompositeOperation='source-over';g.text('photons in  ·  electrons →  ·  ← holes',16,h-14,'left',.45,10)}
+  return{draw,spawn}}
+
+// ---------- boot ----------
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cards=[...document.querySelectorAll('canvas[data-k]')].map(cv=>{const d=Math.min(2,devicePixelRatio||1);cv.width=W*d;cv.height=H*d;const ctx=cv.getContext('2d');ctx.setTransform(d,0,0,d,0,0);
+    return{cv,ctx,g:G(ctx),f:ART[cv.dataset.k],c:BRIGHT[+cv.dataset.c],vis:true,off:+cv.dataset.i*.37}});
+  const paint=(o,t)=>{const{ctx}=o;ctx.clearRect(0,0,W,H);ctx.fillStyle='#0c1016';ctx.fillRect(0,0,W,H);const vg=ctx.createRadialGradient(W/2,H/2,20,W/2,H/2,170);vg.addColorStop(0,'rgba(255,255,255,.035)');vg.addColorStop(1,'rgba(0,0,0,.25)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    try{o.f&&o.f(ctx,o.g,t+o.off,o.c)}catch(e){}};
+  cards.forEach(o=>paint(o,5.2)); // complete still frame first
+  const hv=document.getElementById('hero'),H0=hv?hero(hv):null;
+  if(H0){for(let i=0;i<70;i++){if(i%2==0)H0.spawn();H0.draw(.05,i*.05)}}
+  if(reduce){if(H0){for(let i=0;i<40;i++)H0.spawn();H0.draw(.9,0)}return}
+  if('IntersectionObserver'in window){const io=new IntersectionObserver(es=>es.forEach(e=>{const o=cards.find(c=>c.cv===e.target);if(o)o.vis=e.isIntersecting}));cards.forEach(o=>io.observe(o.cv))}
+  let last=performance.now(),acc=0;const t0=last;
+  function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;const t=(now-t0)/1000+5.2;
+    cards.forEach(o=>{if(o.vis)paint(o,t)});
+    if(H0){acc+=dt;while(acc>.09){H0.spawn();acc-=.09}H0.draw(dt,t)}
+    requestAnimationFrame(loop)}
+  requestAnimationFrame(loop);
+})();
+
+</script>
+</body></html>

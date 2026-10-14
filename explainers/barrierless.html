@@ -1,0 +1,304 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Barrierless Charge Generation</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Barrierless Charge Generation: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1002/adma.201906763">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Advanced Materials 2020</span>
+  <h1>Free charges without a barrier in PM6:Y6</h1>
+  <p class="dek">An electron and a hole that have just been split at a donor–acceptor interface still attract each other strongly. In PM6:Y6 they escape anyway, with no help from the electric field and almost none from heat. The electrostatics of the Y6 molecule do the work.</p>
+  <p class="cite">L. Perdigón-Toro*, H. Zhang*, A. Markina, J. Yuan, S. M. Hosseini, C. M. Wolff, G. Zuo, M. Stolterfoht, Y. Zou, F. Gao, D. Andrienko, S. Shoaee, D. Neher. <i>Barrierless free charge generation in the high-performance PM6:Y6 bulk heterojunction non-fullerene solar cell.</i> Advanced Materials 32, 1906763 (2020). *Equal contribution. <a href="https://doi.org/10.1002/adma.201906763">doi:10.1002/adma.201906763</a></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · TWO WAYS IN</span><h2>Light makes excitons, the interface makes charges</h2>
+      <p>PM6 is a donor polymer and Y6 an acceptor molecule. A photon absorbed in either one creates an exciton, a tightly bound electron–hole pair on one material. Only at the interface between the two can the pair be pulled apart.</p>
+      <p>There are two channels. If PM6 absorbs, its electron drops into Y6 (channel I). If Y6 absorbs, its hole moves into PM6 (channel II). The singlet energies are 1.90 eV for PM6 and 1.42 eV for Y6, and the charge-transfer (CT) state lies at about 1.41 eV. So channel I has a driving force of ≈0.60 eV, channel II only ≤0.13 eV, and the ionization-energy offset is just 0.09 eV.</p>
+      <p class="note">Energy levels after Fig. 1a (cyclic voltammetry, from ref. 4 of the paper).</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · THE TRAP</span><h2>The Coulomb trap</h2>
+      <p>Right after transfer, the electron sits on Y6 and the hole on PM6, about a nanometre apart. This CT pair is still bound by Coulomb attraction. For an organic material with a dielectric constant around 3.5:</p>
+      <div class="eq">E<sub>b</sub> ≈ q² / (4πε₀ε<sub>r</sub>r) ≈ 0.4 eV  at r = 1 nm</div>
+      <p>Theory for homogeneous media predicts a CT binding energy of around 400 meV, more than fifteen times the thermal energy at room temperature (k<sub>B</sub>T ≈ 26 meV). On paper, the pair should mostly fall back together.</p>
+      <p class="note">The curve is the bare Coulomb potential; the paper quotes the ≈0.4 eV expectation from the literature.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · WHAT A BARRIER LOOKS LIKE</span><h2>Fingerprints of a barrier</h2>
+      <p>If the pair had to climb out of that well, two things would give it away. First, the yield of free charges would depend on the internal electric field: a strong field at reverse bias lowers the barrier, a weak field near open circuit does not. Second, cooling the device would cut the yield, because the pair would need heat to escape.</p>
+      <p>The curves on the right show what that looks like in a simple barrier model. They are an expectation, not data.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · THE MEASUREMENT</span><h2>Counting charges with a delayed field</h2>
+      <p>Time-delayed collection field (TDCF) separates generation from what happens later. The cell is held at a pre-bias V<sub>pre</sub>, which sets the internal field. A ≈5 ns laser pulse creates charges. After 6 ns the voltage jumps to a strong reverse bias of −2.5 V and every free charge is swept out and counted.</p>
+      <p>The pulse is weak (0.05 µJ cm<sup>−2</sup>, in the regime where collected charge is strictly proportional to fluence), so charges barely meet each other before collection. The collected charge Q then measures how many free charges were generated at V<sub>pre</sub>.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · FLAT</span><h2>No field dependence, whatever you excite</h2>
+      <p>For PM6:Y6 the collected charge does not change with pre-bias, even close to V<sub>oc</sub>. That holds at six photon energies: 2.76, 2.33 and 2.07 eV (mainly PM6, channel I), 1.55 and 1.41 eV (Y6, channel II), and 1.29 eV, inside the low-energy shoulder attributed to the CT state.</p>
+      <p>The internal quantum efficiency and the internal generation efficiency are both close to one and do not depend on photon energy. Extra driving force (channel I) and excess photon energy bring no benefit: generation proceeds through cold, relaxed CT states.</p>
+      <p class="note">Schematic, after Fig. 1c; each curve is normalised to its value at −2 V.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · COLD</span><h2>Six millielectronvolts</h2>
+      <p>Cooling tests the second fingerprint. In TDCF, free charge generation drops by less than 10% from 320 K to 230 K and stays field independent. Low-intensity EQE measured versus temperature follows EQE = EQE₀·exp(−E<sub>a</sub>/k<sub>B</sub>T) with E<sub>a</sub> = 6 meV at every excitation energy.</p>
+      <p>Comparable studies on fullerene blends found a few tens to ≈100 meV. Generation stays efficient down to ≈125 K, and V<sub>oc</sub> rises linearly on cooling down to ≈100 K, so the free-carrier density is unaffected. Charge generation in PM6:Y6 is essentially barrierless.</p>
+      <p class="note">Lines are Eq. (1) of the paper drawn with the quoted E<sub>a</sub> values, not the measured points (Fig. 2c).</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · NOT DISORDER</span><h2>Order, not disorder</h2>
+      <p>One popular explanation for easy charge separation is energetic disorder: a broad spread of site energies offers low-energy escape routes. Temperature-dependent space-charge-limited currents give a disorder of σ<sub>IE</sub> = 83 meV for holes and σ<sub>EA</sub> = 71 meV for electrons, and recombination is non-dispersive. Both point to a narrow density of states, too narrow to be the main driver.</p>
+      <p>Aggregation of Y6 does matter. In a dilute blend (PM6:Y6 = 10:1) where Y6 no longer aggregates, generation becomes field dependent and thermally activated with E<sub>a</sub> ≈ 22 meV.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · WHY</span><h2>The quadrupole flattens the hill</h2>
+      <p>Y6 has an A–D′–A″–D′–A architecture. Its electrostatic potential is positive over the conjugated core and negative at the ends (Fig. 4a), giving a large quadrupole moment (Q<sub>xx</sub> = −120, Q<sub>yy</sub> = 80, Q<sub>zz</sub> = 40 D·Å). In the crystal, Y6 molecules pair up so that their dipoles cancel and the quadrupolar fields remain.</p>
+      <p>At a donor–acceptor interface the concentration of Y6 changes, so its crystal field bends. This bias potential B pushes electrons and holes away from the interface and shrinks the energy gap between the CT state and free charges. An upper-bound estimate gives B ≈ 1.1 eV for Y6; simulations suggest B &gt; 1 is enough for barrierless CT dissociation.</p>
+      <p class="note">Molecule and energy landscape are schematic, after Fig. 4a and the text.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · WHAT FOLLOWS</span><h2>Generation is not the bottleneck</h2>
+      <p>Because generation is the same at every bias, any slope of the J–V curve near short circuit must come from recombination of free charges. That recombination is bimolecular (order 2.14) with k<sub>2</sub> = 1.7 × 10<sup>−17</sup> m³ s<sup>−1</sup>, only about 30 times below the Langevin rate of 5.5 × 10<sup>−16</sup> m³ s<sup>−1</sup>.</p>
+      <p>The devices reach 13.7% (V<sub>oc</sub> 0.856 V, J<sub>sc</sub> 22.4 mA cm<sup>−2</sup>, FF 71.3%), and a certified 1 cm² cell 13.45%. They are limited by absorption and extraction, not generation. Simulations suggest more than 18% is within reach with a smaller k<sub>2</sub> and ten times higher mobility.</p>
+      <p class="note">J–V drawn with a diode model (ideality 1.17 from the paper) plus a linear collection loss, matched to V<sub>oc</sub>, J<sub>sc</sub> and FF of Table S1; the generation line is schematic.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>Escape from the Coulomb well</h2>
+  <p class="intro">A deliberately simple toy model, built for intuition and not taken from the paper. A CT pair escapes with rate k = k₀·exp(−E<sub>a</sub>/k<sub>B</sub>T) or recombines with rate k<sub>r</sub> = k₀/100. The barrier is E<sub>a</sub> = E<sub>b</sub> − ΔE<sub>B</sub> − ΔE(F): the Coulomb binding energy, minus an electrostatic compensation ΔE<sub>B</sub>, minus the lowering by the internal field F (Poole–Frenkel form, 100 nm device, built-in voltage 1 V). ΔE<sub>B</sub> stands in for the effect of the interfacial bias potential; it is not the paper's B, which is defined differently. The plot shows the free-charge yield against applied voltage, like the TDCF pre-bias scan.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Free-charge yield versus voltage in a toy model that responds to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="eb"><span class="row"><span>Coulomb binding energy E<sub>b</sub></span><output id="ebv">300 meV</output></span><input id="eb" type="range" min="100" max="500" step="10" value="300"></label>
+      <label for="bb"><span class="row"><span>Electrostatic compensation ΔE<sub>B</sub> (toy)</span><output id="bbv">0 meV</output></span><input id="bb" type="range" min="0" max="500" step="10" value="0"></label>
+      <label for="tt"><span class="row">Temperature<output id="ttv">300 K</output></span><input id="tt" type="range" min="80" max="340" step="10" value="300"></label>
+      <div class="read"><div><b id="r0">–</b><span>yield at short circuit</span></div><div><b id="rf">–</b><span>yield near V<sub>oc</sub> / yield at −2 V</span></div><div><b id="ra">–</b><span>apparent activation energy</span></div></div>
+      <p class="note">Try this: with ΔE<sub>B</sub> = 0 the yield is small and falls toward open circuit. Raise ΔE<sub>B</sub> toward E<sub>b</sub> and the curve goes flat and high. Then lower the temperature: with the barrier gone, cold barely matters.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1002/adma.201906763">Read the full paper in Advanced Materials ↗</a>
+  <span class="note">Numbers quoted from the paper and its Supporting Information: singlet energies 1.90 and 1.42 eV, E<sub>CT</sub> 1.41 eV, driving forces ≈0.60 and ≤0.13 eV, IE offset 0.09 eV, the ≈0.4 eV expected binding energy, TDCF settings (≈5 ns pulse, 6 ns delay, −2.5 V, 0.05 µJ cm⁻²), the six excitation energies, E<sub>a</sub> = 6 meV and ≈22 meV, temperatures 320/230/≈125/≈100 K, σ<sub>IE</sub> 83 and σ<sub>EA</sub> 71 meV, the quadrupole components, B ≈ 1.1 eV, k<sub>2</sub> and k<sub>L</sub>, recombination order 2.14, ideality 1.17, and the device figures (Table S1, 13.45% certified, &gt;18% projection). Curve shapes, the molecule drawing, the Arrhenius lines and the lab model are schematic or illustrative.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=140){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=20;i++){const s=i/20*len,o=Math.sin(i/20*TAU*2.5)*4;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,2,8,a)}
+};return g}
+
+// ---- toy CT-escape model (shared by scene 3 and the lab) ----
+// yield = k/(k+kr), k = k0 exp(-Ea/kT), kr = k0/100; Ea = max(0, Eb - B - PF(F)); F = (Vbi - V)/d, Vbi = 1 V, d = 100 nm, eps_r = 3.5
+const KB=8.617e-5;
+function pf(F){return Math.sqrt(1.602e-19*Math.max(0,F)/(Math.PI*8.854e-12*3.5))} // eV
+function yieldOf(V,T,Eb,B){const F=(1.0-V)/100e-9,Ea=Math.max(0,Eb-B-pf(F)),k=100*Math.exp(-Ea/(KB*T));return k/(k+1)}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+
+const EX=[[2.76,'#8f9bff','PM6'],[2.33,'#62e0a8','PM6'],[2.07,'#ffb85c','PM6'],[1.55,'#ff8a7a','Y6'],[1.41,'#ff5f8f','Y6'],[1.29,'#cfa2ff','CT']];
+
+function hole(x,y,a,r=5){g.ring(x,y,r,'#fff',2,a,10)}
+function elec(x,y,a,r=5){g.dot(x,y,r,C.blue,a,12)}
+
+const SC=[
+ // 0 energy levels after Fig. 1a, two channels
+ (t,a)=>{const Y=E=>90+(-3.0-E)/3.0*300,D={x0:90,x1:240,L:-3.5,H:-5.56},A={x0:330,x1:480,L:-4.1,H:-5.65};
+  g.axes(70,Y(-6.0),560,Y(-3.0));[-3,-4,-5,-6].forEach(E=>g.text(E.toFixed(1),62,Y(E)+4,'right',.5*a,12));g.text('energy (eV)',70,76,'left',.5*a,12);
+  g.line([[D.x0,Y(D.L)],[D.x1,Y(D.L)]],C.amber,3,10,a);g.line([[D.x0,Y(D.H)],[D.x1,Y(D.H)]],C.amber,3,10,a);
+  g.line([[A.x0,Y(A.L)],[A.x1,Y(A.L)]],C.blue,3,10,a);g.line([[A.x0,Y(A.H)],[A.x1,Y(A.H)]],C.blue,3,10,a);
+  g.text('PM6',165,Y(D.L)-14,'center',.9*a,15,C.amber);g.text('Y6',405,Y(A.L)-14,'center',.9*a,15,C.blue);
+  g.line([[D.x1,Y(D.H)],[500,Y(D.H)]],C.ink,1,0,.3*a,[3,4]);g.line([[495,Y(D.H)],[495,Y(A.H)]],C.ink,1.4,0,.8*a);g.text('IE offset 0.09 eV',405,Y(A.H)+22,'center',.8*a,12);
+  const p=(t%8)/8,ch2=p>=.5,q=(p%.5)/.5;
+  if(!ch2){if(q<.3){const k=q/.3;g.wave(120+k*30,40+k*80,1.2,30,'#62e0a8',a*(1-k*.3))}
+    else{const k=ss((q-.35)/.45);elec(q<.35?200:lerp(200,400,k),q<.35?Y(D.L):lerp(Y(D.L),Y(A.L),k)-Math.sin(k*Math.PI)*22,a);hole(200,Y(D.H),a)}
+    g.text('channel I: electron transfer, ΔE ≈ 0.60 eV',300,420,'center',.9*a,14,C.blue)}
+  else{if(q<.3){const k=q/.3;g.wave(390+k*20,50+k*120,1.3,30,'#ff8a7a',a*(1-k*.3))}
+    else{const k=ss((q-.35)/.45);elec(400,Y(A.L),a);hole(q<.35?400:lerp(400,200,k),q<.35?Y(A.H):lerp(Y(A.H),Y(D.H),k)+Math.sin(k*Math.PI)*20,a)}
+    g.text('channel II: hole transfer, ΔE ≤ 0.13 eV',300,420,'center',.9*a,14,C.amber)}
+  elec(80,444,.8*a,4);g.text('electron',90,448,'left',.55*a,12);hole(180,444,.8*a,4);g.text('hole',190,448,'left',.55*a,12);
+  g.text('after Fig. 1a',560,448,'right',.4*a,11)},
+ // 1 Coulomb well
+ (t,a)=>{const X=r=>90+(r-.4)/5.6*470,Y=E=>80+(-E)/.6*300,Ec=r=>-1.44/(3.5*r);g.axes(90,390,565,60);
+  g.line([[90,80],[565,80]],C.ink,1,0,.3*a,[4,4]);g.text('free pair (0 eV)',560,72,'right',.55*a,12);
+  g.fn(x=>Y(Ec((x-90)/470*5.6+.4)),X(.74),565,C.violet,3,14,a);
+  const jig=.06*Math.sin(t*6)+.04*Math.sin(t*9.3),tryk=Math.max(0,Math.sin(t*1.3))**6,r=1+jig+tryk*.55,E=Ec(r);
+  const y=Y(E)-8;elec(X(r)+7,y,a);hole(X(r)-7,y,a);
+  const kt=.0257/.6*300;g.rect(X(1)-60,Y(Ec(1))-kt,6,kt,C.amber,.9*a,8);g.text('kBT',X(1)-68,Y(Ec(1))-kt/2+4,'right',.8*a,12,C.amber);
+  g.line([[X(1)+16,Y(Ec(1))],[X(1)+16,80]],C.ink,1.2,0,.6*a,[2,3]);g.text('Eb ≈ 0.4 eV at r = 1 nm',X(2.2),Y(-.42),'left',.85*a,14);
+  [1,2,3,4,5,6].forEach(r=>g.text(r+'',X(r),410,'center',.5*a,12));g.text('electron–hole distance r (nm)',330,434,'center',.6*a,13);
+  g.text('energy',82,60,'right',.55*a,12);g.text('bare Coulomb, εr = 3.5',565,370,'right',.45*a,11)},
+ // 2 expectation for a barrier
+ (t,a)=>{const X=v=>100+(v+2)/2.9*440,Y=q=>380-q*280;g.axes(100,380,560,70);
+  const Ts=[[300,C.amber],[200,C.violet],[120,C.blue]],p=ss(((t%7)/7)/.6);
+  Ts.forEach(([T,c],i)=>{const n=yieldOf(-2,T,.4,.1);const xe=100+440*p;g.fn(x=>Y(yieldOf((x-100)/440*2.9-2,T,.4,.1)/n),100,xe,c,2.6,10,a);const vl=[-1.0,-1.45,-1.75][i];g.text(T+' K',X(vl)+8,Y(yieldOf(vl,T,.4,.1)/n)-6,'left',.85*a*ss((p-.3)/.3),13,c)});
+  g.line([[100,Y(1)],[560,Y(1)]],C.ink,1,0,.25*a,[4,4]);
+  [-2,-1,0].forEach(v=>g.text(v+' V',X(v),400,'center',.5*a,12));g.text('pre-bias →  (weaker field)',555,424,'right',.6*a,13);
+  g.text('Q / Q(−2 V)',92,62,'right',.6*a,12);g.text('1',90,Y(1)+4,'right',.5*a,12);
+  g.text('IF there were a barrier',110,52,'left',.85*a,15,C.red);g.text('illustrative barrier model, not data',555,440,'right',.4*a,11)},
+ // 3 TDCF timeline
+ (t,a)=>{const p=(t%6)/6,X=s=>80+s*480,tp=.18,tc=.45,Vp=130,Vc=230,f=x=>{const s=(x-X(tc))/480;return 390-120*Math.exp(-s/.07)};
+  g.text('voltage',80,62,'left',.55*a,12);g.text('current',80,300,'left',.55*a,12);
+  g.fn(x=>{const s=(x-80)/480;return s<tc?Vp:Vc},80,560,C.amber,3,12,a,undefined,480);
+  g.text('V_pre',X(.02),Vp-12,'left',.85*a,13,C.amber);g.text('V_coll = −2.5 V',X(tc)+10,Vc+22,'left',.85*a,13,C.amber);
+  const k=Math.exp(-Math.pow((p-tp)/.03,2));g.line([[X(tp),80],[X(tp),250]],'#fff',2,18,a*(.35+.65*k));g.text('≈5 ns laser pulse',X(tp)+8,92,'left',.85*a,13);g.text('0.05 µJ cm⁻²',X(tp)+8,200,'left',.6*a,12);
+  g.line([[X(tp),Vp+18],[X(tc),Vp+18]],C.ink,1,0,.5*a);g.text('delay 6 ns',X((tp+tc)/2),Vp+36,'center',.7*a,12);
+  g.line([[80,390],[560,390]],C.ink,1,0,.3*a);
+  ctx.save();ctx.globalAlpha=.22*a;ctx.fillStyle=C.blue;ctx.beginPath();ctx.moveTo(X(tc),390);for(let x=X(tc);x<=560;x+=2)ctx.lineTo(x,f(x));ctx.lineTo(560,390);ctx.fill();ctx.restore();
+  g.fn(f,X(tc),560,C.blue,2.6,12,a);g.line([[80,390],[X(tc),390]],C.blue,2.6,12,a);g.text('area = collected charge Q',X(tc)+70,330,'left',.85*a,14,C.blue);
+  g.line([[X(p),56],[X(p),400]],C.ink,1,0,.35*a,[3,4]);
+  const R=rng(3);if(p>tp){for(let j=0;j<12;j++){const y0=300+R()*30,x0=X(tp)+(R()-.5)*30,s=p>tc?ss((p-tc)/.25):0;if(s<1){elec(x0+s*200,y0,a*(1-s),3);hole(x0-s*120,y0+8,a*(1-s),3)}}}
+  g.text('time →  (not to scale)',560,420,'right',.5*a,12)},
+ // 4 flat Q(Vpre) for six excitation energies
+ (t,a)=>{const Voc=.856,X=v=>100+(v+2)/(Voc+2)*440,Y=q=>380-q*260;g.axes(100,380,560,70);const p=ss(((t%7)/7)/.6);
+  g.line([[100,Y(1)],[560,Y(1)]],C.ink,1,0,.2*a,[4,4]);
+  EX.forEach(([E,c,lab],i)=>{const R=rng(30+i),off=(i-2.5)*.008;const pts=[];for(let k=0;k<=12;k++){const v=-2+k/12*(Voc+2-.05);pts.push([X(v),Y(1+off+(k?(R()-.5)*.03:0))])}
+    g.line(pts,c,2.4,10,a);pts.forEach(q=>g.dot(q[0],q[1],3,c,a,8));
+    g.text(E.toFixed(2)+' eV  '+lab,555,Y(.62)+i*20-60,'right',.9*a,13,c)});
+  const vc=-2+p*(Voc+2);g.line([[X(vc),Y(1.12)],[X(vc),Y(0)]],C.ink,1,0,.3*a,[3,4]);
+  [-2,-1,0].forEach(v=>g.text(v+' V',X(v),400,'center',.5*a,12));g.text('Voc',X(Voc),400,'center',.6*a,12);g.text('pre-bias Vpre',555,424,'right',.6*a,13);
+  g.text('Q / Q(−2 V)',92,62,'right',.6*a,12);g.text('1',90,Y(1)+4,'right',.5*a,12);g.text('0',90,Y(0)+4,'right',.5*a,12);
+  g.text('flat for every excitation energy',110,Y(.25),'left',.85*a,15,C.green);g.text('IQE ≈ IGE ≈ 1',110,Y(.25)+22,'left',.7*a,13,C.green);g.text('schematic, after Fig. 1c',555,Y(.1),'right',.4*a,11)},
+ // 5 activation energy, Eq. (1) with quoted Ea values
+ (t,a)=>{const kT=T=>KB*1000*T,inv=u=>lerp(1/kT(320),1/kT(150),u),X=u=>100+u*280,Y=l=>110-l/Math.LN10*120;g.axes(100,350,380,70);
+  const L=(Ea,u)=>-Ea*(inv(u)-inv(0));const p=ss(((t%7)/7)/.6),xe=100+280*p;
+  g.fn(x=>Math.min(350,Y(L(100,(x-100)/280))),100,xe,C.red,2,0,.7*a,[5,5]);
+  g.fn(x=>Y(L(22,(x-100)/280)),100,xe,C.amber,2.6,10,a);g.fn(x=>Y(L(6,(x-100)/280)),100,xe,C.green,3,14,a);
+  g.text('PM6:Y6 1:1.2  Ea = 6 meV',X(.02),Y(0)-12,'left',.95*a,13,C.green);g.text('dilute 10:1  Ea ≈ 22 meV',X(.05),Y(L(22,.45))+30,'left',.9*a,13,C.amber);g.text('≈100 meV (upper end,',X(.2)+14,300,'left',.7*a,12,C.red);g.text('fullerene blends)',X(.2)+14,316,'left',.7*a,12,C.red);
+  [[0,'320 K'],[1,'150 K']].forEach(([u,s])=>g.text(s,X(u),370,'center',.5*a,12));g.text('1 / kBT →',380,392,'right',.6*a,12);
+  [[0,'1'],[-Math.LN10,'0.1']].forEach(([l,s])=>g.text(s,92,Y(l)+4,'right',.5*a,12));g.text('EQE / EQE(320 K), log',100,60,'left',.55*a,12);
+  const bx=430,sc2=140/400;g.text('energy scale',bx,92,'left',.6*a,12);
+  [['Ea 6 meV',6,C.green],['kBT ≈ 26 meV',25.7,C.amber],['Eb ≈ 0.4 eV',400,C.violet]].forEach(([n,v,c],i)=>{const y=120+i*70;g.rect(bx,y,Math.max(2,v*sc2),14,c,.85*a,10);g.text(n,bx,y+36,'left',.85*a,13,c)});
+  g.text('lines: Eq. (1) with quoted Ea, after Fig. 2c',380,430,'right',.4*a,11)},
+ // 6 narrow DOS + aggregation
+ (t,a)=>{const gau=(x,s)=>Math.exp(-x*x/(2*s*s));const y0=220,h=130;g.line([[60,y0],[560,y0]],C.ink,1,0,.3*a);
+  const br=.9+.1*Math.sin(t*1.5);
+  g.fn(x=>y0-h*br*gau((x-170)/.7,71),170-124,170+124,C.blue,2.6,12,a);g.fn(x=>y0-h*br*gau((x-440)/.7,83),440-145,440+145,C.amber,2.6,12,a);
+  g.fn(x=>y0-h*.75*gau((x-170)/.7,100),170-175,170+175,C.ink,1,0,.35*a,[4,4]);
+  g.text('electrons σEA = 71 meV',170,y0+24,'center',.9*a,13,C.blue);g.text('holes σIE = 83 meV',440,y0+24,'center',.9*a,13,C.amber);
+  g.line([[170-70,74],[170+70,74]],C.ink,1,0,.5*a);g.text('±100 meV',170,68,'center',.5*a,11);g.text('dashed: σ = 100 meV',560,74,'right',.45*a,11);
+  // aggregation panel
+  const R=rng(8);g.rect(60,280,230,140,'#ffffff',.04*a);g.rect(320,280,240,140,'#ffffff',.04*a);
+  for(let k=0;k<5;k++)for(let j=0;j<2;j++){const x=95+k*30,y=315+j*14;g.line([[x-12,y],[x+12,y]],C.blue,4,8,.9*a)}
+  for(let k=0;k<5;k++){const x=345+R()*190,y=305+R()*40,an=R()*3;g.line([[x-12*Math.cos(an),y-12*Math.sin(an)],[x+12*Math.cos(an),y+12*Math.sin(an)]],C.blue,4,6,.7*a)}
+  g.text('1:1.2, aggregated Y6',175,372,'center',.9*a,13,C.green);g.text('field independent, Ea 6 meV',175,394,'center',.75*a,12,C.green);
+  g.text('10:1, dilute Y6',440,372,'center',.9*a,13,C.amber);g.text('field dependent, Ea ≈ 22 meV',440,394,'center',.75*a,12,C.amber);
+  g.text('Gaussian widths from SCLC; shapes schematic',560,440,'right',.4*a,11)},
+ // 7 quadrupole + bias potential
+ (t,a)=>{const mol=(cx,cy,s)=>{const pts=[];for(let i=0;i<=20;i++){const u=i/20-.5;pts.push([cx+u*190*s,cy+Math.pow(u*2,2)*26*s])}
+    g.halo(cx,cy+6*s,70*s,'#ff9fb0',.30*a);g.line(pts,C.ink,5,8,.8*a);
+    ['A','D′','A″','D′','A'].forEach((l,i)=>{const u=i/4-.5;g.dot(cx+u*190*s,cy+Math.pow(u*2,2)*26*s,6,i%2?C.ink:'#ff9fb0',.9*a,6);g.text(l,cx+u*190*s,cy+Math.pow(u*2,2)*26*s-12,'center',.7*a,11)});
+    g.halo(cx-108*s,cy+36*s,30*s,'#6f7dff',.6*a);g.halo(cx+108*s,cy+36*s,30*s,'#6f7dff',.6*a)};
+  const br=.95+.05*Math.sin(t*1.6);mol(160,170,br);
+  g.text('+0.05 eV over the core',160,108,'center',.85*a,12,'#ff9fb0');g.text('−0.02 eV at the ends',160,250,'center',.85*a,12,'#9aa6ff');
+  g.text('Qxx −120  Qyy 80  Qzz 40 D·Å',160,290,'center',.8*a,12);g.text('dipoles cancel in the',160,322,'center',.6*a,12);g.text('dimerised unit cell',160,338,'center',.6*a,12);
+  g.text('after Fig. 4a',160,440,'center',.4*a,11);
+  const x0=320,x1=575,Y=E=>140+(-E)*240,U=x=>(x-x0)/(x1-x0);
+  g.axes(x0,380,x1,100);g.fn(x=>Y(-.42/(1+U(x)*8)),x0+4,x1,C.ink,1.6,0,.5*a,[5,4]);g.fn(x=>Y(-.06*ss(U(x))),x0+4,x1,C.green,3,14,a);
+  g.text('Coulomb only',x0+40,Y(-.3),'left',.6*a,12);g.text('+ bias potential B',x1,Y(-.06)+28,'right',.9*a,13,C.green);
+  for(let k=0;k<4;k++){const q=((t*.18+k/4)%1),x=x0+8+(x1-x0-16)*ss(q),y=Y(-.06*ss(U(x)))-9,sep=3+q*14;elec(x+sep,y,a,3.5);hole(x-sep,y,a,3.5)}
+  g.text('pair energy',x0,92,'left',.55*a,12);g.text('distance from interface →',x1,400,'right',.5*a,12);g.text('B ≈ 1.1 eV (upper bound)',x1,430,'right',.75*a,12)},
+ // 8 generation flat vs J–V (diode n=1.17 + linear loss, matched to Table S1)
+ (t,a)=>{const Voc=.856,Jsc=22.4,n=1.17,Vt=.02585,gl=4.83,J0=(Jsc-gl*Voc)/(Math.exp(Voc/(n*Vt))-1),J=v=>Jsc-gl*v-J0*(Math.exp(v/(n*Vt))-1);
+  const X=v=>100+v/1.0*310,Y=j=>380-j/25*270;g.axes(100,380,410,70);const p=ss(((t%7)/7)/.6),ve=Voc*p;
+  g.line([[X(0),Y(23.4)],[X(.93),Y(23.4)]],C.violet,2,10,.9*a,[7,5]);g.text('free-charge generation (TDCF): flat',X(.02),Y(23.4)-12,'left',.9*a,13,C.violet);
+  let mv=0;for(let v=0;v<=Voc;v+=.002)if(v*J(v)>mv*J(mv))mv=v;g.rect(X(0),Y(J(mv)),X(mv)-X(0),Y(0)-Y(J(mv)),C.blue,.10*a);
+  g.fn(x=>Y(Math.max(0,J((x-100)/310))),100,X(Voc),C.blue,3,14,a);g.dot(X(ve),Y(Math.max(0,J(ve))),5,'#fff',a,14);g.text('J–V, AM1.5G',X(.04),Y(19),'left',.85*a,13,C.blue);
+  g.text('Voc 0.856 V · Jsc 22.4',X(.04),Y(15.5),'left',.75*a,12);g.text('FF 71.3% · PCE 13.7%',X(.04),Y(15.5)+17,'left',.75*a,12);
+  g.text('slope = recombination,',X(.04),Y(8),'left',.8*a,13,C.red);g.text('not generation',X(.04),Y(8)+17,'left',.8*a,13,C.red);
+  [0,.2,.4,.6,.8].forEach(v=>g.text(v.toFixed(1),X(v),400,'center',.5*a,12));g.text('V',410,420,'right',.5*a,12);g.text('J (mA cm⁻²)',100,60,'left',.55*a,12);
+  // k2 vs Langevin bars (log)
+  const bx=430,lb=v=>(Math.log10(v)+18)*45;g.text('k2 (log scale)',bx,120,'left',.6*a,12);
+  g.rect(bx,135,lb(1.7e-17),12,C.amber,.85*a,8);g.text('k2 = 1.7×10⁻¹⁷',bx,166,'left',.85*a,12,C.amber);
+  g.rect(bx,182,lb(5.5e-16),12,C.ink,.5*a,6);g.text('Langevin 5.5×10⁻¹⁶',bx,213,'left',.7*a,12);g.text('≈30× apart',bx,234,'left',.7*a,12);
+  g.text('diode model matched to Table S1; generation line schematic',560,440,'right',.4*a,11)}
+];let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce)requestAnimationFrame(frame)}
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+function lab(){const Eb=+$('eb').value/1000,B=+$('bb').value/1000,T=+$('tt').value;$('ebv').value=Math.round(Eb*1000)+' meV';$('bbv').value=Math.round(B*1000)+' meV';$('ttv').value=T+' K';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);const X=v=>80+(v+2)/2.9*480,Y=q=>380-q*300;lg.axes(80,380,570,50);
+  lg.line([[80,Y(1)],[570,Y(1)]],C.ink,1,0,.2,[4,4]);
+  if(T!=300){lg.fn(x=>Y(yieldOf((x-80)/480*2.9-2,300,Eb,B)),80,560,C.ink,1.4,0,.45,[5,5]);lg.text('300 K',X(.6),Y(yieldOf(.6,300,Eb,B))-10,'left',.5,12)}
+  lg.fn(x=>Y(yieldOf((x-80)/480*2.9-2,T,Eb,B)),80,560,C.green,3,14);lg.text(T+' K',X(-1.9),Y(yieldOf(-1.9,T,Eb,B))-10,'left',.9,13,C.green);
+  [-2,-1,0,.8].forEach(v=>lg.text((v>0?'+':'')+v+' V',X(v),400,'center',.5,12));lg.text('applied voltage (pre-bias)',560,430,'right',.6,13);lg.text('free-charge yield',72,40,'left',.6,13);
+  [0,.5,1].forEach(q=>lg.text(q.toFixed(1),72,Y(q)+4,'right',.5,12));
+  const y0=yieldOf(0,T,Eb,B),ratio=yieldOf(.8,T,Eb,B)/yieldOf(-2,T,Eb,B);
+  const T1=T,T2=T-10,ea=-KB*(Math.log(yieldOf(0,T1,Eb,B))-Math.log(yieldOf(0,T2,Eb,B)))/(1/T1-1/T2);
+  $('r0').textContent=(y0*100).toFixed(y0<.1?1:0)+'%';$('rf').textContent=ratio.toFixed(2);$('ra').textContent=Math.max(0,ea*1000).toFixed(0)+' meV';
+  lg.text('toy model, not the paper’s',560,40,'right',.4,11)}
+['eb','bb','tt'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>

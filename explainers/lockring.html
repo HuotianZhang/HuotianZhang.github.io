@@ -1,0 +1,305 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Locked Rings That Glow</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Locked Rings That Glow: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1002/adma.202519607">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Advanced Materials 2025</span>
+  <h1>Locking an acceptor into a ring to make it glow</h1>
+  <p class="dek">Every excited molecule that sheds its energy as heat costs an organic solar cell voltage. Tying two acceptor backbones into a strained ring softens the vibrations that carry that heat away, and a shorter strap across the ring then fixes how the molecules pack.</p>
+  <p class="cite">W. Liu, J. Yuan, Y. Nai, N. Jain, Z. Fu, W. Chen, J. Wu, R. Zhang, H. Zhang, X. Guo, F. Gao, Y. Zou. <i>Conformationally locked macrocyclic acceptors with enhanced photoluminescence for high-efficiency organic solar cells.</i> Advanced Materials, e19607 (2025). <a href="https://doi.org/10.1002/adma.202519607">doi:10.1002/adma.202519607</a></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE VOLTAGE TAX</span><h2>Light that never comes out</h2>
+      <p>A solar cell run backwards is a light-emitting diode. Detailed balance says the ideal cell would turn every injected charge pair back into a photon. Every pair that instead decays silently, as heat, lowers the open-circuit voltage:</p>
+      <div class="eq">ΔV<sub>nr</sub> = −(k<sub>B</sub>T/q) · ln(EQE<sub>EL</sub>)</div>
+      <p>Each factor of ten lost in emission costs about 60 mV at room temperature. In these devices non-radiative recombination is the largest part of the total voltage loss, and its ceiling is set by how well the low-gap acceptor itself emits: its photoluminescence quantum yield, or PLQY.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · WHERE THE HEAT GOES</span><h2>A ladder of vibrations</h2>
+      <p>Draw the ground and excited states as two parabolas along a molecular coordinate. Each holds a ladder of vibrational levels spaced by the mean high-frequency vibrational quantum hν̄. The relaxed excited state can drop without emitting by landing on a ground-state level of the same energy; how fast depends on how much the two vibrational wavefunctions overlap.</p>
+      <p>If the vibrations are softer, hν̄ is smaller, the matching level sits higher up the ladder (j = 4 instead of j = 3 in the paper's sketch), the overlap shrinks, and the heat channel slows. The paper writes this as PLQY rising with exp[(ΔE − λ<sub>S</sub>)/hν̄].</p>
+      <p class="note">Schematic, after Fig. 3g.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · THE LINEAR STARTING POINT</span><h2>Linear acceptors glow weakly</h2>
+      <p>The building block is BTP-C3, a linear A–DA′D–A acceptor of the Y-series family: a fused electron-rich core flanked by two electron-poor end groups. Low-gap linear acceptors like this typically have PLQYs below 5%.</p>
+      <p>Strategies to raise PLQY, such as adding rigid units or bulky side chains, usually change how the molecules aggregate in the film, and charge transport suffers. The goal is brightness without that trade-off.</p>
+      <p class="note">Drawing is schematic; see Fig. 1 of the paper for the chemical structures.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · CLOSE THE RING</span><h2>Two backbones, one strained ring</h2>
+      <p>In the ring-like conjugated macrocycle (RCM), two BTP-C3 backbones are joined end to end by thiophene bridges, and their central triazole units are tied together across the cavity by an alkyl strap. The strap is six, five or four carbons long, which gives RCM-C6, RCM-C5 and RCM-C4.</p>
+      <p>The ring is shape-persistent and strained: the conjugated backbone can no longer relax freely. RCM-C6 is the macrocycle the group introduced in <a href="https://doi.org/10.1002/anie.202311645">Angewandte Chemie 2023</a>, with an electroluminescence efficiency of 4 × 10<sup>−4</sup>.</p>
+      <p class="note">Schematic, after Fig. 1a.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · THE FINGERPRINT</span><h2>Raman shows softer vibrations</h2>
+      <p>Raman spectra probe exactly the backbone vibrations that matter. In the C=C stretching region (1350–1700 cm<sup>−1</sup>) the macrocycle spectra are redshifted relative to linear BTP-C3, with more weight in the lower-frequency modes. The average high-frequency vibration is lower, which is the softening sketched in step 2.</p>
+      <p>Solution spectra agree: RCM-C5 and RCM-C4 show a smaller Stokes shift and narrower emission than RCM-C6, signs of a stiffer structure that relaxes less after excitation.</p>
+      <p class="note">Spectra are schematic, after Figs. 3c and 1d.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · THE PAYOFF IN LIGHT</span><h2>Brighter films, smaller voltage loss</h2>
+      <p>Neat films of RCM-C4 and RCM-C6 reach PLQYs of 14.5% and 13.7%, roughly three times the typical value for linear acceptors. RCM-C5 is lower, at about 10% in Fig. 3b.</p>
+      <p>In devices with the donor PM6, the non-radiative voltage loss ΔE<sub>nr</sub> is 0.21 eV (RCM-C6), 0.24 eV (RCM-C5) and 0.22 eV (RCM-C4), against 0.26 eV for a linear BTP-C3 device. The ring itself is the main win; within the series the order is not strictly monotonic.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · TOO GOOD AT STACKING</span><h2>A shorter strap tames aggregation</h2>
+      <p>RCM-C6 emits well but packs badly. Its two backbones sit at 95.8° to each other, and in neat films it forms large crystalline domains with 10.3 nm surface roughness. In blends this excessive aggregation drives recombination and limits fill factor.</p>
+      <p>Shortening the strap pulls the triazoles together: the cavity shrinks from 8.3 to 7.5 to 6.3 Å, the backbones become more planar, and a controlled twist in the thiophene bridges keeps aggregation in check. The film absorption peak moves from 804 to 796 to 786 nm, a sign of weaker aggregation. RCM-C4 films form an ordered fibrous network with only 1.42 nm roughness.</p>
+      <p class="note">Ring geometry and film textures are schematic, after Figs. 1b and 4a.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · THE DEVICE</span><h2>17.1%, the record for macrocycles</h2>
+      <p>With PM6, efficiency rises from 14.55% (RCM-C6) to 16.51% (RCM-C5) to 17.10% (RCM-C4), driven by fill factor (65.6 → 72.1 → 73.9%) and current, with V<sub>oc</sub> near 0.97 V throughout. At publication 17.1% was the highest efficiency for a macrocycle-based cell.</p>
+      <p>RCM-C4 also has the longest excited-state lifetime in films, 0.75 ns against 0.57 ns for RCM-C6, giving excitons more time to reach the donor interface, plus more balanced electron and hole mobilities. Its devices kept about 100% of their efficiency after 285 h at 80 °C, where L8-BO and BTP-C3 devices fell to about 80%.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · THE DESIGN RULE</span><h2>Stiffness first, then packing</h2>
+      <p>The recipe has two steps. First, lock the conjugated backbone into a ring so its vibrations soften and the excitation has fewer ways to turn into heat; that raises PLQY and lowers the voltage tax. Second, tune the geometry of the lock (here the strap length) so the stiff rings do not over-aggregate and charges can still move.</p>
+      <p>RCM-C6 shows that the first step alone is not enough. RCM-C4 shows that both can be had in one molecule.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>Soften a toy molecule</h2>
+  <p class="intro">This is a textbook energy-gap-law toy, built for intuition. It is not a model or fit from the paper. One effective high-frequency vibration of energy ħω̄ couples to the excitation with strength S (the Huang–Rhys factor). The non-radiative rate follows k<sub>nr</sub> ∝ exp(−γ·E<sub>g</sub>/ħω̄) with γ = ln(E<sub>g</sub>/Sħω̄) − 1, the radiative rate is held fixed, and the emission spectrum is a Poisson vibronic progression.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy emission spectrum and photon count that respond to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="hw"><span class="row"><span>Mean vibration ħω̄ (lower = softer)</span><output id="hwv">200 meV</output></span><input id="hw" type="range" min="140" max="220" step="2" value="200"></label>
+      <label for="rig"><span class="row"><span>Coupling S (lower = less distortion)</span><output id="rigv">0.90</output></span><input id="rig" type="range" min="0.40" max="1.40" step="0.02" value="0.90"></label>
+      <label for="gap"><span class="row"><span>Emission gap E<sub>g</sub></span><output id="gapv">1.45 eV</output></span><input id="gap" type="range" min="1.20" max="1.70" step="0.01" value="1.45"></label>
+      <div class="read"><div><b id="rplqy">–</b><span>toy emission yield</span></div><div><b id="rdv">–</b><span>ΔV<sub>nr</sub> if a device emitted this well (mV)</span></div></div>
+      <p class="note">Try this: slide ħω̄ from 210 down to 180 meV (about 1690 to 1450 cm<sup>−1</sup>, inside the Raman window the paper examines) and watch the yield climb. Then raise S to see a distorting molecule lose light, and lower the gap: smaller gaps are punished harder, which is why low-gap acceptors need this kind of design.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1002/adma.202519607">Read the full paper in Advanced Materials ↗</a>
+  <span class="note">From the paper: PLQY 14.5% (RCM-C4) and 13.7% (RCM-C6), and about 10% for RCM-C5 read from Fig. 3b; linear acceptors typically below 5% (literature cited in the paper); ΔE<sub>nr</sub> 0.21, 0.24, 0.22 eV and 0.26 eV for BTP-C3; Raman window 1350–1700 cm<sup>−1</sup>; dihedral 95.8°; cavity 8.3, 7.5, 6.3 Å; film 0–0 peaks 804, 796, 786 nm; roughness 10.3 and 1.42 nm; Table 1 device values; lifetimes 0.75, 0.58, 0.57 ns; 285 h at 80 °C. The J–V curves are a diode model matched to Table 1, not the measured curves. Ladders, molecule drawings, spectra, film textures and the lab model are schematic.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=140){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  hex(x,y,r,col,w=1.8,rot=0,a=1,glow=0,fill){const p=[];for(let j=0;j<=6;j++){const b=j/6*TAU+rot;p.push([x+r*Math.cos(b),y+r*Math.sin(b)])}
+    if(fill){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=fill;ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.fill();ctx.restore()}g.line(p,col,w,glow,a)},
+  wave(x,y,ang,len,col,a=1,w=1.6){const p=[];for(let i=0;i<=20;i++){const s=i/20*len,o=Math.sin(i/20*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,w,8,a)}
+};return g}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;const sc=Math.min(w/VW,h/VH),ox=(w-VW*sc)/2,oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+const S_=(x,y,s,al,a,sz,col)=>g.text(s,x,y,al,a,sz,col);
+
+// Hermite-Gauss envelope for vibrational wavefunction sketches
+function psi(j,x){let h0=1,h1=2*x;if(j==0)return Math.exp(-x*x/2);for(let k=1;k<j;k++){const h2=2*x*h1-2*k*h0;h0=h1;h1=h2}return h1*Math.exp(-x*x/2)}
+const psiMax=[];for(let j=0;j<9;j++){let m=0;for(let x=-6;x<=6;x+=.02)m=Math.max(m,Math.abs(psi(j,x)));psiMax.push(m)}
+
+// linear chain (scene 2)
+const NU=6;
+function chainPos(k,cx,cy,t){return[cx-150+k*60,cy+Math.sin(t*3.1+k*1.7)*14,Math.sin(t*2.3+k*2.1)*.6]}
+
+// macrocycle schematic: two backbones (end–core–triazole–core–end), thiophene bridges at the ends, alkyl strap across the cavity
+function drawRCM(cx,cy,cav,n,a,t,join=1,glow=10,wob=0){
+  const xs=[-120,-60,0,60,120];
+  for(let s of[-1,1]){const yb=cy+s*(cav/2+(1-join)*60);
+    const P=xs.map((x,i)=>[cx+x,yb+Math.sin(t*3+i*1.3+s)*8*wob]);
+    g.line(P,C.ink,2,0,.6*a);
+    P.forEach(([x,y],i)=>{const end=i==0||i==4,tri=i==2;g.hex(x,y,end?13:15,end?C.amber:tri?C.blue:C.violet,1.8,Math.PI/6,a,glow*.6,'#0b0e14');if(tri)g.text('N',x,y+4,'center',.8*a,11)})}
+  if(join>.02){const al=a*ss(join);
+    for(let s of[-1,1]){const x0=cx+s*120,y0=cy-cav/2,y1=cy+cav/2,bx=cx+s*158;
+      const pts=[];for(let i=0;i<=20;i++){const u=i/20,y=lerp(y0,y1,u),x=lerp(x0+s*12,bx,Math.sin(Math.PI*u));pts.push([x,y])}
+      g.line(pts,C.ink,2,0,.7*al);g.dot(bx,cy,6,C.green,al,8);g.text('S',bx,cy+4,'center',.7*al,10,'#0b0e14')}
+    // strap
+    const y0=cy-cav/2+15,y1=cy+cav/2-15,pts=[[cx,y0]];for(let i=1;i<=n;i++){pts.push([cx+(i%2?9:-9),lerp(y0,y1,i/(n+1))])}pts.push([cx,y1]);
+    g.line(pts,C.amber,2.2,6,al);pts.slice(1,-1).forEach(p=>g.dot(p[0],p[1],2.6,C.amber,al,6))}}
+
+// Raman schematic (BTP-C3 vs ring): peaks in the 1350–1700 cm-1 window, ring softened
+const RX=w=>70+(w-1350)/350*470;
+function raman(shift,boost){return w=>{const pk=[[1400,.55],[1450,.5],[1500,.75],[1540,1],[1590,.45]];let s=0;pk.forEach(([c,h],i)=>{const hh=h*(i<2?1+boost:1-boost*.4);s+=hh*Math.exp(-Math.pow((w-c+shift)/9,2))});return s}}
+
+// diode model matched to Table 1 (n = 1.3, Rs = 2 Ω cm², Rsh fitted to FF)
+function mkJV(Voc,Jsc,Rsh){const n=1.3,Vt=.0257,Rs=2,Jg=Jsc*(1+Rs/Rsh),J0=(Jg-Voc/Rsh*1000)/(Math.exp(Voc/(n*Vt))-1);
+  return V=>{let lo=-60,hi=Jg+5;for(let i=0;i<50;i++){const J=(lo+hi)/2,Vd=V+J*Rs/1000,f=Jg-J0*(Math.exp(Vd/(n*Vt))-1)-Vd/Rsh*1000-J;f>0?lo=J:hi=J}return(lo+hi)/2}}
+const DEV=[['RCM-C6',.977,22.73,189.6,'14.55%','65.6%',C.amber],['RCM-C5',.958,23.90,317.6,'16.51%','72.1%',C.blue],['RCM-C4',.968,23.97,398.1,'17.10%','73.9%',C.red]].map(d=>({n:d[0],Voc:d[1],Jsc:d[2],J:mkJV(d[1],d[2],d[3]),pce:d[4],ff:d[5],c:d[6]}));
+
+// film textures (scene 6)
+function texture(k,x0,y0,w,h,a,t){const R=rng(30+k);ctx.save();ctx.beginPath();ctx.rect(x0,y0,w,h);ctx.clip();g.rect(x0,y0,w,h,'#ffffff',.04*a);
+  if(k==0){for(let i=0;i<7;i++){const x=x0+R()*w,y=y0+R()*h,r=18+R()*22;g.halo(x,y,r*1.6,C.violet,.55*a);g.ring(x,y,r,C.violet,1.2,.5*a)}}
+  else if(k==1){for(let i=0;i<60;i++){g.dot(x0+R()*w,y0+R()*h,2.5+R()*3,C.violet,.55*a,4)}}
+  else{for(let i=0;i<16;i++){let x=x0+R()*w,y=y0+R()*h,an=R()*TAU;const p=[[x,y]];for(let s=0;s<14;s++){an+=(R()-.5)*.5;x+=Math.cos(an)*9;y+=Math.sin(an)*9;p.push([x,y])}g.line(p,C.violet,1.6,6,.7*a)}}
+  ctx.restore();g.line([[x0,y0],[x0+w,y0],[x0+w,y0+h],[x0,y0+h],[x0,y0]],C.ink,1,0,.25*a)}
+
+const SC=[
+ // 0 voltage tax
+ (t,a)=>{const x=110,w=120,top=80,bot=380,R=rng(3);
+  g.line([[x-20,top],[x+w+20,top]],C.ink,1.5,0,.6*a);g.line([[x-20,bot],[x+w+20,bot]],C.ink,1.5,0,.6*a);
+  const vo=210,vr=60,vn=bot-top-vo-vr;
+  g.rect(x,bot-vo,w,vo,C.blue,.75*a,14);g.rect(x,bot-vo-vr,w,vr,C.blue,.3*a);g.rect(x,top,w,vn,C.red,.35*a);
+  g.text('Eg / q',x-26,top+5,'right',.75*a);g.text('qVoc',x+w+28,bot-vo/2+5,'left',.85*a);g.text('radiative loss',x+w+28,bot-vo-vr/2+5,'left',.6*a,13);g.text('non-radiative loss',x+w+28,top+vn/2+5,'left',.9*a,13,C.red);
+  for(let k=0;k<12;k++){const p=(t*.35+R())%1,emit=k%4==0,xx=x+10+R()*(w-20);
+    if(emit){g.wave(xx+p*60,top-10-p*50,-1.2,22,'#fff',(1-p)*a)}else{g.dot(xx+Math.sin(t*4+k)*5,top+vn*R()-p*36,2,C.red,(1-p)*.9*a,8)}}
+  g.text('photon out: voltage kept',560,30,'right',.8*a,13,'#fff');g.text('heat: voltage lost',560,50,'right',.8*a,13,C.red);
+  g.text('−60 mV per decade of lost emission',300,428,'center',.7*a,14,C.amber);g.text('bar heights schematic',560,445,'right',.35*a,11)},
+ // 1 vibronic ladders, high vs low frequency (after Fig. 3g)
+ (t,a)=>{const c=(t%10)/10,m=c<.4?0:c<.5?ss((c-.4)/.1):c<.9?1:1-ss((c-.9)/.1);const h=lerp(40,30,m),k=.006*Math.pow(h/40,2),Q0=270,dQ=95,y0=390,yE=y0-124,jx=Math.round(124/h);
+  const yG=q=>y0-k*Math.pow(q-Q0,2),yA=q=>yE-k*Math.pow(q-Q0-dQ,2);
+  g.fn(q=>Math.max(40,yG(q)),Q0-Math.sqrt(250/k),Q0+Math.sqrt(250/k),C.ink,2.2,0,.85*a);
+  g.fn(q=>Math.max(40,yA(q)),Q0+dQ-Math.sqrt(220/k),Q0+dQ+Math.sqrt(220/k),C.red,2.2,8,.9*a);
+  for(let j=0;j*h<=185;j++){const E=y0-j*h,half=Math.sqrt(Math.max(j,.5)*h/k),hit=j==jx;
+    g.line([[Q0-half,E],[Q0+half,E]],hit?C.green:C.ink,hit?1.6:1,hit?8:0,(hit?.9:.25)*a);
+    const sc=Math.sqrt(2*j+1)/(j?half:Math.sqrt(2/k));g.fn(q=>E-14*Math.abs(psi(j,(q-Q0)*sc))/psiMax[j],Q0-half,Q0+half,hit?C.green:'#9aa4b2',1.1,0,(hit?.85:.35)*a,null,120);
+    g.text('j = '+j,Q0+half+8,E+4,'left',(hit?.9:.45)*a,12,hit?C.green:C.ink)}
+  g.fn(q=>yE-22*Math.exp(-Math.pow((q-Q0-dQ)/22,2)),Q0+dQ-60,Q0+dQ+60,C.green,2,10,.9*a);g.dot(Q0+dQ,yE,5,'#fff',a,12);g.text('A*',Q0+dQ+40,yE-46,'left',.9*a,15,C.red);g.text('A',Q0-12,y0+24,'center',.8*a,15);
+  g.line([[52,y0],[52,y0-h]],C.ink,1.2,0,.7*a);g.text('hν̄',46,y0-h/2+4,'right',.8*a,13);
+  g.text(m<.5?'high-frequency vibrations':'softened vibrations',300,30,'center',.95*a,15,m<.5?C.ink:C.green);
+  g.text('heat channel lands on j = '+jx+(jx>3?': smaller overlap, slower loss':': larger overlap, faster loss'),300,52,'center',.75*a,12.5);
+  g.text('schematic, after Fig. 3g',560,444,'right',.4*a,11)},
+ // 2 linear BTP-C3, floppy and dim
+ (t,a)=>{const P=[];for(let k=0;k<NU;k++)P.push(chainPos(k,300,215,t));for(let k=0;k<NU-1;k++)g.line([P[k],P[k+1]].map(p=>[p[0],p[1]]),C.ink,2,0,.6*a);
+  P.forEach(([x,y,r],k)=>g.hex(x,y,15,k==0||k==NU-1?C.amber:C.violet,1.8,r,a,6,'#0b0e14'));const R=rng(8);
+  for(let k=0;k<14;k++){const p=(t*.5+R())%1,u=Math.floor(R()*NU),[x,y]=chainPos(u,300,215,t);g.dot(x+(R()-.5)*30,y-20-p*60,2,C.red,(1-p)*.9*a,8)}
+  if(Math.sin(t*1.3)>.8)g.wave(470,180,-.6,26,'#fff',.6*a);
+  g.text('linear acceptor (BTP-C3 type): free to twist',300,90,'center',.85*a,15);g.text('typical PLQY of linear acceptors: below 5%',300,345,'center',.8*a,13,C.red);
+  g.text('end group',P[0][0],P[0][1]+38,'center',.5*a,11,C.amber);g.text('fused core',300,262,'center',.5*a,11,C.violet);g.text('schematic',560,24,'right',.35*a,11)},
+ // 3 close the ring
+ (t,a)=>{const p=(t%9)/9,j=ss((p-.1)/.45);drawRCM(300,215,108,6,a,t,j,6+10*j,1-j);
+  if(j>.97){for(let k=0;k<6;k++){const q=(t*.5+k/6)%1,an=k/6*TAU+t*.2;g.wave(300+(190+q*50)*Math.cos(an),215+(130+q*40)*Math.sin(an),an,20,'#fff',(1-q)*.8*a)}}
+  g.text(j<.5?'two BTP-C3 backbones…':'shape-persistent macrocycle (RCM)',300,48,'center',.9*a,15);
+  g.text('thiophene bridges',575,248,'right',.6*a*ss(j),11,C.green);g.text('alkyl strap (C6 / C5 / C4)',300,340,'center',.75*a*ss(j),12,C.amber);
+  g.text('triazole',300,215-108/2-26-(1-j)*60,'center',.55*a*ss(j),11,C.blue);g.text('schematic, after Fig. 1a',560,444,'right',.4*a,11)},
+ // 4 Raman softening (after Fig. 3c)
+ (t,a)=>{const m=ss(.5-.5*Math.cos(TAU*t/7)),fL=raman(0,0),fR=raman(20*m,.6*m),Y1=v=>200-v*110,Y2=v=>380-v*110;
+  g.line([[70,200],[540,200]],C.ink,1,0,.3*a);g.line([[70,380],[540,380]],C.ink,1,0,.3*a);
+  g.fn(x=>Y1(fL(1350+(x-70)/470*350)),70,540,C.green,2.2,10,a,null,300);g.fn(x=>Y2(fR(1350+(x-70)/470*350)),70,540,C.violet,2.4,12,a,null,300);
+  const mean=f=>{let s=0,w=0;for(let v=1350;v<=1700;v+=2){const y=f(v);s+=y*v;w+=y}return s/w};const mL=mean(fL),mR=mean(fR);
+  g.line([[RX(mL),70],[RX(mL),200]],C.green,1.2,0,.7*a,[4,4]);g.line([[RX(mR),250],[RX(mR),380]],C.violet,1.2,0,.7*a,[4,4]);g.line([[RX(mL),250],[RX(mL),380]],C.green,1,0,.35*a,[2,4]);
+  if(m>.2)g.arrow(RX(mL),262,RX(mR)-2,262,'#fff',1.6,.8*a*m);
+  g.text('linear BTP-C3',76,84,'left',.85*a,13,C.green);g.text('macrocycle',76,264,'left',.85*a,13,C.violet);g.text('mean frequency',RX(mL)+6,66,'left',.6*a,11);
+  [1400,1500,1600,1700].forEach(v=>g.text(String(v),RX(v),400,'center',.5*a,12));g.text('Raman shift (cm⁻¹), C=C stretch region',540,424,'right',.6*a,12);
+  g.text('schematic, after Fig. 3c',560,24,'right',.4*a,11)},
+ // 5 PLQY and ΔEnr bars (numbers from paper)
+ (t,a)=>{const p=ss(((t%8)/8)/.35);
+  g.text('PLQY of neat films (%)',150,40,'center',.85*a,14);g.axes(40,350,270,60);[5,10,15].forEach(v=>{const y=350-v*17;g.line([[40,y],[270,y]],C.ink,1,0,.1*a);g.text(String(v),34,y+4,'right',.5*a,11)});
+  const B=[['linear',5,'< 5',C.ink,1],['C6',13.7,'13.7',C.amber,0],['C5',10,'≈10*',C.blue,0],['C4',14.5,'14.5',C.red,0]];
+  B.forEach(([n,v,l,c,dash],i)=>{const x=58+i*54,h=v*17*p;if(dash){g.line([[x,350],[x,350-h],[x+36,350-h],[x+36,350]],c,1.4,0,.6*a,[4,4])}else g.rect(x,350-h,36,h,c,.8*a,10);g.text(l,x+18,340-v*17,'center',.9*a*p,12);g.text(n,x+18,370,'center',.7*a,12)});
+  g.text('* read from Fig. 3b',40,396,'left',.45*a,11);g.text('linear: typical literature value',40,412,'left',.45*a,11);
+  g.text('non-radiative loss ΔEnr (eV)',450,40,'center',.85*a,14);g.axes(330,350,570,60);[.1,.2].forEach(v=>{const y=350-v*1000;g.line([[330,y],[570,y]],C.ink,1,0,.1*a);g.text(v.toFixed(1),324,y+4,'right',.5*a,11)});
+  const E=[['BTP-C3',.26,C.green],['C6',.21,C.amber],['C5',.24,C.blue],['C4',.22,C.red]];
+  E.forEach(([n,v,c],i)=>{const x=348+i*54,h=v*1000*p;g.rect(x,350-h,36,h,c,.8*a,10);g.text(v.toFixed(2),x+18,340-v*1000,'center',.9*a*p,12);g.text(n,x+18,370,'center',.7*a,12)});
+  g.text('lower is better',570,396,'right',.45*a,11)},
+ // 6 shorter strap: cavity, planarity, film texture
+ (t,a)=>{const k=Math.floor(t/3.2)%3,f=ss((t%3.2)/.6),D=[['RCM-C6',6,8.3,'804 nm','large crystalline domains · RMS 10.3 nm'],['RCM-C5',5,7.5,'796 nm','granular domains'],['RCM-C4',4,6.3,'786 nm','ordered fibrous network · RMS 1.42 nm']][k];
+  drawRCM(300,140,D[2]*13,D[1],a,t,1,10,0);g.line([[248,140-D[2]*6.5],[248,140+D[2]*6.5]],'#fff',1,0,.5*a);g.text(D[2]+' Å',242,144,'right',.9*a*f,13);
+  g.text(D[0],300,24,'center',.95*a,16,[C.amber,C.blue,C.red][k]);g.text('film 0–0 absorption '+D[3],300,44,'center',.65*a*f,12);
+  texture(k,150,262,300,130,a*f,t);g.text('neat film: '+D[4],300,414,'center',.8*a*f,12.5);g.text('schematic, after Figs. 1b and 4a',560,444,'right',.4*a,11)},
+ // 7 J–V (diode model matched to Table 1)
+ (t,a)=>{const X=v=>90+v/1.0*440,Y=j=>380-j/25*300,p=ss(((t%8)/8)/.6);g.axes(90,380,560,60);
+  [0,.2,.4,.6,.8,1].forEach(v=>g.text(v.toFixed(1),X(v),400,'center',.5*a,12));[0,10,20].forEach(j=>g.text(String(j),82,Y(j)+4,'right',.5*a,12));
+  DEV.forEach((d,i)=>{g.fn(x=>Y(Math.max(0,d.J((x-90)/440))),90,90+(X(d.Voc)-90)*p,d.c,2.6,10,a);
+    g.text(d.n+'  PCE '+d.pce+' · FF '+d.ff,100,Y(10)+i*20-40,'left',.9*a,13,d.c)});
+  g.text('voltage (V)',560,428,'right',.6*a,13);g.text('J (mA cm⁻²)',96,52,'left',.6*a,12);
+  g.text('exciton lifetime 0.57 / 0.58 / 0.75 ns',100,Y(10)+40,'left',.7*a,12);g.text('diode model matched to Table 1 Voc, Jsc, FF',560,444,'right',.4*a,11)},
+ // 8 design rule: two steps
+ (t,a)=>{drawRCM(170,225,80,4,a*.9,t,1,8,0);
+  const b=(x,y,w,h,c,s1,s2,on)=>{g.rect(x,y,w,h,c,.12*a);g.line([[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]],c,1.6,on*12,.8*a);g.text(s1,x+12,y+26,'left',.95*a,14,c);g.text(s2,x+12,y+48,'left',.7*a,12)};
+  const p=(t%6)/6,on1=Math.max(0,Math.sin(Math.PI*Math.min(1,p*2))),on2=Math.max(0,Math.sin(Math.PI*Math.max(0,p*2-1)));
+  b(352,110,236,64,C.green,'1 · lock the backbone','soft vibrations: PLQY↑ ΔEnr↓',on1);b(352,270,236,64,C.blue,'2 · tune the strap','tamed aggregation: FF↑',on2);
+  g.arrow(330,190,348,150,C.green,2,a,on1*10);g.arrow(330,260,348,296,C.blue,2,a,on2*10);
+  g.text('17.1%',450,400,'center',a,30,'#fff');g.text('PM6:RCM-C4',450,424,'center',.6*a,12)}
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+4,dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce)requestAnimationFrame(frame)}
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab: energy-gap-law toy ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+function egl(S,Eg,hw){const N=Eg/hw,gam=Math.max(.05,Math.log(N/S)-1),kr=1,knr=KP*Math.exp(-S)*Math.exp(-gam*N);const q=kr/(kr+knr);return{q,dv:-25.7*Math.log(q)}}
+const KP=(()=>{const N=1.45/.2,gam=Math.log(N/.9)-1,base=Math.exp(-.9)*Math.exp(-gam*N);return(1/.03-1)/base})(); // calibrated so the default sliders give 3%
+function lab(){const S=+$('rig').value,Eg=+$('gap').value,hw=+$('hw').value/1000;$('rigv').value=S.toFixed(2);$('gapv').value=Eg.toFixed(2)+' eV';$('hwv').value=Math.round(hw*1000)+' meV · '+Math.round(hw*8065.5)+' cm⁻¹';
+  const m=egl(S,Eg,hw);lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const X=E=>60+(E-.9)/(1.8-.9)*500,Y=v=>230-v*170;lg.axes(60,230,570,40);
+  const I=E=>{let s=0,f=1;for(let n=0;n<8;n++){if(n)f*=n;s+=Math.exp(-S)*Math.pow(S,n)/f*Math.exp(-Math.pow((E-(Eg-n*hw))/.045,2))}return s};
+  let mx=0;for(let E=.9;E<=1.8;E+=.005)mx=Math.max(mx,I(E));
+  lg.fn(x=>Y(I(.9+(x-60)/500*.9)/mx),60,560,C.violet,2.6,12);
+  for(let n=0;n<3;n++){const E=Eg-n*hw;if(E>.92)lg.text(n?'0–'+n:'0–0',X(E),Y(1)-8,'center',.6,12)}
+  [1.0,1.2,1.4,1.6,1.8].forEach(E=>lg.text(E.toFixed(1),X(E),250,'center',.5,12));lg.text('photon energy (eV)',560,272,'right',.55,12);lg.text('toy emission spectrum',66,34,'left',.6,12);
+  const lit=Math.round(m.q*100),R=rng(4),ord=[...Array(100).keys()].sort(()=>R()-.5),on=new Set(ord.slice(0,lit));
+  for(let i=0;i<100;i++){const x=80+(i%20)*24,y=310+Math.floor(i/20)*24;if(on.has(i))lg.dot(x,y,5,'#fff',1,12);else lg.dot(x,y,3.5,C.red,.35)}
+  lg.text('100 excitations: white = photon, red = heat',300,442,'center',.6,12);
+  $('rplqy').textContent=(m.q*100<1?(m.q*100).toFixed(2):(m.q*100).toFixed(1))+'%';$('rdv').textContent=Math.round(m.dv)}
+['rig','gap','hw'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>
