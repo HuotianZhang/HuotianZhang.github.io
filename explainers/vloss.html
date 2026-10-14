@@ -1,0 +1,307 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Where the Voltage Goes</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Where the Voltage Goes: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1016/j.chempr.2020.08.003">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Chem 2020 · Perspective</span>
+  <h1>Where the voltage goes in Y6-type solar cells</h1>
+  <p class="dek">An organic solar cell gives back much less voltage than the photons it absorbs could provide. This Perspective splits that loss into three parts and shows that the largest one depends on how brightly the blend can emit light. It then asks how A-DA′D-A acceptors such as Y6 can be redesigned to emit more brightly.</p>
+  <p class="cite">J. Yuan, H. Zhang, R. Zhang, Y. Wang, J. Hou, M. Leclerc, X. Zhan, F. Huang, F. Gao, Y. Zou, Y. Li. <i>Reducing Voltage Losses in the A-DA′D-A Acceptor-Based Organic Solar Cells.</i> Chem 6, 2147–2161 (2020). <a href="https://doi.org/10.1016/j.chempr.2020.08.003">doi:10.1016/j.chempr.2020.08.003</a></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE GAP</span><h2>A 0.6 V gap</h2>
+      <p>Organic solar cells (OSCs) have improved fast. At the time of writing, the certified efficiency of single-junction cells had reached 17.4%. Peak external quantum efficiencies were above 80% and internal ones above 90%, so nearly every absorbed photon already becomes collected charge.</p>
+      <p>Voltage is where they fall short. The difference between the optical gap and the open-circuit voltage V<sub>oc</sub> is usually around 0.6 V in state-of-the-art OSCs. That is 0.2–0.3 V more than in crystalline silicon or GaAs cells. The authors argue that V<sub>oc</sub> may be the only avenue left for another big leap in efficiency.</p>
+      <p class="note">Schematic bars; the 0.6 V and 0.2–0.3 V figures are from the text.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · THREE STEPS DOWN</span><h2>Splitting the loss into three</h2>
+      <p>Using detailed balance, the paper writes the open-circuit voltage as the optical gap minus three losses:</p>
+      <div class="eq">qV<sub>oc</sub> = E<sub>g</sub> − ΔE<sub>1</sub> − ΔE<sub>2</sub> − ΔE<sub>3</sub></div>
+      <p><b>ΔE<sub>1</sub></b> is radiative recombination above the gap. Every solar cell has it, because a cell that absorbs light must also emit it. <b>ΔE<sub>2</sub></b> is extra radiative loss below the gap, from a soft absorption edge. In the latest low-offset OSCs it is already below 50 meV, as small as in inorganic or perovskite cells. <b>ΔE<sub>3</sub></b> is non-radiative recombination: 200–300 meV in state-of-the-art OSCs, much more than in the best inorganic or perovskite cells.</p>
+      <p class="note">Step heights are schematic (Eq. 1 of the paper); only the ΔE<sub>2</sub> and ΔE<sub>3</sub> ranges are from the text.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · THE BIG ONE</span><h2>ΔE<sub>3</sub> is set by how well the cell glows</h2>
+      <p>The non-radiative loss follows from a single number, the electroluminescence quantum efficiency EQE<sub>EL</sub>. That is the fraction of injected charges that come out as photons when the solar cell is run as an LED:</p>
+      <div class="eq">ΔE<sub>3</sub> = −kT ln(EQE<sub>EL</sub>)</div>
+      <p>Here k is Boltzmann's constant. At room temperature every factor of ten in EQE<sub>EL</sub> is worth about 60 meV of voltage. A loss of 200–300 meV therefore means EQE<sub>EL</sub> of only about 4 × 10<sup>−4</sup> down to 1 × 10<sup>−5</sup>: at best one photon for every few thousand injected charges. To cut ΔE<sub>3</sub>, make the cell a better LED.</p>
+      <p class="note">Curve drawn from the equation at 300 K; the shaded band is the 200–300 meV range from the text.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · FOUR GATES</span><h2>What makes a cell emit</h2>
+      <p>EQE<sub>EL</sub> is a product of four probabilities:</p>
+      <div class="eq">EQE<sub>EL</sub> = f<sub>e–h</sub> · β · PLQY · f<sub>outcoupling</sub></div>
+      <p>f<sub>e–h</sub> is the balance of injected electrons and holes (1 when they match). β is the chance that an injected pair forms an emissive exciton: spin statistics make singlets and triplets in a 1 : 3 ratio, and triplets usually end as heat, so β ≈ 25%. PLQY is the photoluminescence quantum yield of the blend. f<sub>outcoupling</sub> is the share of emitted light that escapes the device, about 20% for a planar cell.</p>
+      <p>Three of the four are fixed by physics or device geometry. The one chemists can change is the PLQY.</p>
+      <p class="note">Values 1, 25% and 20% are the assumptions the paper uses for Fig. 2.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · BORROWED LIGHT</span><h2>Why small offsets do not have to hurt</h2>
+      <p>In fullerene blends the non-radiative loss follows an energy-gap law tied to the charge-transfer (CT) state. That implied a trade-off: high current needed a large donor–acceptor offset, and a large offset cost voltage.</p>
+      <p>In the best non-fullerene blends the absorption and emission spectra of the blend often overlap those of the pure low-gap component, so the offset is small. When the singlet exciton S<sub>1</sub> and the CT state are close in energy they hybridise. The CT state then "borrows" brightness from the emissive S<sub>1</sub> (the three-state model). A bright low-gap material can then make the whole blend brighter and lower ΔE<sub>3</sub>.</p>
+      <p class="note">Schematic, after Fig. 3B (three-state model, Eisner et al.).</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · THE MOLECULE</span><h2>Anatomy of an A-DA′D-A acceptor</h2>
+      <p>Y6 joins electron-accepting end groups (A) to a ladder-type fused core whose centre is itself electron deficient (A′, a benzothiadiazole), flanked by donor segments (D). Two sp<sup>2</sup> nitrogens in pyrrole rings carry alkyl side chains. These chains stand roughly perpendicular to the backbone and stop the core from over-aggregating. The molecule is C<sub>2</sub>-symmetric and slightly curved.</p>
+      <p>In films its absorption shifts about 100 nm to the red compared with solution. In the crystal, Y6 molecules pair up so that their dipoles cancel and a large quadrupole moment remains. The paper links the resulting narrow density of states to trap-free transport of both electrons and holes. Y6 also has a smaller local-exciton reorganisation energy than other NFAs, which helps keep voltage losses small.</p>
+      <p class="note">Schematic, after Fig. 4A, 4C and 4E; not a real structure.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · SWAP THE CORE</span><h2>Change A′, gain light</h2>
+      <p>PM6:Y6 still has a HOMO offset of about 0.1 eV, and its blend PLQY is only 2.8 × 10<sup>−4</sup>. That is about 70 times below the PLQY needed for 20% efficiency in the paper's model.</p>
+      <p>The proposed lever is the central A′ unit. Replacing benzothiadiazole (BT) with the less electron-withdrawing benzotriazole (BTA) gives Y11. With PM6 it has a smaller HOMO offset and a smaller optical gap, and the blend PLQY rises to 1.3 × 10<sup>−3</sup>, nearly five times higher. The non-radiative loss of PM6:Y11 devices drops to 0.20 eV.</p>
+      <p class="note">PLQY values, the ≈70× and ≈5× ratios and ΔE<sub>3</sub> = 0.20 eV are from the text; the 2% target is the Fig. 2 scenario.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · MORE LEVERS</span><h2>Order, morphology, third components</h2>
+      <p><b>Disorder.</b> Tail states below the gap open extra non-radiative channels. Sub-gap absorption follows the Urbach rule α = α<sub>0</sub> exp[(E − E<sub>g</sub>)/E<sub>U</sub>]; a smaller Urbach energy E<sub>U</sub> means a sharper edge. Adding alkyl chains at the β position of the core gives a more uniform conformation: the electron mobility of Y18 in blends is five times that of Y3.</p>
+      <p><b>Morphology.</b> Grazing-incidence X-ray scattering (GIWAXS) of PM6:Y11 blends shows a new out-of-plane (100) diffraction at 0.54–0.59 Å<sup>−1</sup>, a sign of more regular acceptor stacking. <b>Ternary blends</b> can raise EQE<sub>EL</sub> by reducing aggregation-induced quenching or trap states, at some risk to morphology and absorption. <b>"Quasi-polymer"</b> acceptors (oligomers, branched macromolecules) aim at stable, roll-coated modules.</p>
+      <p class="note">Absorption tails schematic, after Fig. 6A (no measured E<sub>U</sub> values shown).</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · OUTLOOK</span><h2>No built-in trade-off</h2>
+      <p>For years a donor–acceptor offset of about 0.3 eV was thought necessary to split excitons. The new acceptors reach internal quantum efficiencies of 90% with offsets close to zero. So there is no intrinsic compromise between photocurrent and V<sub>oc</sub>.</p>
+      <p>The A-DA′D-A family went from 6% (BZIC, 2017) to 17% (Y18) in about three years. Getting past 20% now mainly means raising blend emission. Open questions remain: the roles of thermal motion, of triplet states (well studied in fullerene blends, little known for NFAs), and of domain purity.</p>
+      <p class="note">Efficiency values from the text; bar lengths to scale.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>From PLQY to efficiency</h2>
+  <p class="intro">A toy re-implementation of the recipe the paper describes for its Fig. 2. It is not the authors' code or their figure. Current is 85% of the AM1.5G photons above the absorption edge. ΔE<sub>1</sub> follows from the Shockley–Queisser limit for that edge, ΔE<sub>2</sub> = 50 meV, and ΔE<sub>3</sub> = −kT ln(EQE<sub>EL</sub>) with f<sub>e–h</sub> = 1 and β = 25%. FF comes from the empirical formula with ideality 1, at 300 K. Small details differ from the paper: at a 900 nm edge and 2% PLQY this toy gives about 22%, where the paper quotes 20%. The model assumes ideal current collection and an ideal fill factor, so its absolute efficiencies are upper estimates; read the trends, not the exact numbers.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Voltage-loss staircase and efficiency versus PLQY in a toy model that responds to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="ed"><span class="row"><span>Absorption edge</span><output id="edv">900 nm</output></span><input id="ed" type="range" min="780" max="1000" step="5" value="900"></label>
+      <label for="pl"><span class="row"><span>Blend PLQY</span><output id="plv">2.8×10⁻⁴</output></span><input id="pl" type="range" min="-5" max="-0.5" step="0.01" value="-3.553"></label>
+      <label for="oc"><span class="row"><span>Light outcoupling f<sub>outcoupling</sub></span><output id="ocv">20%</output></span><input id="oc" type="range" min="5" max="40" step="1" value="20"></label>
+      <div class="read"><div><b id="rv">–</b><span>V<sub>oc</sub></span></div><div><b id="r3">–</b><span>ΔE<sub>3</sub> (non-radiative)</span></div><div><b id="re">–</b><span>EQE<sub>EL</sub></span></div><div><b id="rp">–</b><span>PCE (toy)</span></div></div>
+      <p class="note">Try this: start at the PM6:Y6 PLQY (2.8×10⁻⁴), then slide to the PM6:Y11 value (1.3×10⁻³) and on to 2%. Each tenfold step in PLQY buys about 60 mV. Moving the edge to the red gains current but lowers the gap, so the voltage drops too.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1016/j.chempr.2020.08.003">Read the full Perspective in Chem ↗</a>
+  <span class="note">Numbers quoted from the paper: certified 17.4%; EQE &gt;80% and IQE &gt;90%; voltage loss ≈0.6 V and 0.2–0.3 V above c-Si/GaAs; ΔE<sub>2</sub> &lt;50 meV; ΔE<sub>3</sub> 200–300 meV; the Fig. 2 assumptions (EQE 85%, ΔE<sub>2</sub> 0.05 eV, f<sub>e–h</sub> 1, β 25%, outcoupling 20%, n = 1, 900 nm edge and 2% PLQY for 20%); ≈100 nm red shift; PM6:Y6 HOMO offset ≈0.1 eV and PLQY 2.8×10⁻⁴ (≈70× below target); PM6:Y11 PLQY 1.3×10⁻³ (≈5×) and ΔE<sub>3</sub> 0.20 eV; Y18 mobility 5× Y3; GIWAXS 0.54–0.59 Å⁻¹; ≈0.3 eV historical offset and 90% IQE; BZIC 6% to Y18 17%. Step heights, the molecule and dimer drawings, the three-state diagram, the Urbach tails and the lab model are schematic or illustrative. The lab uses the ASTM G173 AM1.5G spectrum.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=140){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=20;i++){const s=i/20*len,o=Math.sin(i/20*TAU*2.5)*4;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,2,8,a)}
+};return g}
+
+function addHex(g,ctx){g.hex=(x,y,r,col,w=1.6,rot=0,a=1,glow=0)=>{const p=[];for(let j=0;j<=6;j++){const b=j/6*TAU+rot;p.push([x+r*Math.cos(b),y+r*Math.sin(b)])}g.line(p,col,w,glow,a)};return g}
+
+// ---- toy re-implementation of the Fig. 2 recipe (shared by the lab) ----
+// JB: AM1.5G (ASTM G173) photon current in mA cm^-2 per 10 nm bin, starting at 280 nm
+const JB=[0.0, 0.0, 0.0044, 0.0329, 0.0812, 0.1162, 0.1327, 0.1509, 0.1868, 0.2062, 0.1956, 0.2369, 0.3778, 0.4003, 0.4108, 0.4123, 0.5104, 0.5666, 0.5842, 0.6023, 0.5974, 0.627, 0.6272, 0.6191, 0.6469, 0.6687, 0.6693, 0.6844, 0.6855, 0.6875, 0.7058, 0.6944, 0.7192, 0.7208, 0.7166, 0.7321, 0.7397, 0.7171, 0.7536, 0.7647, 0.7107, 0.7104, 0.7362, 0.6984, 0.6312, 0.7008, 0.7422, 0.7467, 0.4164, 0.7332, 0.7291, 0.7008, 0.6982, 0.6143, 0.6042, 0.6468, 0.6824, 0.6558, 0.6682, 0.6707, 0.6607, 0.5762, 0.5202, 0.4833, 0.5243, 0.2041, 0.2677, 0.2651, 0.3995, 0.4928, 0.562, 0.5972, 0.586, 0.5829, 0.5736, 0.5681, 0.5592, 0.5488, 0.5336, 0.527, 0.51, 0.4756, 0.4098, 0.2383, 0.1092, 0.1583, 0.1801, 0.2339, 0.3636, 0.4168, 0.3982, 0.4296, 0.4191, 0.4368, 0.4507, 0.463, 0.4606, 0.4502, 0.387, 0.4233, 0.4288, 0.4186, 0.3745, 0.328, 0.2815, 0.1965, 0.1048, 0.0025, 0.0, 0.0002, 0.0001, 0.0004];
+const KT=0.025852,HEV=4.135667e-15,CL=2.998e8,QE=1.602e-19;
+function jAbove(edge){let s=0;for(let i=0;i<JB.length;i++){const l0=280+10*i;if(l0+10<=edge)s+=JB[i];else if(l0<edge)s+=JB[i]*(edge-l0)/10}return s}
+function j0rad(Eg){let s=0;const de=.001;for(let e=Eg;e<Eg+1;e+=de)s+=2*Math.PI*e*e/(HEV**3*CL*CL)*Math.exp(-e/KT)*de;return s*QE*.1} // mA cm^-2
+function cell(edge,plqy,out){const Eg=1239.84/edge,Jsq=jAbove(edge),Vsq=KT*Math.log(Jsq/j0rad(Eg)+1),eqeel=.25*plqy*out,dE3=-KT*Math.log(eqeel),
+  Voc=Vsq-.05-dE3,Jsc=.85*Jsq,v=Voc/KT,FF=(v-Math.log(v+.72))/(v+1);return{Eg,dE1:Eg-Vsq,dE2:.05,dE3,Voc,Jsc,FF,eqeel,PCE:Jsc*Voc*FF}}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=addHex(Tk(ctx),ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+const sup=n=>String(n).replace(/-/g,'⁻').replace(/\d/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]);
+function spark(x,y,t,k,a){const R=rng(k*97+3);for(let i=0;i<6;i++){const p=(t*.6+R())%1;g.dot(x+(R()-.5)*30+Math.sin(t*3+i)*3,y-p*26,1.8,C.red,(1-p)*.8*a,6)}}
+
+const SC=[
+ // 0 the 0.6 V gap: two schematic columns
+ (t,a)=>{const top=90,s=300,cols=[[110,.6,'organic solar cell','≈0.6 V lost',C.red],[340,.35,'c-Si / GaAs','0.2–0.3 V less lost',C.amber]];
+  cols.forEach(([x,l,name,lab,col],k)=>{const w=150,vy=top+l*s;
+   g.rect(x,vy,w,390-vy,C.blue,.75*a,12);g.rect(x,top,w,vy-top,col,.28*a);
+   g.line([[x-10,top],[x+w+10,top]],C.ink,1.4,0,.7*a);g.line([[x-10,vy],[x+w+10,vy]],C.ink,1,0,.5*a,[4,4]);
+   g.text(lab,x+w/2,(top+vy)/2+5,'center',.95*a,14,k?C.amber:'#ffb0b0');g.text('qVoc',x+w/2,(vy+390)/2+5,'center',.95*a,15);
+   g.text(name,x+w/2,420,'center',.75*a,14);spark(x+w/2,top+20,t,k,a*(k?.5:1))});
+  g.text('Eg/q',94,top+5,'right',.7*a,13);g.text('schematic heights; numbers from the text',560,444,'right',.4*a,11);
+  g.text('heat',230,top-10,'left',.45*a,12)},
+ // 1 staircase Eq. 1
+ (t,a)=>{const s=280,y0=70,h1=.26*s,h2=.05*s,h3=.25*s,xs=[70,200,300,400,540],ys=[y0,y0+h1,y0+h1+h2,y0+h1+h2+h3];
+  for(let i=0;i<4;i++){g.line([[xs[i],ys[i]],[xs[i+1],ys[i]]],i==3?C.blue:C.ink,3,i==3?12:0,(i==3?1:.75)*a);if(i<3)g.line([[xs[i+1],ys[i]],[xs[i+1],ys[i+1]]],C.ink,1,0,.35*a,[3,3])}
+  g.text('Eg',62,y0+5,'right',.85*a,15);g.text('qVoc',548,ys[3]+5,'left',.95*a,15,C.blue);
+  const L=[['ΔE1  radiative, above gap','unavoidable',C.amber],['ΔE2  radiative, below gap','< 50 meV',C.violet],['ΔE3  non-radiative','200–300 meV',C.red]];
+  L.forEach(([n,v,col],i)=>{const x=xs[i+1],ya=ys[i],yb=ys[i+1];g.arrow(x+8,ya+2,x+8,yb-2,col,2.4,a,8);g.text(n,x+18,(ya+yb)/2+(i==1?-12:0),'left',.9*a,13,col);g.text(v,x+18,(ya+yb)/2+(i==1?24:18),'left',.65*a,12)});
+  // a ball walking down the stairs
+  const p=(t*.25)%1,seg=Math.min(3,Math.floor(p*4)),f=p*4-seg,bx=lerp(xs[seg],xs[seg+1],ss(f)),by=seg<3&&f>.8?lerp(ys[seg],ys[seg+1],ss((f-.8)/.2)):ys[seg];
+  g.dot(bx,by-7,5,'#fff',a,14);
+  g.text('qVoc = Eg − ΔE1 − ΔE2 − ΔE3',300,370,'center',.85*a,16);g.text('step heights schematic',560,444,'right',.4*a,11)},
+ // 2 dE3 vs EQE_EL
+ (t,a)=>{const X=lg=>90+(lg+7)/7*460,Y=m=>380-m/450*320,f=lg=>-KT*Math.log(Math.pow(10,lg))*1000;g.axes(90,380,560,50);
+  g.rect(90,Y(300),470,Y(200)-Y(300),C.red,.16*a);g.text('typical state-of-the-art OSCs: 200–300 meV',552,Y(300)-8,'right',.75*a,12,'#ffb0b0');
+  g.fn(x=>Y(f((x-90)/460*7-7)),90,550,C.amber,3,12,a);
+  for(let e=-7;e<=0;e++){g.text('10'+sup(e),X(e),400,'center',.55*a,12)}[0,100,200,300,400].forEach(m=>g.text(m,82,Y(m)+4,'right',.5*a,12));
+  g.text('EQE_EL',560,428,'right',.65*a,13);g.text('ΔE3 (meV)',90,40,'left',.65*a,13);
+  const y11=-.2/KT/Math.LN10;g.line([[X(y11),Y(200)],[X(y11),380]],C.green,1.2,0,.6*a,[3,3]);g.dot(X(y11),Y(200),5,C.green,a,12);g.text('PM6:Y11 device, ΔE3 = 0.20 eV',X(y11)+10,Y(200)-30,'left',.85*a,12,C.green);
+  const lg=-7+((t*.12)%1)*7;g.dot(X(lg),Y(f(lg)),5,'#fff',a,14);g.text(Math.round(f(lg))+' meV',X(lg)+10,Y(f(lg))-10,'left',.8*a,12);
+  g.text('≈60 meV per decade at 300 K',540,130,'right',.6*a,12)},
+ // 3 four gates
+ (t,a)=>{const gx=[150,250,350,450],lab=[['f e–h','= 1'],['β','≈ 25%'],['PLQY','blend'],['f out','≈ 20%']],gy=200;
+  gx.forEach((x,i)=>{g.rect(x-4,110,8,180,i==2?C.violet:C.ink,(i==2?.8:.35)*a,i==2?10:0);g.text(lab[i][0],x,90,'center',.9*a,14,i==2?C.violet:C.ink);g.text(lab[i][1],x,320,'center',.65*a,12)});
+  g.text('injected',60,gy-40,'center',.6*a,12);g.text('e + h',60,gy-22,'center',.6*a,12);
+  const R=rng(5),N=26;for(let k=0;k<N;k++){const ph=(t*.18+k/N)%1,x=40+ph*540,yy=gy+(R()-.5)*120,dies=R();
+   // stop at a gate depending on the dice: 75% stop at beta (triplets), most of the rest at PLQY, some at outcoupling
+   const stop=dies<.72?250:dies<.95?350:dies<.98?450:9999;
+   if(x<stop)g.dot(x,yy,3.2,x<250?'#fff':C.blue,a*.9,8);else if(x<stop+50){const q=(x-stop)/50;g.dot(stop+4,yy-q*24,2,C.red,(1-q)*a,6)}
+   if(stop==9999&&x>460)g.wave(x,yy,0,18,C.green,a)}
+  g.text('heat',300,140,'center',.5*a,12,'#ffb0b0');g.text('light out',540,140,'center',.7*a,12,C.green);
+  g.text('EQE_EL = f e–h · β · PLQY · f out',300,370,'center',.9*a,15);g.text('= 0.05 × PLQY with the Fig. 2 assumptions',300,394,'center',.6*a,12);
+  g.text('particle fractions illustrative',560,444,'right',.4*a,11)},
+ // 4 three-state model: offset vs hybridised
+ (t,a)=>{const pan=(x0,title,dS,bright)=>{const gs=360,s1=130,ct=s1+dS;g.text(title,x0+110,40,'center',.85*a,14);
+   g.line([[x0,gs],[x0+220,gs]],C.ink,2.4,0,.6*a);g.text('GS',x0-6,gs+5,'right',.6*a,12);
+   g.line([[x0+20,s1],[x0+100,s1]],C.amber,3,10,a);g.text('S1',x0+60,s1-10,'center',.85*a,13,C.amber);
+   g.line([[x0+120,ct],[x0+200,ct]],C.blue,3,10,a);g.text('CT',x0+160,ct-10,'center',.85*a,13,C.blue);
+   if(bright){const w=Math.sin(t*3)*.5+.5;g.line(Array.from({length:30},(_,i)=>[x0+100+i/29*20,s1+(ct-s1)*i/29+Math.sin(i/29*TAU*2+t*4)*4]),C.violet,2,8,.6*a+.3*a*w);g.text('mixing',x0+110,s1+(ct-s1)/2-16,'center',.7*a,11,C.violet)}
+   for(let k=0;k<3;k++){const p=(t*.45+k/3)%1;g.wave(x0+160+(k-1)*16,ct+30+p*(gs-ct-60),Math.PI/2,16,C.green,(bright?1:.2)*(1-p)*a)}
+   spark(x0+190,gs-6,t,dS,a*(bright?.3:1))};
+  pan(50,'large offset (fullerene era)',110,false);pan(330,'small offset, hybridised',14,true);
+  g.text('dim CT, energy-gap law',160,410,'center',.6*a,12);g.text('CT borrows S1 brightness',440,410,'center',.75*a,12,C.green);
+  g.text('schematic, after Fig. 3B',560,444,'right',.4*a,11)},
+ // 5 Y6 anatomy: blocks + dimer
+ (t,a)=>{const blk=(cx,cy,flip,al,lab,sc2=1)=>{const P=[['A',C.blue],['D',C.amber],['A′',C.violet],['D',C.amber],['A',C.blue]];
+   P.forEach(([n,col],i)=>{const u=(i-2),x=cx+u*58*sc2,y=cy+flip*u*u*7*sc2;g.rect(x-25*sc2,y-16*sc2,50*sc2,32*sc2,col,.22*al);g.line([[x-25*sc2,y-16*sc2],[x+25*sc2,y-16*sc2],[x+25*sc2,y+16*sc2],[x-25*sc2,y+16*sc2],[x-25*sc2,y-16*sc2]],col,1.8,8,al);
+    if(lab)g.text(n,x,y+5,'center',.95*al,15,col)})};
+  blk(300,120,1,a,true);
+  // N-alkyl chains, drawn out of plane near the core
+  [-1,1].forEach(sx=>{const x=300+sx*34,y=146;g.line([[x,y],[x+sx*6,y+20],[x-sx*2,y+34],[x+sx*6,y+48]],C.ink,1.6,0,.6*a)});
+  g.text('N-alkyl chains, out of plane',300,212,'center',.6*a,12);
+  g.text('end group',184,72,'center',.6*a,11);g.text('electron-deficient core',300,72,'center',.75*a,11,C.violet);g.text('end group',416,72,'center',.6*a,11);
+  // dimer with opposite dipoles
+  blk(300,292,1,a*.9,false,.6);blk(300,362,-1,a*.9,false,.6);
+  const pu=.6+.4*Math.sin(t*2);g.arrow(410,306,410,276,C.ink,2.2,a*pu,6);g.arrow(410,348,410,378,C.ink,2.2,a*pu,6);
+  g.text('dipoles cancel,',430,322,'left',.75*a,12);g.text('quadrupole stays',430,340,'left',.75*a,12);g.text('dimer in',200,322,'right',.65*a,12);g.text('the crystal',200,340,'right',.65*a,12);
+  g.text('schematic, after Fig. 4A, 4C, 4E',560,444,'right',.4*a,11)},
+ // 6 BT -> BTA and PLQY on a log axis
+ (t,a)=>{g.text('A′ = BT',150,70,'center',.85*a,15,C.violet);g.text('A′ = BTA',150,180,'center',.85*a,15,C.green);g.text('Y6',150,92,'center',.6*a,12);g.text('Y11',150,202,'center',.6*a,12);
+  g.hex(150,124,18,C.violet,2,0,a,8);g.hex(150,234,18,C.green,2,0,a,8);g.arrow(150,148,150,160,C.ink,1.6,.6*a);
+  g.text('weaker electron pull',150,272,'center',.6*a,12);g.text('→ smaller HOMO offset',150,290,'center',.6*a,12);
+  const X=lg=>290+(lg+4)/3.4*280,yA=170;g.line([[290,yA],[570,yA]],C.ink,1,0,.4*a);
+  [-4,-3,-2,-1].forEach(e=>{g.line([[X(e),yA-4],[X(e),yA+4]],C.ink,1,0,.4*a);g.text('10'+sup(e),X(e),yA+22,'center',.55*a,12)});g.text('blend PLQY',570,yA+44,'right',.6*a,12);
+  const M=[[Math.log10(2.8e-4),'PM6:Y6','2.8×10⁻⁴',C.violet,-1],[Math.log10(1.3e-3),'PM6:Y11','1.3×10⁻³',C.green,1],[Math.log10(.02),'2% target','Fig. 2 → 20%',C.amber,-1]];
+  M.forEach(([lg,n,v,col,up])=>{const x=X(lg);g.dot(x,yA,6,col,a,14);g.text(n,x,up>0?yA+42:yA-48,'center',.9*a,12,col);g.text(v,x,up>0?yA+58:yA-34,'center',.7*a,11)});
+  const pu=.5+.5*Math.sin(t*2);g.line([[X(M[0][0]),yA+82],[X(M[2][0]),yA+82]],C.ink,1.2,0,(.4+.4*pu)*a,[4,4]);g.text('≈70× to target',(X(M[0][0])+X(M[2][0]))/2,yA+96,'center',.8*a,12);
+  g.text('≈5×',(X(M[0][0])+X(M[1][0]))/2,yA-12,'center',.8*a,12,C.green);
+  g.text('PM6:Y11: ΔE3 = 0.20 eV',430,350,'center',.9*a,14,C.green);g.text('PM6:Y6 HOMO offset ≈ 0.1 eV',430,376,'center',.65*a,12);
+  g.text('rings are icons, not structures',560,444,'right',.4*a,11)},
+ // 7 Urbach tails
+ (t,a)=>{const x0=80,x1=560,yb=380,X=e=>x0+(e+.4)/.6*(x1-x0),Y=l=>yb-(l+5)/5.5*300;g.axes(x0,yb,x1,60);
+  const tail=(EU,col)=>g.fn(x=>{const e=(x-x0)/(x1-x0)*.6-.4;return Y(e<0?Math.max(-5,e/EU*Math.LOG10E):Math.min(.4,e*2))},x0,x1,col,3,10,a);
+  tail(.025,C.blue);tail(.06,C.amber);g.text('ordered:',430,330,'left',.85*a,12,C.blue);g.text('sharp edge, small EU',430,347,'left',.75*a,12,C.blue);g.text('disordered:',92,290,'left',.85*a,12,C.amber);g.text('tail states,',92,307,'left',.75*a,12,C.amber);g.text('large EU',92,324,'left',.75*a,12,C.amber);
+  g.line([[X(0),60],[X(0),yb]],C.ink,1,0,.35*a,[3,3]);g.text('Eg',X(0),yb+18,'center',.6*a,12);
+  g.text('photon energy →',x1,yb+36,'right',.55*a,12);g.text('log absorption',x0,48,'left',.6*a,12);
+  g.text('α = α0 exp[(E − Eg)/EU]',95,104,'left',.8*a,14);
+  const p=(t*.2)%1,e=-.4+p*.4;g.dot(X(e),Y(Math.max(-5,e/.06*Math.LOG10E)),4,'#fff',a,12);
+  g.text('schematic, after Fig. 6A',560,444,'right',.4*a,11)},
+ // 8 outlook bars
+ (t,a)=>{const X=p=>150+p/22*400,B=[['BZIC (2017)',6,C.violet],['Y18',17,C.blue],['certified record',17.4,C.green]];
+  g.text('PCE (%)',150,70,'left',.6*a,12);[0,5,10,15,20].forEach(p=>g.text(p,X(p),300,'center',.5*a,12));
+  B.forEach(([n,p,col],i)=>{const y=100+i*60;g.rect(150,y,X(p)-150,30,col,.7*a,10);g.text(n,140,y+20,'right',.85*a,13);g.text(p+'%',X(p)-8,y+20,'right',.95*a,13,'#0b0e14')});
+  g.line([[X(20),86],[X(20),284]],C.amber,2,10,a,[5,5]);g.text('20% target',X(20)-6,80,'right',.85*a,13,C.amber);
+  const pu=(t*.3)%1;g.halo(X(17.4)+pu*(X(20)-X(17.4)),235,22,C.amber,.5*a*(1-pu));
+  g.text('offset once thought necessary ≈ 0.3 eV',300,350,'center',.7*a,13);g.text('new NFAs: IQE 90% at near-zero offset',300,374,'center',.9*a,13,C.green);
+  g.text('bars to scale; values from the text',560,444,'right',.4*a,11)}
+];let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce)requestAnimationFrame(frame)}
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+const sci=v=>{const e=Math.floor(Math.log10(v)),m=v/Math.pow(10,e);return e>=-1?(v*100).toFixed(v<.1?1:0)+'%':m.toFixed(1)+'×10'+sup(e)};
+function lab(){const edge=+$('ed').value,pl=Math.pow(10,+$('pl').value),out=+$('oc').value/100,c=cell(edge,pl,out);
+  $('edv').value=edge+' nm';$('plv').value=sci(pl);$('ocv').value=Math.round(out*100)+'%';
+  $('rv').textContent=c.Voc.toFixed(3)+' V';$('r3').textContent=Math.round(c.dE3*1000)+' meV';$('re').textContent=sci(c.eqeel);$('rp').textContent=c.PCE.toFixed(1)+'%';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  // left: staircase to scale, 1 eV = 220 px
+  const s=220,y0=60,ys=[y0,y0+c.dE1*s,y0+(c.dE1+c.dE2)*s,y0+(c.dE1+c.dE2+c.dE3)*s],bot=y0+c.Eg*s,cols=[C.amber,C.violet,C.red];
+  lg.rect(60,ys[3],110,bot-ys[3],C.blue,.75,10);for(let i=0;i<3;i++)lg.rect(60,ys[i],110,ys[i+1]-ys[i],cols[i],.45);
+  lg.line([[50,y0],[180,y0]],C.ink,1.2,0,.7);lg.text('Eg '+c.Eg.toFixed(2)+' eV',58,y0-10,'left',.8,12);
+  ['ΔE1 '+Math.round(c.dE1*1000),'ΔE2 50','ΔE3 '+Math.round(c.dE3*1000)].forEach((l,i)=>lg.text(l+' meV',178,(ys[i]+ys[i+1])/2+(i==1?0:4),'left',.85,11,cols[i]));
+  lg.text('qVoc',115,(ys[3]+bot)/2+5,'center',.95,14);lg.text(c.Voc.toFixed(2)+' V',115,(ys[3]+bot)/2+22,'center',.8,12);
+  lg.text('to scale',115,bot+20,'center',.4,11);
+  // right: PCE vs log PLQY at this edge and outcoupling
+  const X=l=>320+(l+5)/4.5*250,Y=p=>380-p/26*300;lg.axes(320,380,575,60);
+  [-5,-4,-3,-2,-1].forEach(e=>lg.text('10'+sup(e),X(e),400,'center',.5,11));[0,10,20].forEach(p=>lg.text(p,312,Y(p)+4,'right',.5,11));
+  lg.text('blend PLQY',575,424,'right',.6,12);lg.text('PCE (%)',320,48,'left',.6,12);
+  lg.line([[320,Y(20)],[575,Y(20)]],C.amber,1,0,.35,[4,4]);
+  [[2.8e-4,'Y6'],[1.3e-3,'Y11']].forEach(([v,n])=>{const x=X(Math.log10(v));lg.line([[x,Y(0)],[x,70]],C.ink,1,0,.3,[3,3]);lg.text('PM6:'+n,n=='Y6'?x-4:x+4,66,n=='Y6'?'right':'left',.55,10)});
+  lg.fn(x=>Y(cell(edge,Math.pow(10,(x-320)/250*4.5-5),out).PCE),320,570,C.green,2.6,10,1,null,90);
+  const px=X(Math.log10(pl)),py=Y(c.PCE);lg.dot(px,py,5,'#fff',1,14);lg.text(c.PCE.toFixed(1)+'%',px+(px>500?-10:10),py-10,px>500?'right':'left',.9,12);
+  lg.text('toy re-implementation, not the paper’s figure',575,444,'right',.4,11)}
+['ed','pl','oc'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>

@@ -79,7 +79,7 @@ const S=[
   ['lockring','Conformationally locked macrocyclic acceptors','Ring acceptors soften backbone vibrations. PLQY reaches 14.5%; cells reach 17.1%.','Advanced Materials 2025 · explainer','explainers/lockring.html',4]]},
  {id:'research',h:'Voltage losses',q:'Why do organic solar cells deliver less voltage than their light absorption allows?',items:[
   ['barrierless','Barrierless free charge generation in PM6:Y6','Generation ignores field and photon energy, with Ea only 6 meV. Y6 electrostatics offset the Coulomb pull.','Advanced Materials 2020 · explainer','explainers/barrierless.html',1],
-  ['vloss','Reducing voltage losses in A-DA′D-A acceptor solar cells','Where the voltage goes in cells built on Y-type A-DA′D-A acceptors.','Chem 2020','https://doi.org/10.1016/j.chempr.2020.08.003',1],
+  ['vloss','Reducing voltage losses in A-DA′D-A acceptor solar cells','Non-radiative loss costs 200–300 meV. Brighter blends are the route past 20%.','Chem 2020 · explainer','explainers/vloss.html',1],
   ['ternary','Origins of the open-circuit voltage in ternary cells','Thermal population of CT and local-exciton states sets non-radiative loss; a bright guest with matched CT energy keeps Voc high.','Nature Energy 2023','https://doi.org/10.1038/s41560-023-01309-5',1],
   ['optgap','Optical gaps as a reference for voltage losses','Different ways of defining the optical gap change the reported voltage loss; a consistent reference makes systems comparable.','Advanced Energy Materials 2018','https://doi.org/10.1002/aenm.201801352',1]]},
  {id:'dynamics',h:'Charge dynamics',q:'What happens in the first nanoseconds after a photon is absorbed?',items:[
@@ -159,7 +159,7 @@ vloss(ctx,g,t,c){const y0=130,s=100,nr=.2-.1*ss((Math.sin(TAU*t/6)+1)/2),rad=.16
   g.rect(x,y0-v*s,w,v*s,c,.85,12);g.rect(x,y0-(v+rad)*s,w,rad*s,c,.4);g.rect(x,y0-s,w,nr*s,'#ff6b6b',.35);
   g.line([[88,y0-s],[172,y0-s]],'#e8eef7',1,0,.5);g.line([[88,y0],[172,y0]],'#e8eef7',1,0,.5);
   const R=rng(3);for(let k=0;k<14;k++){const p=(t*.5+R())%1;g.dot(x+R()*w+Math.sin(t*3+k)*4,y0-s+nr*s*R()-p*30,1.6,'#ff8f8f',(1-p)*.8,6)}
-  g.text('Eg/q',82,y0-s+3,'right');g.text('Voc',178,y0-v*s/2+3);g.text('ΔV rad',178,y0-(v+rad/2)*s+3,'left',.6);g.text('ΔV non-rad',178,y0-s+nr*s/2+3,'left',.75);g.text('heat',x+w/2,y0-s-20,'center',.4)},
+  g.text('Eg/q',82,y0-s+3,'right');g.text('Voc',178,y0-v*s/2+3);g.text('ΔE1+ΔE2',178,y0-(v+rad/2)*s+3,'left',.6);g.text('ΔE3 non-rad',178,y0-s+nr*s/2+3,'left',.75);g.text('heat',x+w/2,y0-s-20,'center',.4)},
 ternary(ctx,g,t,c){ // host CT, guest CT and guest LE states in thermal exchange; emission from LE
   const L=[[46,116,'CT host'],[120,108,'CT guest'],[194,52,'LE guest']],R=rng(5);
   L.forEach(([x,y,l],i)=>{g.line([[x-28,y],[x+28,y]],i==2?'#ffffff':c,2.4,10,.9);g.text(l,x,y+16,'center',.6)});
