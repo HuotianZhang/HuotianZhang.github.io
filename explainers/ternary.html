@@ -1,0 +1,324 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ternary Voltage Origins</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Ternary Voltage Origins: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1038/s41560-023-01309-5">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Nature Energy 2023</span>
+  <h1>Why a third component raises, pins or lowers the voltage</h1>
+  <p class="dek">The best organic solar cells mix a guest material into a donor–acceptor blend. Sometimes this raises the open-circuit voltage, sometimes it does nothing, sometimes it lowers it. This paper splits the voltage into a radiative part and a non-radiative loss. It shows that the loss is set by which excited states are thermally populated, and it ends with two design rules for the guest.</p>
+  <p class="cite">Y. Wang, J. Yu, R. Zhang, J. Yuan, S. Hultmark, C. E. Johnson, N. P. Gallop, B. Siegmund, D. Qian, H. Zhang, Y. Zou, M. Kemerink, A. A. Bakulin, C. Müller, K. Vandewal, X.-K. Chen, F. Gao. <i>Origins of the open-circuit voltage in ternary organic solar cells and design rules for minimized voltage losses.</i> Nature Energy (2023). <a href="https://doi.org/10.1038/s41560-023-01309-5">doi:10.1038/s41560-023-01309-5</a></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE PUZZLE</span><h2>Up, flat or down</h2>
+      <p>A ternary organic solar cell (TOSC) is a host binary blend (one donor, one acceptor) plus a guest component. Record efficiencies come from such cells. At first the guest was added to absorb more light, but it can also change the open-circuit voltage V<sub>OC</sub>, and nobody agreed on why.</p>
+      <p>The authors built six dual-acceptor systems. In each one a fullerene (PC<sub>71</sub>BM or Bis-PC<sub>62</sub>BM) gradually replaces the non-fullerene acceptor: PM6:Y6, PBDB-T:Y1, PM6:IT-M (twice, with two fullerenes), PM6:ITCC and PBDB-T:IEICO-4F. Depending on the system, V<sub>OC</sub> rises, stays pinned or falls as the fullerene content goes up.</p>
+      <p class="note">Trend shapes schematic, after Fig. 1b; no values read off the plot.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · OLD MODELS</span><h2>Alloy or parallel?</h2>
+      <p>Two models were in use. The <b>alloy</b> model assumes the two acceptors mix well and form one phase with an averaged charge-transfer (CT) state. The <b>parallel</b> model assumes poor mixing, so the cell behaves like two binary cells side by side.</p>
+      <p>Each works in some systems and fails in others. The alloy model cannot explain tunable V<sub>OC</sub> in some cells with two similar fullerenes. Some "parallel-like" cells have V<sub>OC</sub> pinned to the lower binary value instead of a linear mix. Most of all, both tie V<sub>OC</sub> only to the CT-state energy E<sub>CT</sub>. Neither considers how the guest changes recombination, even though the non-radiative loss is a major part of the voltage loss.</p>
+      <p class="note">Schematic morphologies; not from a figure in the paper.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · TWO PARTS</span><h2>Radiative limit minus non-radiative loss</h2>
+      <p>Detailed balance (assuming near thermal equilibrium) splits the voltage into two measurable pieces:</p>
+      <div class="eq">V<sub>OC</sub> = V<sub>OC</sub><sup>rad</sup> − ΔV<sub>nr</sub></div>
+      <p>V<sub>OC</sub><sup>rad</sup> = (kT/q) ln(J<sub>SC</sub>/J<sub>0,rad</sub>) comes from the photovoltaic quantum efficiency EQE<sub>PV</sub>. J<sub>SC</sub> weights it with the solar spectrum, which is nearly flat here. J<sub>0,rad</sub> weights it with 300 K black-body radiation, which grows exponentially towards low photon energy. So J<sub>0,rad</sub> is set by the weak absorption tail.</p>
+      <div class="eq">ΔV<sub>nr</sub> = −(kT/q) ln(EQE<sub>EL</sub>)</div>
+      <p>EQE<sub>EL</sub> is the electroluminescence efficiency of the cell run as an LED. Computed this way, V<sub>OC</sub> follows the measured trends in all six systems.</p>
+      <p class="note">Spectra schematic; the equations are Eqs. 1–4 of the paper.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · TWO CASES</span><h2>Does the guest change the host?</h2>
+      <p>Treat the guest as forming its own binary blend with the donor (the "guest binary"). Then compare the ternary EQE<sub>PV</sub> with the composition-weighted sum of the two binary spectra.</p>
+      <p><b>Case-1</b> (five systems): the two match. The ternary behaves like a linear combination of two binaries, and the morphology hardly changes. For PM6:Y6:PC<sub>71</sub>BM, calorimetry (DSC) and X-ray scattering (GIWAXS) look like those of PM6:Y6.</p>
+      <p><b>Case-2</b> (PBDB-T:IEICO-4F:PC<sub>71</sub>BM): the ternary absorption edge shifts further to the blue as fullerene is added. PC<sub>71</sub>BM suppresses aggregation of IEICO-4F: its melting endotherm at about 325 °C disappears and its diffraction peak broadens.</p>
+      <p class="note">Schematic, after Fig. 2a,b and Fig. 4a.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · RADIATIVE LIMIT</span><h2>V<sub>OC</sub><sup>rad</sup> barely moves</h2>
+      <p>In Case-1, J<sub>SC</sub> and J<sub>0,rad</sub> of the ternary are weighted sums of the binary values. Write the guest's values as J<sub>SC</sub><sup>G</sup> = a·J<sub>SC</sub><sup>H</sup> and J<sub>0,rad</sub><sup>G</sup> = b·J<sub>0,rad</sub><sup>H</sup>. For guest fraction x:</p>
+      <div class="eq">V<sub>OC</sub><sup>rad,T</sup> − V<sub>OC</sub><sup>rad,H</sup> = (kT/q) ln[(1 − x + ax)/(1 − x + bx)]</div>
+      <p>In the measured systems a is 0.5–1.5 and b spans 10<sup>−5</sup> to 10<sup>1</sup>. With a = 1, a guest with smaller J<sub>0,rad</sub> (b &lt; 1) gains at most about 20 mV at 50%. With b = 1 nothing changes. A guest with larger J<sub>0,rad</sub> (b &gt; 1) pulls V<sub>OC</sub><sup>rad</sup> down quickly. So in Case-1 the radiative limit leaves little room. In Case-2 the equation fails, because the host itself changes.</p>
+      <p class="note">Curves drawn from Eq. 5 with a = 1 at 300 K, as in Fig. 2f,g.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · NON-RADIATIVE LOSS</span><h2>Three EQE<sub>EL</sub> trends</h2>
+      <p>The host binaries emit at least ten times more efficiently than the guest binaries. In the host blends CT and local-exciton (LE) states lie only about 30–80 meV apart. They hybridise, and the bright LE state is thermally populated. In the fullerene guest blends the gap is about 150–340 meV, and the emission is pure, dim CT emission.</p>
+      <p>As the guest is added, EQE<sub>EL</sub> follows one of three trends. It stays pinned at the host value up to about 80% guest (PM6:Y6, PBDB-T:Y1, PM6:IT-M:Bis-PC<sub>62</sub>BM). It falls steadily (PM6:ITCC, PM6:IT-M:PC<sub>71</sub>BM). Or it rises up to about 80% and then drops (the Case-2 IEICO-4F system). In the electroluminescence spectra, guest CT emission shows up only in the systems where EQE<sub>EL</sub> falls.</p>
+      <p class="note">Trend shapes schematic, after Fig. 3a–c; offsets from the text.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · THERMAL POPULATION</span><h2>Excitations sit where energy is lowest</h2>
+      <p>Whether guest CT emission appears depends on where the guest CT state lies. In the "falling" systems E<sub>CT</sub> of the guest is below that of the host. In the "pinned" systems it is above. Near thermal equilibrium, excitations spread over all states according to the Boltzmann factor. A low-lying dim state collects them and becomes the main loss channel.</p>
+      <p>The authors extend their three-state model to four states: LE<sub>H</sub> 1.50 eV, CT<sub>H</sub> 1.45 eV, LE<sub>G</sub> 1.80 eV, and CT<sub>G</sub> moved from 1.60 to 1.30 eV. If E<sub>CT,G</sub> &gt; E<sub>CT,H</sub>, the simulated EQE<sub>EL</sub> stays pinned to the host. If it is lower, EQE<sub>EL</sub> falls continuously with guest content. If the two are equal, EQE<sub>EL</sub> is roughly a linear mix of the two binaries. Thermal population alone reproduces all the Case-1 trends.</p>
+      <p class="note">Level energies from Fig. 3g; the dots are a Boltzmann illustration, not the paper's simulation.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · CASE-2</span><h2>Less aggregation, brighter host</h2>
+      <p>The rise in the IEICO-4F system needs one more ingredient. When PC<sub>71</sub>BM breaks up IEICO-4F aggregates, aggregation-caused quenching (ACQ) is suppressed. The PLQY and the exciton lifetime of IEICO-4F rise with fullerene content (transient absorption shows the longer lifetime is not a fluence effect). In the model, a higher LE<sub>H</sub> PLQY lifts the flat part of the EQE<sub>EL</sub> curve, so EQE<sub>EL</sub> first rises and then falls, as measured.</p>
+      <p>Trap passivation could give a similar effect. Space-charge-limited-current measurements rule it out here. So in Case-2 both parts can improve: the blue-shifted edge raises V<sub>OC</sub><sup>rad</sup>, and the brighter host lowers ΔV<sub>nr</sub>.</p>
+      <p class="note">Schematic, after Fig. 3c,i and Fig. 4e.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · DESIGN RULES</span><h2>Two rules for the guest</h2>
+      <p><b>Rule 1 (Case-1).</b> Use a guest whose binary blend emits more efficiently than the host (EQE<sub>EL</sub><sup>G</sup> &gt; EQE<sub>EL</sub><sup>H</sup>): a luminescent guest with a small CT–LE offset. Keep its CT energy close to the host's (E<sub>CT,G</sub> ≅ E<sub>CT,H</sub>). Too low, and absorption from those low states raises J<sub>0,rad</sub> (b &gt; 1), so V<sub>OC</sub><sup>rad</sup> falls by more than ΔV<sub>nr</sub> gains.</p>
+      <p><b>Rule 2 (Case-2).</b> Use a guest that mixes well with the low-gap component of the host, so that it suppresses aggregation. Such a guest does not even need to be a semiconductor; an insulator could work, as long as it does not harm the electronic properties.</p>
+      <p>The two cases can overlap: one guest can meet both rules. The authors note that they do not exclude other mechanisms in other material combinations.</p>
+      <p class="note">Schematic, after Fig. 4c.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>A four-state toy</h2>
+  <p class="intro">This is a toy, not the paper's simulation. It uses the four level energies of Fig. 3g and the recombination rates and EQE<sub>EL</sub> factors from the Methods. Unlike the paper's model it has no electronic coupling, so there is no hybridisation. Excitations are spread over the four states by Boltzmann factors at 300 K, with host states weighted by (1 − x) and guest states by x. The radiative-limit change uses Eq. 5 with a = 1. The paper measures b; here it is guessed from the CT energies, b = exp[(E<sub>CT,H</sub> − E<sub>CT,G</sub>)/kT]. Read trends, not values.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Energy levels and voltage changes versus guest fraction in a toy model that responds to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="gx"><span class="row"><span>Guest fraction x</span><output id="gxv">20%</output></span><input id="gx" type="range" min="0" max="95" step="1" value="20"></label>
+      <label for="ec"><span class="row"><span>Guest CT energy E<sub>CT,G</sub></span><output id="ecv">1.60 eV</output></span><input id="ec" type="range" min="1.30" max="1.60" step="0.01" value="1.60"></label>
+      <label for="of"><span class="row"><span>Guest LE–CT offset</span><output id="ofv">0.20 eV</output></span><input id="of" type="range" min="0.02" max="0.34" step="0.01" value="0.20"></label>
+      <div class="read"><div><b id="rq">–</b><span>EQE<sub>EL</sub> (toy), host = <span id="rh"></span></span></div><div><b id="rn">–</b><span>change in ΔV<sub>nr</sub></span></div><div><b id="rr">–</b><span>change in V<sub>OC</sub><sup>rad</sup> (Eq. 5, toy b)</span></div><div><b id="rv">–</b><span>net change in V<sub>OC</sub></span></div></div>
+      <p class="note">Try this: start at the Fig. 3g values (1.60 eV, 0.20 eV) and the voltage barely moves. Drop E<sub>CT,G</sub> to 1.30 eV and the dim guest CT state soaks up the excitations. Then set E<sub>CT,G</sub> = 1.45 eV and shrink the offset below 0.05 eV: a bright guest at matched CT energy lowers ΔV<sub>nr</sub> with no radiative penalty. That is rule 1.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1038/s41560-023-01309-5">Read the full article in Nature Energy ↗</a>
+  <span class="note">From the paper: the six ternary systems and their Case-1/Case-2 classification; Eqs. 1–5; a = 0.5–1.5 and b = 10<sup>−5</sup>–10<sup>1</sup>; ≈20 mV maximum V<sub>OC</sub><sup>rad</sup> gain at 50% guest; host EQE<sub>EL</sub> at least 10× the guest's; CT–LE offsets ≈30–80 meV (host) and ≈150–340 meV (guest); EQE<sub>EL</sub> trends pinned or rising up to ≈80% guest; IEICO-4F melting endotherm at ≈325 °C; model energies LE<sub>H</sub> 1.50, CT<sub>H</sub> 1.45, LE<sub>G</sub> 1.80, CT<sub>G</sub> 1.60→1.30 eV; rates k<sub>r</sub>/k<sub>nr</sub> = 10<sup>8</sup>/10<sup>10</sup> s<sup>−1</sup> (LE) and 10<sup>4</sup>/10<sup>10</sup> s<sup>−1</sup> (CT); η<sub>b</sub> = 1, η<sub>e</sub> = 0.25, η<sub>out</sub> = 0.2. Trend shapes, spectra, morphologies, the population dots and the lab model are schematic or illustrative. Eq. 5 curves are computed exactly.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=140){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=20;i++){const s=i/20*len,o=Math.sin(i/20*TAU*2.5)*4;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,2,8,a)}
+};return g}
+
+
+// ---- shared physics (used by story scenes 4, 6 and the lab) ----
+const KT=0.025852;
+// Eq. 5 of the paper: change of the radiative-limit Voc (V) for guest fraction x
+const dVrad=(x,a,b)=>KT*Math.log((1-x+a*x)/(1-x+b*x));
+// four-state Boltzmann toy (no couplings): rates and EQE_EL factors from the Methods
+function toy(x,Ectg,off){const S=[[1.50,1-x,1e8],[1.45,1-x,1e4],[Ectg+off,x,1e8],[Ectg,x,1e4]];let n=0,d=0;const P=[];
+  S.forEach(([E,w,kr])=>{const p=w*Math.exp(-(E-1.3)/KT);P.push(p);n+=p*kr;d+=p*(kr+1e10)});const s=P.reduce((a,b)=>a+b,0);
+  return{eqe:.25*.2*n/d,pop:P.map(p=>p/s)}}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+const sup=n=>String(n).replace(/-/g,'⁻').replace(/\d/g,c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]);
+const foot=(s,a)=>g.text(s,580,444,'right',.45*a,11);
+// a small log-EQE spectrum with an edge at e0 (photon energy axis 1.0-2.4 eV mapped to x0..x1)
+function edge(x0,x1,y0,h,e0,col,w,a,dash,glow=8){const X=e=>x0+(e-1)/1.4*(x1-x0);g.fn(x=>{const e=1+(x-x0)/(x1-x0)*1.4;return y0-h*(1/(1+Math.exp(-(e-e0)/.035)))},X(1.05),x1,col,w,glow,a,dash)}
+
+const SC=[
+ // 0 six systems: Voc vs fullerene content, trend shapes after Fig. 1b
+ (t,a)=>{const P=[['PM6:Y6:PC71BM',[0,.05,.12,.12,.18,.55,1],'rises',C.green],['PBDB-T:Y1:PC71BM',[.6,.65,.62,.65,.65,.3],'pinned',C.amber],['PM6:IT-M:Bis-PC62BM',[0,0,.2,.15,.45,.8],'rises',C.green],
+   ['PM6:ITCC:PC71BM',[1,.62,.35,.15,0],'falls',C.red],['PM6:IT-M:PC71BM',[1,.66,.66,.45,.3,.1],'falls',C.red],['PBDB-T:IEICO-4F:PC71BM',[0,.2,.3,.45,.6,.7,.95,.9],'rises',C.green]];
+  const cur=(t*.15)%1;
+  P.forEach(([n,v,lab,col],i)=>{const x0=40+(i%3)*190,y0=200+Math.floor(i/3)*200,w=150,h=110;g.axes(x0,y0,x0+w,y0-h);
+   g.text(n,x0+w/2,y0-h-16,'center',.85*a,11.5);g.text(lab,x0+w-4,y0-h+6,'right',.9*a,12,col);
+   const pts=v.map((q,k)=>[x0+8+k/(v.length-1)*(w-16),y0-12-q*(h-30)]);g.line(pts,col,2,8,.8*a);pts.forEach(p=>g.dot(p[0],p[1],3.4,'#fff',.9*a,6));
+   const cx=x0+8+cur*(w-16);g.line([[cx,y0],[cx,y0-h+14]],C.ink,1,0,.25*a,[2,3])});
+  g.text('VOC',300,30,'center',.6*a,12);g.text('fullerene (guest) content →',300,425,'center',.6*a,12);foot('trend shapes schematic, after Fig. 1b',a)},
+ // 1 alloy vs parallel
+ (t,a)=>{const R=rng(4);
+  [[150,'alloy model','well mixed, one averaged CT'],[450,'parallel model','separate domains, two CTs']].forEach(([cx,ttl,sub],k)=>{
+   g.text(ttl,cx,50,'center',.9*a,15);g.text(sub,cx,70,'center',.6*a,12);
+   g.line([[cx-110,90],[cx+110,90],[cx+110,290],[cx-110,290],[cx-110,90]],C.ink,1,0,.3*a);
+   for(let i=0;i<42;i++){const kk=i%2,x=k?cx+(kk?50:-50)+(R()-.5)*90:cx+(R()-.5)*200,y=100+R()*180,j=Math.sin(t*1.5+i)*1.5;
+    g.dot(x+j,y,kk?5.5:3.5,kk?C.amber:C.blue,.85*a,6)}
+   if(k){g.line([[cx,95],[cx,285]],C.ink,1,0,.35*a,[3,4])}});
+  g.dot(70,320,3.5,C.blue,a,6);g.text('non-fullerene acceptor',80,324,'left',.7*a,12);g.dot(320,320,5.5,C.amber,a,6);g.text('fullerene guest',330,324,'left',.7*a,12);
+  const pu=.6+.4*Math.sin(t*2);g.text('both models: VOC ← E_CT only',300,370,'center',.9*a,15);g.text('missing: how the guest changes recombination (ΔV_nr)',300,396,'center',(.5+.4*pu)*a,13,C.red);
+  foot('schematic morphologies',a)},
+ // 2 detailed balance
+ (t,a)=>{const x0=60,x1=370,yb=330,X=e=>x0+(e-1)/1.4*(x1-x0),E=x=>1+(x-x0)/(x1-x0)*1.4;g.axes(x0,yb,x1,60);
+  const eqe=e=>Math.log10(1/(1+Math.exp(-(e-1.5)/.018))),Y=l=>yb-10-(l+6)/6*250,bb=e=>-6+(2.4-e)/1.4*5.4;
+  g.fn(x=>Y(Math.max(-6,eqe(E(x)))),x0,x1,C.blue,2.6,10,a);g.text('EQE_PV',x1,Y(0)-12,'right',.85*a,12,C.blue);
+  g.fn(x=>Y(bb(E(x))),x0,x1,C.amber,1.6,6,.7*a,[5,4]);g.text('300 K black body',X(1.04),Y(bb(1.04))+22,'left',.8*a,12,C.amber);
+  g.text('log scale',x0+4,52,'left',.5*a,11);g.text('photon energy →',x1,yb+20,'right',.55*a,12);
+  // integrand of J0,rad = EQE_PV x black-body flux (linear, normalised): peaks in the absorption tail
+  const pr=e=>Math.pow(10,eqe(e))*Math.exp(-(e-1.3)/KT);let m=0;for(let e=1;e<=2.4;e+=.005)m=Math.max(m,pr(e));
+  const yb2=405;g.line([[x0,yb2],[x1,yb2]],C.ink,1,0,.3*a);
+  g.fn(x=>yb2-55*pr(E(x))/m,x0,x1,C.green,2,8,a);g.text('EQE_PV × black body → J0,rad',x0,yb2+18,'left',.85*a,12,C.green);
+  const p=(t*.2)%1,e=1.25+p*.45;g.dot(X(e),Y(Math.max(-6,eqe(e))),4,'#fff',a,12);g.dot(X(e),yb2-55*pr(e)/m,3.5,'#fff',a,10);
+  // bar after Fig. 4b
+  const bx=455,bw=90,top=100,nr=110,yb3=390;g.rect(bx,top+nr,bw,yb3-top-nr,C.blue,.75*a,10);g.rect(bx,top,bw,nr,C.red,.4*a);
+  g.line([[bx-8,top],[bx+bw+8,top]],C.ink,1.2,0,.7*a);g.text('VOC,rad',bx+bw/2,top-12,'center',.85*a,12);
+  g.text('ΔV_nr',bx+bw/2,top+nr/2+5,'center',.95*a,13);g.text('VOC',bx+bw/2,(top+nr+yb3)/2+5,'center',.95*a,15);
+  foot('spectra schematic; bar after Fig. 4b',a)},
+ // 3 Case-1 vs Case-2 edges
+ (t,a)=>{const pu=.5+.5*Math.sin(t*1.6);
+  [[60,'Case-1',1.38,1.38,'ternary = weighted sum'],[240,'Case-2',1.46,1.38,'ternary edge blue-shifts']].forEach(([y,n,eT,eL,lab],k)=>{const x0=40,x1=340,yb=y+140;g.axes(x0,yb,x1,y);
+   g.text(n,x0+8,y+14,'left',.9*a,14,k?C.violet:C.blue);edge(x0,x1,yb,110,eL,C.ink,1.6,.75*a,[5,4],0);edge(x0,x1,yb,110,eT,k?C.violet:C.blue,2.6,a);
+   g.text(lab,x1,y+14,'right',.7*a,11.5);if(k){const X=e=>x0+(e-1)/1.4*(x1-x0);g.arrow(X(1.36),yb-55,X(1.36)+18+6*pu,yb-55,C.violet,2,a,6)}});
+  g.text('solid: ternary   dashed: weighted binaries',190,412,'center',.6*a,11.5);
+  // morphology icons (after Fig. 4a)
+  const R=rng(9);[[475,120,0],[475,300,1]].forEach(([cx,cy,k])=>{for(let i=0;i<5;i++){const an=i/5*TAU,r=k?40:34;
+    k?g.ring(cx+r*Math.cos(an),cy+r*Math.sin(an),9,C.violet,1.6,.85*a,6):g.rect(cx+r*Math.cos(an)-9,cy+r*Math.sin(an)-9,18,18,C.blue,.6*a)}
+   for(let i=0;i<3;i++)g.ring(cx+(R()-.5)*30+(k?0:62),cy+(R()-.5)*30+(k?0:-44),7,C.amber,1.6,.9*a);
+   g.text(k?'guest breaks up':'host order',cx,cy+66,'center',.7*a,11.5);g.text(k?'host aggregates':'unchanged',cx,cy+82,'center',.7*a,11.5)});
+  g.text('IEICO-4F melt',475,410,'center',.65*a,11.5,C.violet);g.text('(≈325 °C) vanishes',475,426,'center',.65*a,11.5,C.violet);foot('schematic, after Fig. 2a,b and 4a',a)},
+ // 4 Eq. 5 curves (exact)
+ (t,a)=>{const x0=80,x1=490,yt=60,yb=380,X=x=>x0+x*(x1-x0),Y=m=>yt+(300-m)/600*(yb-yt),cl=m=>Math.max(-300,Math.min(300,m));g.axes(x0,yb,x1,yt);
+  g.line([[x0,Y(0)],[x1,Y(0)]],C.ink,1,0,.3*a,[3,3]);[300,150,0,-150,-300].forEach(m=>g.text(m,x0-8,Y(m)+4,'right',.5*a,11));
+  [0,.25,.5,.75,1].forEach(x=>g.text(Math.round(x*100)+'%',X(x),yb+18,'center',.5*a,11));
+  const B=[[1e-5,C.blue],[1e-2,C.blue],[1,C.ink],[1e1,C.amber],[1e3,C.red],[1e5,C.red]];let ly=[];
+  B.forEach(([b,col])=>{g.fn(xx=>Y(cl(dVrad(Math.min(.999,(xx-x0)/(x1-x0)),1,b)*1000)),x0,x1,col,2.2,8,a,null,240);ly.push([Y(cl(dVrad(.999,1,b)*1000)),b,col])});
+  ly.sort((p,q)=>p[0]-q[0]);for(let i=1;i<ly.length;i++)ly[i][0]=Math.max(ly[i][0],ly[i-1][0]+15);
+  ly.forEach(([y,b,col])=>g.text('b = 10'+sup(Math.round(Math.log10(b))),x1+8,y+4,'left',.85*a,11,col));
+  const x=.5,v=dVrad(x,1,1e-5)*1000;g.line([[X(x),Y(v)],[X(x),Y(0)]],C.green,1.4,0,.8*a);g.dot(X(x),Y(v),5,C.green,a,12);g.text('≈'+Math.round(v)+' mV at 50%',X(x)-8,Y(v)-12,'right',.9*a,12,C.green);
+  const p=(t*.12)%1;g.dot(X(p*.99),Y(cl(dVrad(p*.99,1,1e3)*1000)),4,'#fff',a,12);
+  g.text('ΔVOC,rad (mV)',x0,yt-12,'left',.6*a,12);g.text('guest fraction x →',x1,yb+36,'right',.55*a,12);g.text('measured: b = 10⁻⁵ … 10¹',x0+10,Y(260),'left',.6*a,12);
+  foot('Eq. 5, a = 1, 300 K (as Fig. 2f,g)',a)},
+ // 5 three EQE_EL trends (schematic) + offsets
+ (t,a)=>{const T=[['pinned','Y6 · Y1 · IT-M:Bis',[0,0,.02,0,.05,-.1,-1.2],C.amber],['falls','ITCC · IT-M:PC71BM',[0,-.25,-.45,-.6,-.8,-1],C.red],['rises (Case-2)','IEICO-4F',[0,.35,.55,.9,1.1,1.15,.8,-.9],C.violet]];
+  T.forEach(([n,s,v,col],i)=>{const x0=40+i*190,y0=240,w=150;g.axes(x0,y0,x0+w,y0-160);g.text(n,x0+w/2,40,'center',.9*a,13,col);g.text(s,x0+w/2,58,'center',.6*a,11);
+   const pts=v.map((q,k)=>[x0+8+k/(v.length-1)*(w-16),y0-95-q*50]);g.line(pts,col,2,8,.85*a);pts.forEach(p=>g.dot(p[0],p[1],3.2,'#fff',.9*a,6))});
+  g.text('log EQE_EL vs guest content',300,264,'center',.55*a,12);
+  // CT-LE offsets to scale (0.35 px per meV)
+  const yb=380;[[150,'host blends','CT–LE ≈ 30–80 meV',55,C.green,1],[420,'guest blends','CT–LE ≈ 150–340 meV',245,C.red,0]].forEach(([cx,n,l,o,col,br])=>{const yl=yb-o*.35;
+   g.line([[cx-70,yl],[cx-10,yl]],C.amber,2.6,8,a);g.line([[cx+10,yb],[cx+70,yb]],C.blue,2.6,8,a);g.text('LE',cx-40,yl-8,'center',.8*a,11,C.amber);g.text('CT',cx+40,yb-8,'center',.8*a,11,C.blue);
+   g.line([[cx,yl],[cx,yb]],C.ink,1,0,.4*a,[2,3]);g.text(n,cx,yb+18,'center',.85*a,12);g.text(l,cx,yb+34,'center',.75*a,11.5,col);
+   const pu=(t*.6)%1;g.wave(cx-40,yl+6+pu*14,Math.PI/2,12,C.green,(br?1:.25)*(1-pu)*a)});
+  foot('schematic, after Fig. 3a–c',a)},
+ // 6 four-state ladder with Boltzmann population
+ (t,a)=>{const Y=E=>392-(E-1.22)/.66*300,s=ss((Math.sin(t*.35)+1)/2),Ectg=1.60-.30*s,x=.5,r=toy(x,Ectg,.20),R=rng(21);
+  const L=[[110,1.50,'LE_H',C.amber],[230,1.45,'CT_H',C.blue],[480,1.80,'LE_G',C.amber],[370,Ectg,'CT_G',C.violet]];
+  g.line([[50,Y(1.22)],[560,Y(1.22)]],C.ink,2,0,.5*a);g.text('G',42,Y(1.22)+4,'right',.6*a,12);
+  g.line([[310,Y(1.60)],[430,Y(1.60)]],C.violet,1,0,.35*a,[3,3]);g.line([[310,Y(1.30)],[430,Y(1.30)]],C.violet,1,0,.35*a,[3,3]);g.text('1.60',304,Y(1.60)+4,'right',.5*a,11);g.text('1.30',304,Y(1.30)+4,'right',.5*a,11);
+  L.forEach(([cx,E,n,col],i)=>{g.line([[cx-50,Y(E)],[cx+50,Y(E)]],col,3,10,a);g.text(n,cx,Y(E)-30,'center',.9*a,13,col);g.text(E.toFixed(2)+' eV',cx,Y(E)-14,'center',.65*a,11);
+   const n2=Math.round(r.pop[i]*40);for(let k=0;k<n2;k++)g.dot(cx-44+R()*88+Math.sin(t*2+k)*2,Y(E)+8+R()*14,2.6,'#fff',.85*a,6);
+   g.text(Math.round(r.pop[i]*100)+'%',cx+56,Y(E)+4,'left',.75*a,11)});
+  g.text('host binary',170,414,'center',.75*a,12);g.text('guest binary',425,414,'center',.75*a,12);
+  g.text(Ectg>1.46?'E_CT,G > E_CT,H: host states hold the excitations':Ectg<1.44?'E_CT,G < E_CT,H: dim guest CT takes over':'E_CT,G ≈ E_CT,H: shared',300,40,'center',.9*a,13);
+  foot('levels from Fig. 3g; dots: Boltzmann share at x = 50%',a)},
+ // 7 Case-2: levels rise, ACQ suppressed
+ (t,a)=>{const s=ss((Math.sin(t*.8)+1)/2),Y=E=>360-(E-1.2)*600;
+  g.line([[60,Y(1.42)],[180,Y(1.42)]],C.amber,1.4,0,.5*a,[4,4]);g.line([[200,Y(1.38)],[320,Y(1.38)]],C.blue,1.4,0,.5*a,[4,4]);
+  const dE=.04*s;g.line([[60,Y(1.42+dE)],[180,Y(1.42+dE)]],C.amber,3,10,a);g.line([[200,Y(1.38+dE)],[320,Y(1.38+dE)]],C.blue,3,10,a);
+  g.text('LE_H',120,Y(1.42+dE)-12,'center',.9*a,13,C.amber);g.text('CT_H',260,Y(1.38+dE)-12,'center',.9*a,13,C.blue);
+  g.line([[40,Y(1.2)],[340,Y(1.2)]],C.ink,2,0,.5*a);g.text('ground state',190,Y(1.2)+20,'center',.55*a,12);
+  const wA=1.5+3*s;g.line([[120,Y(1.42+dE)+4],[120,Y(1.2)-4]],C.green,wA,8,.85*a);g.line([[260,Y(1.38+dE)+4],[260,Y(1.2)-4]],C.green,wA*.5,6,.7*a);
+  g.text('blue-shifted edge → higher VOC,rad',190,60,'center',.85*a,12.5);g.text('suppressed ACQ → brighter → lower ΔV_nr',190,82,'center',.85*a,12.5,C.green);
+  g.text('dashed: before guest',190,Y(1.2)+40,'center',.5*a,11);
+  // EQE_EL rise-then-fall (schematic, Fig. 3c)
+  const x0=390,x1=570,yb=330;g.axes(x0,yb,x1,130);const v=[0,.35,.55,.9,1.1,1.15,.8,-.9],pts=v.map((q,k)=>[x0+8+k/(v.length-1)*(x1-x0-16),yb-100-q*60]);
+  g.line(pts,C.violet,2,8,.85*a);pts.forEach(p=>g.dot(p[0],p[1],3.2,'#fff',.9*a,6));g.text('EQE_EL (log)',x0,120,'left',.6*a,12);g.text('PC71BM content →',x1,yb+20,'right',.55*a,11.5);
+  g.text('up to ≈80%, then down',(x0+x1)/2,yb+44,'center',.7*a,12,C.violet);
+  foot('schematic, after Fig. 3c and 4e',a)},
+ // 8 design rules (after Fig. 4c)
+ (t,a)=>{const Y=E=>330-(E-1.3)*700;const st=[[90,1.48,'LE_H',C.amber,1],[200,1.44,'CT_H',C.blue,.5],[330,1.44,'CT_G',C.violet,1.4],[440,1.47,'LE_G',C.violet,2.2]];
+  g.line([[40,Y(1.3)],[500,Y(1.3)]],C.ink,2,0,.5*a);g.text('ground state',270,Y(1.3)+20,'center',.55*a,12);
+  st.forEach(([cx,E,n,col,w],i)=>{g.line([[cx-42,Y(E)],[cx+42,Y(E)]],col,3,10,a);g.text(n,cx,Y(E)-12,'center',.9*a,13,col);
+   const p=(t*.6+i*.25)%1;g.line([[cx,Y(E)+5],[cx,Y(1.3)-5]],C.green,w*1.6,6,.65*a);g.dot(cx,Y(E)+5+p*(Y(1.3)-Y(E)-10),2.4,'#fff',(1-p)*a,8)});
+  const pu=.5+.5*Math.sin(t*1.6);g.line([[230,Y(1.44)+14],[300,Y(1.44)+14]],C.ink,1.2,0,(.4+.4*pu)*a,[3,3]);g.text('E_CT,H ≅ E_CT,G',265,Y(1.44)+32,'center',.85*a,12);
+  g.text('Rule 1: EQE_EL(guest binary) > EQE_EL(host binary)',300,56,'center',.9*a,13,C.green);g.text('arrow width ∝ emission efficiency',300,76,'center',.55*a,11);
+  g.text('Rule 2: guest mixes well with the low-gap host component',300,400,'center',.9*a,13,C.violet);g.text('(even an insulator can do it)',300,420,'center',.6*a,11.5);
+  foot('schematic, after Fig. 4c',a)}
+];let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+// pause the story canvas while it is off-screen
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+const sci=v=>{const e=Math.floor(Math.log10(v)),m=v/Math.pow(10,e);return m.toFixed(1)+'×10'+sup(e)};
+const mv=v=>(v>=0?'+':'−')+Math.abs(Math.round(v*1000))+' mV';
+function calc(x,ec,of){const h=toy(0,ec,of).eqe,r=toy(x,ec,of),b=Math.exp((1.45-ec)/KT),dnr=-KT*Math.log(r.eqe/h),drad=dVrad(x,1,b);return{h,r,dnr,drad,net:drad-dnr}}
+function lab(){const x=+$('gx').value/100,ec=+$('ec').value,of=+$('of').value,c=calc(x,ec,of);
+  $('gxv').value=Math.round(x*100)+'%';$('ecv').value=ec.toFixed(2)+' eV';$('ofv').value=of.toFixed(2)+' eV';
+  $('rq').textContent=sci(c.r.eqe);$('rh').textContent=sci(c.h);$('rn').textContent=mv(c.dnr);$('rr').textContent=mv(c.drad);$('rv').textContent=mv(c.net);
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  // left: levels with population bars
+  const Y=E=>380-(E-1.25)/.9*320,L=[[45,1.50,'LE_H',C.amber],[100,1.45,'CT_H',C.blue],[160,ec+of,'LE_G',C.amber],[215,ec,'CT_G',C.violet]];
+  lg.line([[20,410],[245,410]],C.ink,1.6,0,.5);lg.text('ground',132,428,'center',.5,11);
+  L.forEach(([cx,E,n,col],i)=>{lg.line([[cx-22,Y(E)],[cx+22,Y(E)]],col,2.6,8,1);lg.text(n,cx,Y(E)-22,'center',.85,11,col);lg.text(E.toFixed(2),cx,Y(E)-8,'center',.6,10);
+   const p=c.r.pop[i];lg.rect(cx-20,Y(E)+4,40*p,6,'#fff',.85);});
+  lg.text('bars: share of excitations',132,44,'center',.55,11);
+  // right: voltage changes vs x
+  const x0=300,x1=575,Yv=m=>70+(80-m)/280*300,X=v=>x0+v/.95*(x1-x0);lg.axes(x0,370,x1,70);lg.line([[x0,Yv(0)],[x1,Yv(0)]],C.ink,1,0,.3,[3,3]);
+  [80,0,-100,-200].forEach(m=>lg.text(m,x0-6,Yv(m)+4,'right',.5,10));[0,.5,.95].forEach(v=>lg.text(Math.round(v*100)+'%',X(v),388,'center',.5,10));
+  const cl=m=>Math.max(-200,Math.min(80,m));
+  [['net',C.green,3],['-nr',C.violet,1.8],['rad',C.amber,1.8]].forEach(([k,col,w])=>lg.fn(px=>{const v=(px-x0)/(x1-x0)*.95,q=calc(v,ec,of);return Yv(cl((k=='net'?q.net:k=='rad'?q.drad:-q.dnr)*1000))},x0,x1,col,w,k=='net'?10:4,k=='net'?1:.8,k=='net'?null:[5,4],80));
+  lg.text('net ΔVOC',x1,58,'right',.9,11,C.green);lg.text('− ΔΔV_nr',x1-90,58,'right',.85,11,C.violet);lg.text('ΔVOC,rad',x1-178,58,'right',.85,11,C.amber);
+  const px=X(x),py=Yv(cl(c.net*1000));lg.dot(px,py,5,'#fff',1,14);
+  lg.text('guest fraction x →',x1,410,'right',.55,11);lg.text('mV',x0,40,'left',.55,11);
+  lg.text('toy model, not the paper’s simulation',575,444,'right',.4,11)}
+['gx','ec','of'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>

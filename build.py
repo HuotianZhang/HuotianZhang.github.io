@@ -22,6 +22,7 @@ EXPLAINERS = {  # key -> artifact id
     "lockring": "6caA5ERMgZarBczFBMwsxe",
     "barrierless": "S1tDbNHh3ZAneZWVF4ncT9",
     "vloss": "5abwCWpKQrD3MFEx4U5NZH",
+    "ternary": "JH26x5yfAtpM4zrxjprGs3",
 }
 DESC = {
     "home": "Huotian Zhang - device physicist working on organic solar cells, University of Potsdam.",
