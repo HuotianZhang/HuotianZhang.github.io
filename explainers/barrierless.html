@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Barrierless Charge Generation</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Barrierless Charge Generation: an interactive explainer of a paper by Huotian Zhang and co-authors."></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Barrierless Charge Generation</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Generation ignores field and photon energy, with Ea only 6 meV. Y6 electrostatics offset the Coulomb pull."><link rel="canonical" href="https://huotianzhang.github.io/explainers/barrierless.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="Free charges without a barrier in PM6:Y6"><meta property="og:description" content="Generation ignores field and photon energy, with Ea only 6 meV. Y6 electrostatics offset the Coulomb pull."><meta property="og:url" content="https://huotianzhang.github.io/explainers/barrierless.html"><meta property="og:image" content="https://huotianzhang.github.io/og/barrierless.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
 <style>
@@ -53,6 +53,7 @@ footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60p
   .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
   .labgrid{grid-template-columns:1fr}
 }
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
 @media (prefers-reduced-motion:reduce){.step{transition:none}}
 </style>
 
@@ -139,7 +140,7 @@ function Tk(ctx){const g={
   ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
   halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
   rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
-  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size}px ${font}`;ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
   arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
   axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
   wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=20;i++){const s=i/20*len,o=Math.sin(i/20*TAU*2.5)*4;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,2,8,a)}
@@ -153,7 +154,9 @@ function yieldOf(V,T,Eb,B){const F=(1.0-V)/100e-9,Ea=Math.max(0,Eb-B-pf(F)),k=10
 
 // ---- story canvas ----
 const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
-function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"≈100 meV (upper end,": "≈100 meV", "fullerene blends)": "(fullerene)", "IF there were a barrier": ["IF there were a barrier", 40, 0], "field independent, Ea 6 meV": "Ea 6 meV", "field dependent, Ea ≈ 22 meV": "Ea ≈ 22 meV", "free-charge generation (TDCF): flat": "TDCF generation: flat"}; // phone-only shorter labels ('' drops one; [text,dx,dy] shifts it)
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
 fit();addEventListener('resize',fit);
 
 const EX=[[2.76,'#8f9bff','PM6'],[2.33,'#62e0a8','PM6'],[2.07,'#ffb85c','PM6'],[1.55,'#ff8a7a','Y6'],[1.41,'#ff5f8f','Y6'],[1.29,'#cfa2ff','CT']];

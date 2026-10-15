@@ -9,11 +9,13 @@ path "index.html"), saved as:
   cv.html            public CV artifact
   explainers/<key>.html   one per explainer artifact
 The artifact-id -> page map is in PAGES / EXPLAINERS below; add a line when a
-new explainer is published.
+new explainer is published. Share previews: og/<key>.png (made by
+tools/make_og.js from the built page) is linked in the page head when present.
 """
 import html, re, sys
 from pathlib import Path
 
+SITE = "https://huotianzhang.github.io/"
 HOME = "1F4J2oRjASGFUQs4gHCh7N"
 CV = "SBLZ4VGLwFyvvsp19NQXWG"
 EXPLAINERS = {  # key -> artifact id
@@ -29,6 +31,7 @@ DESC = {
     "cv": "Curriculum vitae of Huotian Zhang.",
 }
 ART = re.compile(r"https://claude\.ai/(?:code/)?artifact/([A-Za-z0-9-]+)")
+CARD = re.compile(r"\['(\w+)','([^']*)','([^']*)','([^']*)','([^']*)',\d\]")
 
 
 def fragment(src):
@@ -58,13 +61,36 @@ def relink(body, where):
     return ART.sub(sub, body)
 
 
-def wrap(title, desc, body):
+def share_meta(out, path, title, desc, image):
+    """Open Graph / Twitter card tags; image is og/<name>.png, used only if it exists."""
+    url = SITE + ("" if path == "index.html" else path)
+    tags = [f'<link rel="canonical" href="{url}">',
+            '<meta property="og:type" content="article">' if path.startswith("explainers/") else '<meta property="og:type" content="website">',
+            '<meta property="og:site_name" content="Huotian Zhang">',
+            f'<meta property="og:title" content="{html.escape(title)}">',
+            f'<meta property="og:description" content="{html.escape(desc)}">',
+            f'<meta property="og:url" content="{url}">']
+    if image and (out / image).exists():
+        tags += [f'<meta property="og:image" content="{SITE}{image}">',
+                 '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
+                 '<meta name="twitter:card" content="summary_large_image">']
+    else:
+        tags.append('<meta name="twitter:card" content="summary">')
+    return "".join(tags)
+
+
+def heading(body, fallback):
+    m = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S)
+    return html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip() if m else fallback
+
+
+def wrap(title, desc, body, meta=""):
     return ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             f"<title>{html.escape(title)}</title>"
             "<style>html,body{margin:0;padding:0}img{max-width:100%}</style>"
             f'<meta name="description" content="{html.escape(desc)}">'
-            f"</head><body>\n{body}</body></html>\n")
+            f"{meta}</head><body>\n{body}</body></html>\n")
 
 
 def main():
@@ -72,8 +98,11 @@ def main():
     out = Path(sys.argv[2] if len(sys.argv) > 2 else Path(__file__).parent)
     (out / "explainers").mkdir(parents=True, exist_ok=True)
 
-    t, b = fragment((src / "home.html").read_text())
-    (out / "index.html").write_text(wrap(t, DESC["home"], relink(b, "root")))
+    home = (src / "home.html").read_text()
+    cards = {m.group(1): html.unescape(m.group(3)) for m in CARD.finditer(home)}  # homepage card blurbs
+    t, b = fragment(home)
+    (out / "index.html").write_text(wrap(t, DESC["home"], relink(b, "root"),
+        share_meta(out, "index.html", "Huotian Zhang", DESC["home"], "og/home.png")))
 
     t, b = fragment((src / "cv.html").read_text())
     b = relink(b, "root")
@@ -81,13 +110,14 @@ def main():
                    r'\1<a href="index.html" style="color:inherit">← Homepage</a> · ', b, count=1)
     if not n:
         raise SystemExit('cv: class="run" line not found')
-    (out / "cv.html").write_text(wrap(t, DESC["cv"], b))
+    (out / "cv.html").write_text(wrap(t, DESC["cv"], b, share_meta(out, "cv.html", "Huotian Zhang · CV", DESC["cv"], None)))
 
     for k in EXPLAINERS:
         t, b = fragment((src / "explainers" / f"{k}.html").read_text())
+        d = cards.get(k) or f"{t}: an interactive explainer of a paper by Huotian Zhang and co-authors."
         (out / "explainers" / f"{k}.html").write_text(
-            wrap(t, f"{t}: an interactive explainer of a paper by Huotian Zhang and co-authors.",
-                 relink(b, "explainer")))
+            wrap(t, d, relink(b, "explainer"),
+                 share_meta(out, f"explainers/{k}.html", heading(b, t), d, f"og/{k}.png")))
     (out / ".nojekyll").write_text("")
 
     left = [str(p) for p in out.rglob("*.html") if ".git" not in p.parts and "claude.ai" in p.read_text()]
