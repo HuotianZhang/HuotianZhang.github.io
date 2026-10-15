@@ -94,7 +94,7 @@ footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60p
       <p class="note">Schematic, after Fig. 3B (three-state model, Eisner et al.).</p></section>
     <section class="step" data-s="5"><span class="n">6 / 9 · THE MOLECULE</span><h2>Anatomy of an A-DA′D-A acceptor</h2>
       <p>Y6 joins electron-accepting end groups (A) to a ladder-type fused core whose centre is itself electron deficient (A′, a benzothiadiazole), flanked by donor segments (D). Two sp<sup>2</sup> nitrogens in pyrrole rings carry alkyl side chains. These chains stand roughly perpendicular to the backbone and stop the core from over-aggregating. The molecule is C<sub>2</sub>-symmetric and slightly curved.</p>
-      <p>In films its absorption shifts about 100 nm to the red compared with solution. In the crystal, Y6 molecules pair up so that their dipoles cancel and a large quadrupole moment remains. The paper links the resulting narrow density of states to trap-free transport of both electrons and holes. Y6 also has a smaller local-exciton reorganisation energy than other NFAs, which helps keep voltage losses small.</p>
+      <p>In films its absorption shifts about 100 nm to the red compared with solution. A single Y6 molecule has only a small dipole moment but a strong quadrupole moment: the electron-withdrawing end groups are negative relative to the core. In the crystal the molecules pair up face to face, and this large quadrupole persists. The paper links the resulting narrow density of states to trap-free transport of both electrons and holes. Y6 also has a smaller local-exciton reorganisation energy than other NFAs, which helps keep voltage losses small.</p>
       <p class="note">Schematic, after Fig. 4A, 4C and 4E; not a real structure.</p></section>
     <section class="step" data-s="6"><span class="n">7 / 9 · SWAP THE CORE</span><h2>Change A′, gain light</h2>
       <p>PM6:Y6 still has a HOMO offset of about 0.1 eV, and its blend PLQY is only 2.8 × 10<sup>−4</sup>. That is about 70 times below the PLQY needed for 20% efficiency in the paper's model.</p>
@@ -115,22 +115,23 @@ footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60p
 <section class="lab" id="lab">
   <span class="kicker">Try it</span>
   <h2>From PLQY to efficiency</h2>
-  <p class="intro">A toy re-implementation of the recipe the paper describes for its Fig. 2. It is not the authors' code or their figure. Current is 85% of the AM1.5G photons above the absorption edge. ΔE<sub>1</sub> follows from the Shockley–Queisser limit for that edge, ΔE<sub>2</sub> = 50 meV, and ΔE<sub>3</sub> = −kT ln(EQE<sub>EL</sub>) with f<sub>e–h</sub> = 1 and β = 25%. FF comes from the empirical formula with ideality 1, at 300 K. Small details differ from the paper: at a 900 nm edge and 2% PLQY this toy gives about 22%, where the paper quotes 20%. The model assumes ideal current collection and an ideal fill factor, so its absolute efficiencies are upper estimates; read the trends, not the exact numbers.</p>
+  <p class="intro">A toy re-implementation of the recipe the paper describes for its Fig. 2. It is not the authors' code or their figure. Current is 85% of the AM1.5G photons above the absorption edge. ΔE<sub>1</sub> follows from the Shockley–Queisser limit for that edge, ΔE<sub>2</sub> = 50 meV, and ΔE<sub>3</sub> = −kT ln(EQE<sub>EL</sub>) with f<sub>e–h</sub> = 1 and β = 25%. As in the original calculation, the fill factor is held fixed (about 70–75%; the slider starts at 75%). At a 900 nm edge and 2% PLQY this toy then gives about 19%, close to the 20% the paper quotes; the remaining ≈1 point reflects details the paper does not specify. Read the trends, not the exact numbers.</p>
   <div class="labgrid">
     <canvas id="labcv" role="img" aria-label="Voltage-loss staircase and efficiency versus PLQY in a toy model that responds to the sliders"></canvas>
     <div class="ctrl">
       <label for="ed"><span class="row"><span>Absorption edge</span><output id="edv">900 nm</output></span><input id="ed" type="range" min="780" max="1000" step="5" value="900"></label>
       <label for="pl"><span class="row"><span>Blend PLQY</span><output id="plv">2.8×10⁻⁴</output></span><input id="pl" type="range" min="-5" max="-0.5" step="0.01" value="-3.553"></label>
+      <label for="ff"><span class="row"><span>Fixed fill factor</span><output id="ffv">75%</output></span><input id="ff" type="range" min="60" max="85" step="1" value="75"></label>
       <label for="oc"><span class="row"><span>Light outcoupling f<sub>outcoupling</sub></span><output id="ocv">20%</output></span><input id="oc" type="range" min="5" max="40" step="1" value="20"></label>
       <div class="read"><div><b id="rv">–</b><span>V<sub>oc</sub></span></div><div><b id="r3">–</b><span>ΔE<sub>3</sub> (non-radiative)</span></div><div><b id="re">–</b><span>EQE<sub>EL</sub></span></div><div><b id="rp">–</b><span>PCE (toy)</span></div></div>
-      <p class="note">Try this: start at the PM6:Y6 PLQY (2.8×10⁻⁴), then slide to the PM6:Y11 value (1.3×10⁻³) and on to 2%. Each tenfold step in PLQY buys about 60 mV. Moving the edge to the red gains current but lowers the gap, so the voltage drops too.</p>
+      <p class="note">Try this: start at the PM6:Y6 PLQY (2.8×10⁻⁴), then slide to the PM6:Y11 value (1.3×10⁻³) and on to 2%. Each tenfold step in PLQY buys about 60 mV. Moving the edge to the red gains current but lowers the gap, so the voltage drops too. Between FF 70% and 75% the 20% point moves by about 1.3 percentage points.</p>
     </div>
   </div>
 </section>
 
 <footer>
   <a class="btn" href="https://doi.org/10.1016/j.chempr.2020.08.003">Read the full Perspective in Chem ↗</a>
-  <span class="note">Numbers quoted from the paper: certified 17.4%; EQE &gt;80% and IQE &gt;90%; voltage loss ≈0.6 V and 0.2–0.3 V above c-Si/GaAs; ΔE<sub>2</sub> &lt;50 meV; ΔE<sub>3</sub> 200–300 meV; the Fig. 2 assumptions (EQE 85%, ΔE<sub>2</sub> 0.05 eV, f<sub>e–h</sub> 1, β 25%, outcoupling 20%, n = 1, 900 nm edge and 2% PLQY for 20%); ≈100 nm red shift; PM6:Y6 HOMO offset ≈0.1 eV and PLQY 2.8×10⁻⁴ (≈70× below target); PM6:Y11 PLQY 1.3×10⁻³ (≈5×) and ΔE<sub>3</sub> 0.20 eV; Y18 mobility 5× Y3; GIWAXS 0.54–0.59 Å⁻¹; ≈0.3 eV historical offset and 90% IQE; BZIC 6% to Y18 17%. Step heights, the molecule and dimer drawings, the three-state diagram, the Urbach tails and the lab model are schematic or illustrative. The lab uses the ASTM G173 AM1.5G spectrum.</span>
+  <span class="note">Numbers quoted from the paper: certified 17.4%; EQE &gt;80% and IQE &gt;90%; voltage loss ≈0.6 V and 0.2–0.3 V above c-Si/GaAs; ΔE<sub>2</sub> &lt;50 meV; ΔE<sub>3</sub> 200–300 meV; the Fig. 2 assumptions (EQE 85%, ΔE<sub>2</sub> 0.05 eV, f<sub>e–h</sub> 1, β 25%, outcoupling 20%, fixed FF, 900 nm edge and 2% PLQY for 20%); ≈100 nm red shift; PM6:Y6 HOMO offset ≈0.1 eV and PLQY 2.8×10⁻⁴ (≈70× below target); PM6:Y11 PLQY 1.3×10⁻³ (≈5×) and ΔE<sub>3</sub> 0.20 eV; Y18 mobility 5× Y3; GIWAXS 0.54–0.59 Å⁻¹; ≈0.3 eV historical offset and 90% IQE; BZIC 6% to Y18 17%. Step heights, the molecule and dimer drawings, the three-state diagram, the Urbach tails and the lab model are schematic or illustrative. The lab uses the ASTM G173 AM1.5G spectrum.</span>
   <a href="../index.html">← Back to homepage</a>
 </footer>
 
@@ -160,8 +161,8 @@ const JB=[0.0, 0.0, 0.0044, 0.0329, 0.0812, 0.1162, 0.1327, 0.1509, 0.1868, 0.20
 const KT=0.025852,HEV=4.135667e-15,CL=2.998e8,QE=1.602e-19;
 function jAbove(edge){let s=0;for(let i=0;i<JB.length;i++){const l0=280+10*i;if(l0+10<=edge)s+=JB[i];else if(l0<edge)s+=JB[i]*(edge-l0)/10}return s}
 function j0rad(Eg){let s=0;const de=.001;for(let e=Eg;e<Eg+1;e+=de)s+=2*Math.PI*e*e/(HEV**3*CL*CL)*Math.exp(-e/KT)*de;return s*QE*.1} // mA cm^-2
-function cell(edge,plqy,out){const Eg=1239.84/edge,Jsq=jAbove(edge),Vsq=KT*Math.log(Jsq/j0rad(Eg)+1),eqeel=.25*plqy*out,dE3=-KT*Math.log(eqeel),
-  Voc=Vsq-.05-dE3,Jsc=.85*Jsq,v=Voc/KT,FF=(v-Math.log(v+.72))/(v+1);return{Eg,dE1:Eg-Vsq,dE2:.05,dE3,Voc,Jsc,FF,eqeel,PCE:Jsc*Voc*FF}}
+function cell(edge,plqy,out,ff=.75){const Eg=1239.84/edge,Jsq=jAbove(edge),Vsq=KT*Math.log(Jsq/j0rad(Eg)+1),eqeel=.25*plqy*out,dE3=-KT*Math.log(eqeel),
+  Voc=Vsq-.05-dE3,Jsc=.85*Jsq,v=Voc/KT,FF=ff;return{Eg,dE1:Eg-Vsq,dE2:.05,dE3,Voc,Jsc,FF,eqeel,PCE:Jsc*Voc*FF}}
 
 // ---- story canvas ----
 const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=addHex(Tk(ctx),ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
@@ -231,10 +232,12 @@ const SC=[
   [-1,1].forEach(sx=>{const x=300+sx*34,y=146;g.line([[x,y],[x+sx*6,y+20],[x-sx*2,y+34],[x+sx*6,y+48]],C.ink,1.6,0,.6*a)});
   g.text('N-alkyl chains, out of plane',300,212,'center',.6*a,12);
   g.text('end group',184,72,'center',.6*a,11);g.text('electron-deficient core',300,72,'center',.75*a,11,C.violet);g.text('end group',416,72,'center',.6*a,11);
-  // dimer with opposite dipoles
-  blk(300,292,1,a*.9,false,.6);blk(300,362,-1,a*.9,false,.6);
-  const pu=.6+.4*Math.sin(t*2);g.arrow(410,306,410,276,C.ink,2.2,a*pu,6);g.arrow(410,348,410,378,C.ink,2.2,a*pu,6);
-  g.text('dipoles cancel,',430,322,'left',.75*a,12);g.text('quadrupole stays',430,340,'left',.75*a,12);g.text('dimer in',200,322,'right',.65*a,12);g.text('the crystal',200,340,'right',.65*a,12);
+  // charge pattern of the monomer: negative ends, positive core (quadrupole); pulsing signs
+  const pu=.6+.4*Math.sin(t*2);[[184,'−',C.blue],[300,'+',C.red],[416,'−',C.blue]].forEach(([x,sg,col])=>{g.halo(x,236,22,col,.35*a*pu);g.text(sg,x,243,'center',.95*a,20,col)});
+  g.text('small dipole, strong quadrupole',300,272,'center',.8*a,12);
+  // face-to-face pair in the crystal
+  blk(300,322,1,a*.9,false,.6);blk(300,370,1,a*.9,false,.6);
+  g.text('pairs in',200,342,'right',.65*a,12);g.text('the crystal',200,360,'right',.65*a,12);g.text('quadrupole',410,342,'left',.65*a,12);g.text('persists',410,360,'left',.65*a,12);
   g.text('schematic, after Fig. 4A, 4C, 4E',560,444,'right',.4*a,11)},
  // 6 BT -> BTA and PLQY on a log axis
  (t,a)=>{g.text('A′ = BT',150,70,'center',.85*a,15,C.violet);g.text('A′ = BTA',150,180,'center',.85*a,15,C.green);g.text('Y6',150,92,'center',.6*a,12);g.text('Y11',150,202,'center',.6*a,12);
@@ -284,7 +287,7 @@ function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*
 lfit();addEventListener('resize',()=>{lfit();lab()});
 const $=id=>document.getElementById(id);
 const sci=v=>{const e=Math.floor(Math.log10(v)),m=v/Math.pow(10,e);return e>=-1?(v*100).toFixed(v<.1?1:0)+'%':m.toFixed(1)+'×10'+sup(e)};
-function lab(){const edge=+$('ed').value,pl=Math.pow(10,+$('pl').value),out=+$('oc').value/100,c=cell(edge,pl,out);
+function lab(){const edge=+$('ed').value,pl=Math.pow(10,+$('pl').value),out=+$('oc').value/100,ff=+$('ff').value/100,c=cell(edge,pl,out,ff);$('ffv').value=Math.round(ff*100)+'%';
   $('edv').value=edge+' nm';$('plv').value=sci(pl);$('ocv').value=Math.round(out*100)+'%';
   $('rv').textContent=c.Voc.toFixed(3)+' V';$('r3').textContent=Math.round(c.dE3*1000)+' meV';$('re').textContent=sci(c.eqeel);$('rp').textContent=c.PCE.toFixed(1)+'%';
   lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
@@ -301,9 +304,9 @@ function lab(){const edge=+$('ed').value,pl=Math.pow(10,+$('pl').value),out=+$('
   lg.text('blend PLQY',575,424,'right',.6,12);lg.text('PCE (%)',320,48,'left',.6,12);
   lg.line([[320,Y(20)],[575,Y(20)]],C.amber,1,0,.35,[4,4]);
   [[2.8e-4,'Y6'],[1.3e-3,'Y11']].forEach(([v,n])=>{const x=X(Math.log10(v));lg.line([[x,Y(0)],[x,70]],C.ink,1,0,.3,[3,3]);lg.text('PM6:'+n,n=='Y6'?x-4:x+4,66,n=='Y6'?'right':'left',.55,10)});
-  lg.fn(x=>Y(cell(edge,Math.pow(10,(x-320)/250*4.5-5),out).PCE),320,570,C.green,2.6,10,1,null,90);
+  lg.fn(x=>Y(cell(edge,Math.pow(10,(x-320)/250*4.5-5),out,ff).PCE),320,570,C.green,2.6,10,1,null,90);
   const px=X(Math.log10(pl)),py=Y(c.PCE);lg.dot(px,py,5,'#fff',1,14);lg.text(c.PCE.toFixed(1)+'%',px+(px>500?-10:10),py-10,px>500?'right':'left',.9,12);
   lg.text('toy re-implementation, not the paper’s figure',575,444,'right',.4,11)}
-['ed','pl','oc'].forEach(id=>$(id).addEventListener('input',lab));lab();
+['ed','pl','oc','ff'].forEach(id=>$(id).addEventListener('input',lab));lab();
 </script>
 </body></html>
