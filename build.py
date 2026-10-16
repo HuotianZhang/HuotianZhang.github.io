@@ -12,7 +12,7 @@ The artifact-id -> page map is in PAGES / EXPLAINERS below; add a line when a
 new explainer is published. Share previews: og/<key>.png (made by
 tools/make_og.js from the built page) is linked in the page head when present.
 """
-import html, re, sys
+import html, json, re, subprocess, sys
 from pathlib import Path
 
 SITE = "https://huotianzhang.github.io/"
@@ -80,6 +80,52 @@ def share_meta(out, path, title, desc, image):
     return "".join(tags)
 
 
+HOME_TITLE = "Huotian Zhang · Organic solar cell physics · University of Potsdam"
+HOME_DESC = ("Huotian Zhang is a device physicist and postdoctoral researcher in Dieter Neher's group at the "
+             "University of Potsdam, working on voltage losses and charge generation in organic solar cells, "
+             "with interactive explainers of his papers.")
+PERSON = {"@type": "Person", "name": "Huotian Zhang", "url": SITE,
+          "jobTitle": "Postdoctoral researcher",
+          "affiliation": {"@type": "CollegeOrUniversity", "name": "University of Potsdam"},
+          "alumniOf": {"@type": "CollegeOrUniversity", "name": "Linköping University"},
+          "knowsAbout": ["organic solar cells", "non-fullerene acceptors", "voltage losses",
+                         "charge generation", "transient absorption spectroscopy", "device physics"],
+          "sameAs": ["https://orcid.org/0000-0002-9302-4129",
+                     "https://scholar.google.com/citations?user=BUc0XmUAAAAJ",
+                     "https://x.com/HuotianZ", "https://github.com/HuotianZhang"]}
+
+
+def jsonld(obj):
+    """schema.org structured data for search engines (invisible on the page)."""
+    return ('<script type="application/ld+json">'
+            + json.dumps({"@context": "https://schema.org", **obj}, ensure_ascii=False).replace("</", "<\\/")
+            + "</script>")
+
+
+def static_cards(home, body):
+    """Write the homepage paper cards into the HTML (the page script redraws the same markup),
+    so crawlers that do not run JavaScript still see every title and blurb."""
+    m = re.search(r"const S=(\[.*?\n\]);", home, re.S)
+    if not m:
+        raise SystemExit("home: card data `const S=[...]` not found")
+    S = json.loads(subprocess.run(["node", "-e", f"process.stdout.write(JSON.stringify({m.group(1)}))"],
+                                  capture_output=True, text=True, check=True).stdout)
+    out, ix = [], 0
+    for sec in S:
+        items = []
+        for k, t, d, v, u, ci in sec["items"]:
+            tag, href = ("a", f' href="{u}"') if u else ("div", "")
+            items.append(f'<{tag} class="card"{href}><canvas data-k="{k}" data-c="{ci}" data-i="{ix}" role="img" aria-label="{t}"></canvas>'
+                         f'<span class="t">{t}</span><span class="d">{d}</span><span class="v" style="color:var(--c{ci})">{v}</span></{tag}>')
+            ix += 1
+        q = f'<p class="q">{sec["q"]}</p>' if sec["q"] else ""
+        out.append(f'<section id="{sec["id"]}"><h2>{sec["h"]}</h2>{q}<div class="grid g{len(sec["items"])}">{"".join(items)}</div></section>')
+    body, n = re.subn(r'<div id="sections"></div>', '<div id="sections">' + "".join(out) + "</div>", body, count=1)
+    if not n:
+        raise SystemExit('home: <div id="sections"></div> not found')
+    return body
+
+
 def heading(body, fallback):
     m = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S)
     return html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip() if m else fallback
@@ -102,9 +148,10 @@ def main():
     home = (src / "home.html").read_text()
     cards = {m.group(1): html.unescape(m.group(3)) for m in CARD.finditer(home)}  # homepage card blurbs
     t, b = fragment(home)
-    (out / "index.html").write_text(wrap(t, DESC["home"], relink(b, "root"),
+    (out / "index.html").write_text(wrap(HOME_TITLE, HOME_DESC, relink(static_cards(home, b), "root"),
         f'<meta name="google-site-verification" content="{GOOGLE_VERIFY}">'
-        + share_meta(out, "index.html", "Huotian Zhang", DESC["home"], "og/home.png")))
+        + share_meta(out, "index.html", "Huotian Zhang", HOME_DESC, "og/home.png")
+        + jsonld({"@type": "ProfilePage", "url": SITE, "mainEntity": PERSON})))
 
     t, b = fragment((src / "cv.html").read_text())
     b = relink(b, "root")
@@ -117,9 +164,17 @@ def main():
     for k in EXPLAINERS:
         t, b = fragment((src / "explainers" / f"{k}.html").read_text())
         d = cards.get(k) or f"{t}: an interactive explainer of a paper by Huotian Zhang and co-authors."
+        h, url = heading(b, t), f"{SITE}explainers/{k}.html"
+        doi = re.search(r'href="https://doi\.org/([^"]+)"', b)
+        paper = re.search(r'class="cite">.*?<i>(.*?)</i>', b, re.S)
+        art = {"@type": "Article", "headline": h, "description": d, "url": url,
+               "author": {"@type": "Person", "name": "Huotian Zhang", "url": SITE}}
+        if doi:
+            art["about"] = {"@type": "ScholarlyArticle", "sameAs": f"https://doi.org/{doi.group(1)}",
+                            **({"name": html.unescape(re.sub(r"<[^>]+>", "", paper.group(1))).strip()} if paper else {})}
         (out / "explainers" / f"{k}.html").write_text(
-            wrap(t, d, relink(b, "explainer"),
-                 share_meta(out, f"explainers/{k}.html", heading(b, t), d, f"og/{k}.png")))
+            wrap(f"{h} | Huotian Zhang", d, relink(b, "explainer"),
+                 share_meta(out, f"explainers/{k}.html", h, d, f"og/{k}.png") + jsonld(art)))
     (out / ".nojekyll").write_text("")
     pages = ["", "cv.html"] + [f"explainers/{k}.html" for k in EXPLAINERS]
     (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
