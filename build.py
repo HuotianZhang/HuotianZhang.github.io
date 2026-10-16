@@ -16,6 +16,7 @@ import html, re, sys
 from pathlib import Path
 
 SITE = "https://huotianzhang.github.io/"
+GOOGLE_VERIFY = "J1_mK4dyr2IzBuI1Unu374b6aEppPAtKORJIOFAsYB8"  # Google Search Console ownership tag (homepage only)
 HOME = "1F4J2oRjASGFUQs4gHCh7N"
 CV = "SBLZ4VGLwFyvvsp19NQXWG"
 EXPLAINERS = {  # key -> artifact id
@@ -102,7 +103,8 @@ def main():
     cards = {m.group(1): html.unescape(m.group(3)) for m in CARD.finditer(home)}  # homepage card blurbs
     t, b = fragment(home)
     (out / "index.html").write_text(wrap(t, DESC["home"], relink(b, "root"),
-        share_meta(out, "index.html", "Huotian Zhang", DESC["home"], "og/home.png")))
+        f'<meta name="google-site-verification" content="{GOOGLE_VERIFY}">'
+        + share_meta(out, "index.html", "Huotian Zhang", DESC["home"], "og/home.png")))
 
     t, b = fragment((src / "cv.html").read_text())
     b = relink(b, "root")
@@ -119,6 +121,11 @@ def main():
             wrap(t, d, relink(b, "explainer"),
                  share_meta(out, f"explainers/{k}.html", heading(b, t), d, f"og/{k}.png")))
     (out / ".nojekyll").write_text("")
+    pages = ["", "cv.html"] + [f"explainers/{k}.html" for k in EXPLAINERS]
+    (out / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "".join(f"  <url><loc>{SITE}{p}</loc></url>\n" for p in pages) + "</urlset>\n")
+    (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n")
 
     left = [str(p) for p in out.rglob("*.html") if ".git" not in p.parts and "claude.ai" in p.read_text()]
     if left:
