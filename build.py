@@ -84,7 +84,7 @@ def share_meta(out, path, title, desc, image):
 
 
 HOME_TITLE = "Huotian Zhang · Organic solar cell physics · University of Potsdam"
-HOME_DESC = ("Huotian Zhang is a device physicist and postdoctoral researcher in Dieter Neher's group at the "
+HOME_DESC = ("Huotian Zhang is a device physicist and postdoctoral researcher at the "
              "University of Potsdam, working on voltage losses and charge generation in organic solar cells, "
              "with interactive explainers of his papers.")
 PERSON = {"@type": "Person", "name": "Huotian Zhang", "url": SITE,
