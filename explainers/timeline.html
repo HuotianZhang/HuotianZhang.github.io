@@ -1,0 +1,364 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>From photon to current: one charge pair, from femtoseconds to microseconds | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Charges followed from femtoseconds to microseconds. About 100 meV HOMO offset is enough."><link rel="canonical" href="https://huotianzhang.github.io/explainers/timeline.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="From photon to current: one charge pair, from femtoseconds to microseconds"><meta property="og:description" content="Charges followed from femtoseconds to microseconds. About 100 meV HOMO offset is enough."><meta property="og:url" content="https://huotianzhang.github.io/explainers/timeline.html"><meta property="og:image" content="https://huotianzhang.github.io/og/timeline.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "From photon to current: one charge pair, from femtoseconds to microseconds", "description": "Charges followed from femtoseconds to microseconds. About 100 meV HOMO offset is enough.", "url": "https://huotianzhang.github.io/explainers/timeline.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1021/acs.jpcc.0c05263", "name": "From generation to extraction: a time-resolved investigation of photophysical processes in non-fullerene organic solar cells."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.eq{font:15.5px var(--mono);background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:8px 12px;overflow-x:auto}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.ctrl fieldset{border:1px solid var(--rule);border-radius:4px;padding:8px 12px;margin:0;display:grid;gap:4px;font-size:15.5px}
+.ctrl fieldset legend{padding:0 4px;font-size:14.5px;color:var(--muted)}
+.ctrl fieldset label{display:flex;gap:8px;align-items:baseline}
+.ctrl input[type=radio]{accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 24px var(--mono);font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1021/acs.jpcc.0c05263">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · J. Phys. Chem. C 2020 · Article</span>
+  <h1>From photon to current: one charge pair, from femtoseconds to microseconds</h1>
+  <p class="dek">An absorbed photon becomes current only after a chain of steps that spans seven orders of magnitude in time. This study follows the whole chain in four solar cells, with one fullerene and two non-fullerene acceptors, using four time-resolved techniques. The weak link in the non-fullerene cells is the very beginning. When the HOMO offset between donor and acceptor is small, holes are slow to leave excited acceptors and can slip back within picoseconds. About 100 meV of offset is enough to avoid most of that loss.</p>
+  <p class="cite">R. Jasiūnas, H. Zhang, J. Yuan, X. Zhou, D. Qian, Y. Zou, A. Devižis, J. Šulskus, F. Gao, V. Gulbinas*. <i>From generation to extraction: a time-resolved investigation of photophysical processes in non-fullerene organic solar cells.</i> J. Phys. Chem. C 124, 21283–21292 (2020). <a href="https://doi.org/10.1021/acs.jpcc.0c05263">doi:10.1021/acs.jpcc.0c05263</a> <span class="note">(* corresponding author)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE WHOLE LIFE CYCLE</span><h2>Seven decades of time, four techniques</h2>
+      <p>In a bulk-heterojunction solar cell a photon first creates an exciton in the donor or the acceptor. At a donor–acceptor interface the exciton becomes a charge-transfer (CT) state: the electron sits on the acceptor and the hole on the donor, only 0.5–1 nm apart and still bound by their Coulomb attraction. The pair must then split, drift to the electrodes and avoid meeting other charges on the way.</p>
+      <p>No single measurement covers all of this. Transient absorption (TA) and electroabsorption (EA) follow the first 2 ns with sub-picosecond resolution. Optical probing of the electric field (OEFP) tracks how far charges drift in the same window. Transient photocurrent (TPC) and time-delayed collection field (TDCF) continue to 1 µs.</p>
+      <p class="note">Schematic; time scales from the text.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · FOUR CELLS</span><h2>Chosen for small HOMO offsets</h2>
+      <p>The donor polymer PBDB-T is paired with the fullerene PC<sub>71</sub>BM and with the Y-series acceptor Y1. The benchmark acceptor ITIC is paired with PBDB-T-2Cl and PDCBT-2F. The main criterion was the gap between donor and acceptor HOMO levels, the "HOMO offset". It is 0.63 eV with PCBM but only 0.12, 0.10 and 0.02 eV in the non-fullerene blends.</p>
+      <p>Y1 absorbs out to about 800 nm and gives the best cell, 13.2% with 22.2 mA cm<sup>−2</sup>. The two ITIC cells have the highest voltages (1.02 and 1.12 V), because their donor HOMO lies about 1.5 eV below the acceptor LUMO. The cell with the smallest offset, PDCBT-2F:ITIC, has the highest voltage and the lowest efficiency.</p>
+      <p class="note">Energy levels from Fig. 1b; cell parameters from the table in Fig. 1d.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · DONOR EXCITED</span><h2>The electron leaves within 200 fs</h2>
+      <p>A 515 nm pulse excites the donor in PBDB-T:Y1. The TA spectrum shows no trace of the excited donor, even right after the pulse. Bleaching at about 580 and 630 nm comes from donor molecules that have lost an electron (D<sup>+</sup>). The electron has moved to the acceptor faster than the ~200 fs time resolution.</p>
+      <p>The acceptor band at 800 nm hardly changes. Quantum-chemical calculations show why: the Y1 anion absorbs almost where neutral Y1 does, with about half the oscillator strength, so its bleaching is largely cancelled. A narrow positive band at 670 nm is the Stark shift caused by the field of the new CT dipole. The steady-state electroabsorption of the device at −2 V looks the same, shifted by about 10 nm.</p>
+      <p>The PCBM and PBDB-T-2Cl:ITIC blends behave alike, so nearly every donor exciton becomes a CT state. PDCBT-2F:ITIC is the exception: most of its donor excitations decay to the ground state over hundreds of picoseconds, and only a minor fraction forms CT states.</p>
+      <p class="note">Spectra schematic, after Fig. 3a; band positions from the text. The decay between curves follows scene 5.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · ACCEPTOR EXCITED</span><h2>The hole must move fast, or not at all</h2>
+      <p>A 730 nm pulse excites the acceptor instead. Now the hole has to move from the acceptor HOMO to the donor HOMO (channel II), and the HOMO offset is its only driving force.</p>
+      <p>Comparing donor and acceptor bleaching gives a rough yield. In PBDB-T:Y1 about 6/7 of the acceptor excitations already form CT states by 0.5 ps. About half of the rest follow within a few picoseconds, giving about 90% or more. PBDB-T-2Cl:ITIC reaches 60–70%, and PDCBT-2F:ITIC, with a near-zero offset, hardly 20–30%.</p>
+      <p>In the ITIC blends no further CT states form later. Hole transfer seems to work only from the fresh, unrelaxed exciton. Once the exciton has relaxed into an excitonic polaron, its energy is lower and the transfer is blocked.</p>
+      <p class="note">Efficiencies from the text (rough estimates); the pathway drawing is schematic.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · THE FIRST PICOSECONDS</span><h2>A loss that ignores the light intensity</h2>
+      <p>After CT formation the whole TA spectrum drops almost uniformly within a few picoseconds. Within 3 ps the donor bleaching falls to 82% of its peak in PBDB-T-2Cl:ITIC, 75% in PBDB-T:Y1 and 50% in PDCBT-2F:ITIC. With PCBM the drop is marginal.</p>
+      <p>A uniform drop means charges are going back to the ground state. Recombination between charges from different photons (non-geminate) would speed up at higher excitation densities. Here the decay is the same from 0.05 to 3.3 µJ cm<sup>−2</sup>, so the electron and hole recombine with their own partner: geminate recombination.</p>
+      <p class="note">Kinetics schematic, after Fig. 5a,c; the 3 ps values and the fluence range from the text and figure.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · HOLES THAT SLIP BACK</span><h2>A small offset is a low wall</h2>
+      <p>The authors propose a simple picture. To move from the donor back to the acceptor, a hole must climb the HOMO offset. If the offset is small, some holes make the jump and recreate an excited acceptor. Excited acceptors relax to the ground state in about 2 ps, so the pair is lost quickly.</p>
+      <p>The loss follows the offset: more than 50% at about 0.02 eV (PDCBT-2F:ITIC), about 20% at about 0.1 eV (PBDB-T:Y1 and PBDB-T-2Cl:ITIC) and marginal above 0.6 eV (PCBM).</p>
+      <p>Why does the loss stop after a few picoseconds? The pair stabilises: the polar surroundings polarise around the charges and form a CT polaron, which lowers its energy and blocks the way back. The EA signal supports this. It decays more strongly than the bleaching, as if the initially delocalised hole contracted and its field was screened. (A <a href="backtransfer.html">related explainer</a> follows hole back transfer in ITIC-family blends.)</p>
+      <p class="note">Level picture schematic, after Fig. 6, using the PBDB-T:Y1 levels of Fig. 1b. Loss values from the text.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · SPLITTING THE PAIR</span><h2>Free in about 30 picoseconds</h2>
+      <p>The EA signal also measures how far apart the charges are. A pair further apart has a bigger dipole and a stronger field. After its first drop, the EA signal rises weakly but reproducibly over tens of picoseconds in every sample: the pair is spreading out until it passes the Langevin radius of about 15 nm, beyond which the charges count as free.</p>
+      <p>This takes about 30 ps in PBDB-T:Y1 and a little longer with PCBM. Calculations offer a reason for the faster split. The extra electron on Y1 sits mainly on two side groups about 2 nm apart. An electron spread that far is bound less strongly to its hole.</p>
+      <p class="note">Kinetics schematic, after Fig. 7a; 30 ps, 15 nm and 2 nm from the text. The pair drawing is schematic.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · DRIFTING OUT</span><h2>Mobility falls a hundredfold, in every blend alike</h2>
+      <p>OEFP and TPC measure the mean distance that carriers drift along the field, here about 2.3 × 10<sup>5</sup> V cm<sup>−1</sup> at −2 V. Several nanometres appear within tens of picoseconds. Since electrons and holes move in opposite directions, that means 5–10 nm of separation, which fits the 15 nm reached in about 30 ps once diffusion is added. After that the drift grows almost logarithmically with time, so the carriers slow down steadily.</p>
+      <p>The mobility follows from μ = (dx/dt)/E<sub>0</sub>. At first it is several times lower with PCBM than in the non-fullerene blends. It falls steeply during the first ~100 ps as carriers relax in the density of states, and by 500 ps it is similar in all blends. It levels off after a few hundred nanoseconds, one to two orders of magnitude below its starting value. In PBDB-T:Y1 the late value, about 5 × 10<sup>−4</sup> cm<sup>2</sup> V<sup>−1</sup> s<sup>−1</sup>, matches space-charge-limited current measurements. Most carriers are out within 50 ns.</p>
+      <p class="note">Curves schematic, after Fig. 8a,b; values from the text and axes. Fig. 8 labels the ITIC blend with PDCBT-2F as "PCBT-2F" and "PBDB-T-2F".</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · THE LAST LOSS, AND THE RULE</span><h2>Slow recombination, high fill factor</h2>
+      <p>TDCF separates extraction from recombination. When the internal field is cancelled after the pulse, carriers stay put and their number falls only by recombination with other carriers. The bimolecular recombination coefficients γ are typical for organic cells but differ almost threefold. The best cell, PBDB-T:Y1, recombines slowest, and the paper reports that γ anticorrelates with the fill factor. A strong enough internal field must pull carriers out before they meet.</p>
+      <p>The overall verdict: separation is slightly faster with the non-fullerene acceptors, and transport is much the same in all four cells. The real difference is at the start. A small offset raises V<sub>OC</sub>, but below about 100 meV the losses from poor hole transfer and fast geminate recombination outweigh that gain. The HOMO offset should be 100 meV or more.</p>
+      <p class="note">γ and FF after Fig. 9c (γ read from the plot); FF values also in Fig. 1d.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>Choose the HOMO offset</h2>
+  <p class="intro">A toy model, not a simulation from the paper. It follows the paper's two-step story for excitations on the acceptor, with rates invented to land near its numbers. A fresh exciton either passes its hole to the donor or relaxes, and a relaxed exciton is lost. A CT state either loses its hole back over the offset barrier (a Boltzmann factor at 300 K) or stabilises first and survives. The dashed curve adds a first-order guess that V<sub>OC</sub> rises one-for-one as the offset shrinks.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy fraction of acceptor excitations that become free charge pairs versus HOMO offset, responding to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="off"><span class="row"><span>HOMO offset ΔE<sub>H</sub></span><output id="offv">0.10 eV</output></span><input id="off" type="range" min="0" max="0.3" step="0.005" value="0.1"></label>
+      <label for="tx"><span class="row"><span>Toy lifetime of the unrelaxed acceptor exciton</span><output id="txv">0.20 ps</output></span><input id="tx" type="range" min="-1.3" max="0" step="0.02" value="-0.7"></label>
+      <label for="ts"><span class="row"><span>Toy CT stabilisation time</span><output id="tsv">1.0 ps</output></span><input id="ts" type="range" min="-0.7" max="0.7" step="0.02" value="0"></label>
+      <div class="read"><div><b id="r0">–</b><span>toy CT formation from the acceptor</span></div><div><b id="r1">–</b><span>toy geminate loss of CT states</span></div><div><b id="r2">–</b><span>toy free pairs per 100 acceptor excitations</span></div></div>
+      <p class="note">Try this: slide the offset down from 0.3 eV. Nothing happens at first, then below about 0.1 eV both losses set in together. A longer-lived unrelaxed exciton helps the first step, and faster stabilisation helps the second. The dashed "toy output" curve multiplies the free pairs by the guessed V<sub>OC</sub> and peaks where the extra voltage stops paying for the lost charges. Neither the rates nor this curve come from the paper.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1021/acs.jpcc.0c05263">Read the full paper in The Journal of Physical Chemistry C ↗</a>
+  <span class="note">Numbers quoted from the paper (main text and figures; the SI was not consulted): energy levels (Fig. 1b) and cell parameters (Fig. 1d); 515 and 730 nm pumps, the ~200 fs resolution, band positions near 580, 630, 670 and 800 nm and the ~10 nm EA shift; 6/7 at 0.5 ps, ≈90%, 60–70% and 20–30% CT yields after acceptor excitation; the 3 ps values 82%, 75% and 50% and the fluence range 0.05–3.3 µJ cm<sup>−2</sup>; τ ≈ 2 ps acceptor relaxation; geminate losses >50%, ~20% and marginal; 0.5–1 nm, 15 nm, ~30 ps and 2 nm; 2.3 × 10<sup>5</sup> V cm<sup>−1</sup>, 5–10 nm, 50 ns, 500 ps, ~100 ps and 5 × 10<sup>−4</sup> cm<sup>2</sup> V<sup>−1</sup> s<sup>−1</sup>; the "nearly three times" spread of γ and the 100 meV conclusion. Read from figure axes: the drift plateaus and mobility levels (Fig. 8) and the γ values (Fig. 9c). Schematic or illustrative: the timeline, all spectra and kinetics, the pathway, level and pair drawings, and the whole lab.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+
+// ---- story canvas ----
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"electron transfer (donor excited)":"e⁻ transfer","hole transfer (acceptor excited)":"hole transfer","geminate recombination":"geminate","drift and extraction":"extraction","non-geminate recombination":"non-geminate","time after the photon":"","energy (eV)":"eV","ΔHOMO":"","PBDB-T:Y1, 515 nm pump (donor excited)":"PBDB-T:Y1, 515 nm","wavelength (nm)":"λ (nm)","EA, device at −2 V":"EA, −2 V","D⁺ bleach 580 / 630":"D⁺ bleach","EA (CT field) 670":"EA 670","acceptor band: weak (A⁻ ≈ A)":"A: weak","no excited-donor signature":"","unrelaxed A*":"A*","relaxed A* (excitonic polaron)":"relaxed A*","CT state (hole on donor)":"CT","hole transfer, sub-ps":"","relaxation":"","decays":"","ground state":"S₀","CT yield, acceptor excited":"CT yield (A*)","≈ 90% or more":"≈90%+","donor bleach (norm.)":"","time (ps)":"t (ps)","PBDB-T:Y1, EA band 662–682 nm":"Y1, EA band","0.05–3.3 µJ cm⁻²: same decay":"same decay","electron energy":"","hole climbs ΔHOMO":"climbs ΔHOMO","A* relaxes, τ ≈ 2 ps":"τ ≈ 2 ps","CT polaron: way back blocked":"blocked","geminate loss":"loss","HOMO offset (eV)":"ΔHOMO (eV)","EA rise: CT splitting ≈ 30 ps":"splitting ≈ 30 ps","Langevin radius ≈ 15 nm":"15 nm","electron on Y1 side groups, ~2 nm":"e⁻ ~2 nm","D⁺ bleach 573–593 nm":"D⁺","EA 662–682 nm":"EA","mean drift (nm), −2 V":"drift (nm)","time (ns)":"t (ns)","mobility (cm² V⁻¹ s⁻¹)":"µ","SCLC ≈ 5×10⁻⁴":"SCLC","γ (10⁻¹⁰ cm³ s⁻¹)":"γ","fill factor (%)":"FF (%)","HOMO offset ≥ 100 meV":"ΔHOMO ≥ 0.1 eV"}; // phone-only shorter labels ('' drops one)
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+
+// blends: Fig. 1b levels (eV) and Fig. 1d cells
+const B=[
+ {n:'PBDB-T:PC71BM',s:'PCBM',dl:-3.50,dh:-5.33,al:-3.98,ah:-5.96,V:'0.86',J:'13.23',F:'72.7',P:'8.2',col:C.red},
+ {n:'PBDB-T:Y1',s:'Y1',dl:-3.50,dh:-5.33,al:-3.95,ah:-5.45,V:'0.86',J:'22.2',F:'69.1',P:'13.2',col:C.ink},
+ {n:'PBDB-T-2Cl:ITIC',s:'2Cl:ITIC',dl:-3.71,dh:-5.51,al:-4.02,ah:-5.61,V:'1.02',J:'14.85',F:'62.4',P:'9.5',col:C.blue},
+ {n:'PDCBT-2F:ITIC',s:'2F:ITIC',dl:-3.69,dh:-5.59,al:-4.02,ah:-5.61,V:'1.12',J:'8.75',F:'57.6',P:'5.6',col:C.green}];
+const LG=v=>Math.log10(v);
+// piecewise-linear interpolation
+const pw=(P,x)=>{if(x<=P[0][0])return P[0][1];for(let i=1;i<P.length;i++)if(x<=P[i][0]){const[a,b]=P[i-1],[c,d]=P[i];return b+(d-b)*(x-a)/(c-a)}return P[P.length-1][1]};
+
+const SC=[
+ // 0 timeline of processes and techniques (schematic)
+ (t,a)=>{const x0=40,x1=560,L0=-13,L1=-6,X=l=>x0+(l-L0)/(L1-L0)*(x1-x0),cur=L0+((t*.12)%1)*(L1-L0);
+  const P=[['electron transfer (donor excited)',-13,-12.7,C.blue],['hole transfer (acceptor excited)',-13,-11.4,C.amber],['geminate recombination',-12.6,-11.4,C.red],['CT splitting',-11.6,-10.4,C.green],['drift and extraction',-11,-7.3,C.violet],['non-geminate recombination',-9,-6,C.pink]];
+  P.forEach(([n,l0,l1,col],i)=>{const y=58+i*40,on=cur>=l0&&cur<=l1;g.rect(X(l0),y,Math.max(6,X(l1)-X(l0)),12,col,(on?.9:.5)*a,on?12:0);
+   const lx=X(l0)+(l0>-10?Math.max(6,X(l1)-X(l0)):0);g.text(n,l0>-10?X(l1):X(l0),y-6,l0>-10?'right':'left',(on?.95:.7)*a,12,col)});
+  g.line([[x0,310],[x1,310]],C.ink,1,0,.4*a);
+  [[-13,'100 fs'],[-12,'1 ps'],[-11,'10 ps'],[-10,'100 ps'],[-9,'1 ns'],[-8,'10 ns'],[-7,'100 ns'],[-6,'1 µs']].forEach(([l,s])=>{g.line([[X(l),306],[X(l),314]],C.ink,1,0,.5*a);g.text(s,X(l),330,'center',.6*a,11)});
+  g.text('time after the photon',x1,348,'right',.55*a,11);
+  const T=[['TA / EA',-13,-8.7,C.tan],['OEFP',-13,-8.7,C.teal],['TPC',-8.4,-6,C.teal],['TDCF',-7.1,-6,C.tan]];
+  T.forEach(([n,l0,l1,col],i)=>{const y=370+(i%2)*26;g.line([[X(l0),y],[X(l1),y]],col,3,0,.75*a);g.text(n,i<2?X(l0):X(l1),y-6,i<2?'left':'right',.8*a,11,col)});
+  g.line([[X(cur),40],[X(cur),310]],'#ffffff',1.2,8,.5*a,[3,4]);g.dot(X(cur),310,4,'#fff',a,10);
+  g.text('schematic',570,444,'right',.4*a,11)},
+ // 1 energy levels (Fig. 1b) and cells (Fig. 1d)
+ (t,a)=>{const Y=E=>86+(-3.3-E)/2.8*226,k=Math.floor(t/1.6)%4;
+  [-3.5,-4,-4.5,-5,-5.5,-6].forEach(E=>{g.line([[52,Y(E)],[575,Y(E)]],C.ink,1,0,.06*a);g.text(E.toFixed(1),46,Y(E)+4,'right',.5*a,10)});g.text('energy (eV)',10,84,'left',.55*a,11);
+  B.forEach((b,i)=>{const cx=128+i*124,on=i==k,al=on?1:.7;
+   g.rr(cx-44,Y(b.dl),40,Y(b.dh)-Y(b.dl),3,C.tan,al*a,.22,on?8:0);g.rr(cx+4,Y(b.al),40,Y(b.ah)-Y(b.al),3,i==0?C.violet:i==1?C.amber:C.blue,al*a,.22,on?8:0);
+   g.text(b.dh.toFixed(2),cx-24,Y(b.dh)+14,'center',.75*a,10);g.text(b.ah.toFixed(2),cx+24,Y(b.ah)+14,'center',.75*a,10);
+   g.text(b.dl.toFixed(2),cx-24,Y(b.dl)-5,'center',.6*a,10);g.text(b.al.toFixed(2),cx+24,Y(b.al)-5,'center',.6*a,10);
+   const off=(b.dh-b.ah);g.line([[cx-4,Y(b.dh)],[cx+4,Y(b.dh)]],'#fff',1,0,.6*a);
+   g.text('ΔHOMO',cx,44,'center',.5*a,10);g.text(off.toFixed(2)+' eV',cx,62,'center',(on?1:.85)*a,13,off<.05?C.red:off<.2?C.amber:C.green);
+   if(PH)g.text(b.s,cx,332,'center',.8*a,10);else{g.text(b.n.split(':')[0],cx-24,332,'center',.7*a,9.5);g.text(b.n.split(':')[1].replace('PC71BM','PCBM'),cx+24,332,'center',.7*a,9.5);}
+   if(on)g.halo(cx,Y((b.dh+b.ah)/2),36,C.amber,.18*a);
+   [b.V+' V',b.J,b.F+'%',b.P+'%'].forEach((s,j)=>g.text(s,cx,358+j*22,'center',(on?.98:.75)*a,12.5,j==3?C.green:C.ink))});
+  ['VOC','JSC','FF','PCE'].forEach((s,j)=>g.text(s,46,358+j*22,'right',.55*a,11));g.text('JSC in mA cm⁻²',10,444,'left',.45*a,10);
+  g.text('Fig. 1b, 1d',570,444,'right',.4*a,11)},
+ // 2 TA spectrum, donor excited (schematic, after Fig. 3a)
+ (t,a)=>{const X=l=>70+(l-520)/380*470,Y=v=>220-v*150;
+  const sp=l=>-.55*Math.exp(-(((l-582)/16)**2))-.85*Math.exp(-(((l-630)/18)**2))+.62*Math.exp(-(((l-672)/9)**2))-.08*Math.exp(-(((l-800)/30)**2))+.05*Math.exp(-(((l-740)/40)**2));
+  const ea=l=>-.5*Math.exp(-(((l-620)/14)**2))+.55*Math.exp(-(((l-662)/9)**2))-.15*Math.exp(-(((l-700)/14)**2));
+  g.line([[70,Y(0)],[540,Y(0)]],C.ink,1,0,.3*a);g.text('ΔA = 0',540,Y(0)-6,'right',.45*a,10);
+  [550,600,650,700,750,800,850,900].forEach(l=>g.text(l,X(l),396,'center',.5*a,11));g.text('wavelength (nm)',540,414,'right',.6*a,12);
+  g.fn(x=>Y(.8*ea(520+(x-70)/470*380)),70,540,C.blue,1.6,0,.75*a,[5,4],260);
+  const S=[['0.5 ps',1,C.pink],['3 ps',.75,C.amber],['100 ps',.62,C.violet]],k=Math.floor(t/1.4)%3;
+  S.forEach(([n,m,col],i)=>{const on=i==k;g.fn(x=>Y(m*sp(520+(x-70)/470*380)),70,540,col,on?3:1.8,on?12:0,(on?1:.6)*a,null,260);g.dot(84,80+i*20,4.5,col,a,on?10:0);g.text(n,96,84+i*20,'left',(on?.95:.7)*a,12,col)});
+  g.line([[74,140],[94,140]],C.blue,1.6,0,.75*a,[5,4]);g.text('EA, device at −2 V',100,144,'left',.75*a,11,C.blue);
+  g.text('D⁺ bleach 580 / 630',X(606),374,'center',.8*a,12,C.amber);g.text('EA (CT field) 670',X(672)+10,Y(.66)-6,'left',.85*a,12,C.pink);
+  g.text('acceptor band: weak (A⁻ ≈ A)',X(800),Y(-.2)+30,'center',.7*a,11);
+  g.text('PBDB-T:Y1, 515 nm pump (donor excited)',300,46,'center',.75*a,12);g.text('no excited-donor signature',300,440,'center',.55*a,11);
+  g.text('schematic, after Fig. 3a',570,444-14,'right',.4*a,11)},
+ // 3 hole transfer from the excited acceptor
+ (t,a)=>{const A=[90,120],CT=[300,70],R=[300,175],S0=[500,175],CTe=[500,70];
+  g.halo(A[0],A[1],40,C.amber,.25*a);g.ring(A[0],A[1],22,C.amber,2,a,10);g.text('unrelaxed A*',A[0],A[1]+44,'center',.85*a,12,C.amber);
+  g.rr(CT[0]-60,CT[1]-16,120,32,6,C.green,a,.2,8);g.text('CT state (hole on donor)',CT[0],CT[1]-24,'center',.85*a,12,C.green);g.dot(CT[0]-14,CT[1],5,C.blue,a,6);g.ring(CT[0]+14,CT[1],5,C.amber,2,a,6);
+  g.ring(R[0],R[1],16,C.tan,2,a);g.text('relaxed A* (excitonic polaron)',R[0],R[1]+36,'center',.8*a,12,C.tan);
+  g.line([[S0[0]-30,S0[1]],[S0[0]+30,S0[1]]],C.ink,2.4,0,.6*a);g.text('ground state',S0[0],S0[1]+22,'center',.7*a,12);
+  g.arrow(A[0]+24,A[1]-10,CT[0]-64,CT[1]+4,C.green,2,.8*a);g.text('hole transfer, sub-ps',145,64,'center',.65*a,11,C.green);
+  g.arrow(A[0]+24,A[1]+12,R[0]-20,R[1]-4,C.tan,2,.7*a);g.text('relaxation',178,170,'center',.6*a,11,C.tan);
+  g.arrow(R[0]+20,R[1],S0[0]-36,S0[1],C.ink,1.6,.5*a);g.text('decays',400,166,'center',.55*a,11);
+  g.line([[R[0],R[1]-20],[CT[0],CT[1]+20]],C.red,1.6,0,.6*a,[3,4]);g.text('✕',R[0]+12,124,'left',.9*a,15,C.red);
+  for(let k=0;k<6;k++){const p=(t*.35+k/6)%1,ok=k%3!=2,q=ss(p);if(ok)g.dot(lerp(A[0]+24,CT[0]-64,q),lerp(A[1]-10,CT[1]+4,q),3.2,C.amber,a*(1-.3*q),8);else{const q1=ss(Math.min(1,p*2)),q2=ss(Math.max(0,p*2-1));g.dot(q2>0?lerp(R[0]+20,S0[0]-36,q2):lerp(A[0]+24,R[0]-20,q1),q2>0?R[1]:lerp(A[1]+12,R[1]-4,q1),3.2,C.tan,a,6)}}
+  // yields (text values)
+  const Y=[['PBDB-T:Y1','0.12 eV',.9,.9,'≈ 90% or more',C.ink],['PBDB-T-2Cl:ITIC','0.10 eV',.6,.7,'60–70%',C.blue],['PDCBT-2F:ITIC','0.02 eV',.2,.3,'20–30%',C.green]],x0=210,W=300;
+  g.text('CT yield, acceptor excited',x0,252,'left',.7*a,12);
+  Y.forEach(([n,o,lo,hi,s,col],i)=>{const y=280+i*40;g.text(n,x0-10,y+4,'right',.85*a,12,col);g.text(o,x0-10,y+18,'right',.55*a,10);
+   g.rect(x0,y-8,W*lo,16,col,.6*a);if(hi>lo)g.rect(x0+W*lo,y-8,W*(hi-lo),16,col,.25*a);g.text(s,x0+W*hi+8,y+5,'left',.9*a,12,col)});
+  g.line([[x0,400],[x0+W,400]],C.ink,1,0,.35*a);[0,.5,1].forEach(v=>g.text(Math.round(v*100)+'%',x0+W*v,416,'center',.5*a,11));
+  g.text('yields from the text; drawing schematic',570,444,'right',.4*a,11)},
+ // 4 geminate recombination: donor GSB (after Fig. 5a) and fluence independence (after Fig. 5c)
+ (t,a)=>{const x0=60,x1=290,Xt=v=>x0+v/20*(x1-x0),Y=v=>300-v*220;
+  const K=[['PCBM',.95,C.red],['2Cl:ITIC',.82,C.blue],['Y1',.75,C.ink],['2F:ITIC',.5,C.green]];
+  const f=v3=>{const p=(v3-.05)/.95;return v=>v<0?0:(p+(1-p)*Math.exp(-v))*(1-.004*v)};
+  g.axes(x0,300,x1,70);[0,5,10,15,20].forEach(v=>g.text(v,Xt(v),318,'center',.5*a,11));g.text('time (ps)',x1,336,'right',.6*a,12);
+  [0,.5,1].forEach(v=>g.text(v.toFixed(1),x0-6,Y(v)+4,'right',.5*a,11));g.text('donor bleach (norm.)',x0,58,'left',.6*a,11);
+  g.line([[Xt(3),70],[Xt(3),300]],C.ink,1,0,.3*a,[3,3]);g.text('3 ps',Xt(3)+4,84,'left',.6*a,11);
+  const tc=(t*2.5)%20;
+  K.forEach(([n,v3,col])=>{const F=f(v3);g.fn(x=>Y(F((x-x0)/(x1-x0)*20)),x0+1,x1,col,2.4,8,a,null,200);g.text(n+' '+(v3>.9?'marginal':Math.round(v3*100)+'%'),x1+6,Y(F(20))+4,'left',.85*a,11,col);g.dot(Xt(tc),Y(F(tc)),3,'#fff',.8*a,6)});
+  // fluence panel
+  g.text('at 3 ps:',x1+6,Y(1)-6,'left',.5*a,10);const u0=440,u1=565,Xu=v=>u0+v/20*(u1-u0),Yu=v=>300-v*220,ea=v=>v<0?0:(.55+.45*Math.exp(-v/1.2))*(1-.003*v);
+  g.axes(u0,300,u1,70);[0,10,20].forEach(v=>g.text(v,Xu(v),318,'center',.5*a,11));
+  [.05,.1,.25,.75,3.3].forEach((F,i)=>{const col=[C.violet,C.blue,C.teal,C.green,C.amber][i];g.fn(x=>{const v=(x-u0)/(u1-u0)*20;return Yu(ea(v)+.02*Math.sin(v*3+i*1.7)*Math.exp(-v/12))},u0+1,u1,col,1.4,0,.8*a,null,160)});
+  g.text('PBDB-T:Y1, EA band 662–682 nm',u1,58,'right',.6*a,11);g.text('0.05–3.3 µJ cm⁻²: same decay',u1,350,'right',.85*a,12,C.amber);
+  g.text('no fluence dependence → geminate',300,400,'center',.85*a,13);
+  g.text('schematic, after Fig. 5a,c',570,444,'right',.4*a,11)},
+ // 5 back transfer picture (after Fig. 6) and loss vs offset
+ (t,a)=>{const Y=E=>70+(-3.3-E)/2.5*260,ph=(t*.25)%1,stab=ph>.55,b=B[1];
+  const dx0=60,dx1=150,ax0=180,ax1=270;
+  g.text('electron energy',dx0,50,'left',.5*a,11);
+  g.line([[dx0,Y(b.dl)],[dx1,Y(b.dl)]],C.tan,2.4,6,a);g.line([[dx0,Y(b.dh)],[dx1,Y(b.dh)]],C.tan,2.6,8,a);
+  g.line([[ax0,Y(b.al)],[ax1,Y(b.al)]],C.amber,2.4,6,a);g.line([[ax0,Y(b.ah)],[ax1,Y(b.ah)]],C.amber,2.6,8,a);
+  g.text('D',(dx0+dx1)/2,Y(b.dl)-10,'center',.85*a,13,C.tan);g.text('A',(ax0+ax1)/2,Y(b.al)-10,'center',.85*a,13,C.amber);
+  g.text('LUMO',dx0-6,Y(b.dl)+4,'right',.5*a,10);g.text('HOMO',dx0-6,Y(b.dh)+4,'right',.5*a,10);
+  g.line([[ax1+8,Y(b.dh)],[ax1+8,Y(b.ah)]],C.ink,1.2,0,.6*a);g.line([[dx1,Y(b.dh)],[ax1+12,Y(b.dh)]],C.ink,1,0,.3*a,[2,3]);g.text('0.12 eV',ax1+14,(Y(b.dh)+Y(b.ah))/2+4,'left',.8*a,11);
+  g.dot(ax0+30,Y(b.al),5,C.blue,a,8); // electron on acceptor
+  // hole: on donor HOMO; before stabilisation it sometimes hops to the acceptor HOMO
+  const hy=Y(b.dh)-(stab?-14:0);
+  if(stab){g.line([[dx0,Y(b.dh)+14],[dx1,Y(b.dh)+14]],C.green,1.8,8,.85*a,[5,3]);g.text('CT polaron: way back blocked',(dx0+ax1)/2,Y(b.dh)+60,'center',.85*a,11,C.green);g.ring(110,hy,6,C.amber,2,a,8);g.text('✕',165,Y(b.dh)+30,'center',.9*a,14,C.red)}
+  else{const q=ph/.55,hop=q>.3&&q<.75,s=ss((q-.3)/.2);
+   if(!hop){g.ring(110,hy,6,C.amber,2,a,8);g.text('hole climbs ΔHOMO',(dx0+ax1)/2,Y(b.dh)+60,'center',.75*a,11,C.amber)}
+   else{const x=lerp(110,ax0+40,Math.min(1,s)),y=lerp(Y(b.dh),Y(b.ah),Math.min(1,s));g.ring(x,y,6,C.amber,2,a,8);if(s>=1){const r=ss((q-.5)/.25);g.halo(ax0+45,(Y(b.al)+Y(b.ah))/2,60*(1-r)+10,C.red,.5*(1-r)*a);g.text('A* relaxes, τ ≈ 2 ps',(ax0+ax1)/2,Y(b.ah)+30,'center',.85*a,11,C.red)}}}
+  // loss vs offset (text values)
+  const x0=360,x1=560,X=e=>x0+e/.7*(x1-x0),Yl=v=>330-v/60*230;
+  g.axes(x0,330,x1,90);[0,.2,.4,.6].forEach(e=>g.text(e.toFixed(1),X(e),348,'center',.5*a,11));g.text('HOMO offset (eV)',x1,366,'right',.6*a,12);
+  [0,20,40,60].forEach(v=>g.text(v+'%',x0-6,Yl(v)+4,'right',.5*a,11));g.text('geminate loss',x0,78,'left',.65*a,12);
+  const P=[[.02,50,'>50%',C.green,1],[.10,20,'~20%',C.blue,0],[.12,20,'',C.ink,0],[.63,2,'marginal',C.red,0]],pu=.5+.5*Math.sin(t*2.5);
+  P.forEach(([e,v,s,col,up],i)=>{g.dot(X(e),Yl(v),5,col,a,6+6*pu);if(up)g.arrow(X(e),Yl(v)-8,X(e),Yl(v)-30,col,1.6,.8*a);if(s)g.text(s,X(e)+(i==0?10:i==3?0:14),Yl(v)+(i==3?-12:i==0?-14:4),i==3?'center':'left',.9*a,12,col)});
+  g.text('2F:ITIC',X(.02)+10,Yl(50)+4,'left',.6*a,10,C.green);g.text('2Cl:ITIC, Y1',X(.1)+14,Yl(20)+18,'left',.6*a,10,C.blue);g.text('PCBM',X(.63),Yl(2)-26,'center',.6*a,10,C.red);
+  g.text('schematic, after Fig. 6; losses from the text',570,444,'right',.4*a,11)},
+ // 6 EA vs GSB kinetics (after Fig. 7a) and the separating pair
+ (t,a)=>{const X=v=>v<=3?70+v/3*120:190+(v-3)/97*350,Y=v=>240-v*160;
+  const gsb=v=>v<0?0:v<=3?1-.25*(1-Math.exp(-v*1.3))/(1-Math.exp(-3.9)):.75-.07*(1-Math.exp(-(v-3)/40));
+  const ea=v=>v<0?0:v<=3?1-.45*(1-Math.exp(-v*1.6))/(1-Math.exp(-4.8)):.55+.07*(1-Math.exp(-(v-3)/14));
+  g.axes(70,240,540,70);g.line([[190,236],[190,244]],C.ink,1,0,.5*a);
+  [[0,'0'],[1,'1'],[2,'2'],[3,'3'],[20,'20'],[40,'40'],[60,'60'],[80,'80'],[100,'100']].forEach(([v,s])=>g.text(s,X(v),258,'center',.5*a,11));g.text('time (ps)',540,276,'right',.6*a,12);
+  const fn=(F,col,w)=>{const p=[];for(let i=0;i<=200;i++){const v=i<=60?i/60*3:3+(i-60)/140*97;p.push([X(v),Y(F(v))])}g.line(p,col,w,8,a)};
+  fn(gsb,C.ink,2.2);fn(ea,C.red,2.4);g.line([[190,Y(.55)],[540,Y(.55)]],C.red,1,0,.4*a,[3,4]);
+  g.text('D⁺ bleach 573–593 nm',540,Y(.75)-10,'right',.85*a,11);g.text('EA 662–682 nm',540,Y(.62)+20,'right',.85*a,11,C.red);
+  g.text('EA rise: CT splitting ≈ 30 ps',X(40),Y(.42),'center',.75*a,11,C.red);g.text('PBDB-T:Y1',70,62,'left',.7*a,12);
+  const tc=((t*.3)%1)*100;g.dot(X(tc),Y(ea(tc)),3.5,'#fff',.9*a,8);
+  // pair separation (schematic): 1 nm = 13 px
+  const ix=230,sep=.75+14.25*ss((t*.2)%1),hx=ix-6-sep*13*.35,ex=ix+6+sep*13*.65;
+  g.rect(40,318,ix-40,70,C.tan,.08*a);g.rect(ix,318,560-ix,70,C.amber,.08*a);g.line([[ix,312],[ix,394]],C.ink,1,0,.35*a,[3,3]);
+  g.text('donor',50,334,'left',.6*a,11,C.tan);g.text('acceptor (Y1)',552,334,'right',.6*a,11,C.amber);
+  g.ring(hx,360,6,C.amber,2,a,8);g.dot(ex-13,360,4.5,C.blue,a,8);g.dot(ex+13,360,4.5,C.blue,a,8);g.line([[ex-13,360],[ex+13,360]],C.blue,1,0,.4*a);
+  const L0=ix-6-15*13*.35,L1=ix+6+15*13*.65;g.line([[L0,404],[L1,404]],C.green,1.4,0,.7*a);g.line([[L0,398],[L0,410]],C.green,1.4,0,.7*a);g.line([[L1,398],[L1,410]],C.green,1.4,0,.7*a);
+  g.text('Langevin radius ≈ 15 nm',(L0+L1)/2,424,'center',.85*a,11,C.green);g.text('electron on Y1 side groups, ~2 nm',ex,346,'center',.7*a,10,C.blue);
+  g.text('schematic, after Fig. 7a',570,444,'right',.4*a,11)},
+ // 7 drift and mobility (after Fig. 8a,b)
+ (t,a)=>{const x0=80,x1=540,X=l=>x0+(l+3)/6*(x1-x0),Y=v=>200-v/80*140;
+  const D=[[64,C.ink,'Y1'],[60,C.red,'PCBM'],[76,C.blue,'2Cl:ITIC'],[67,C.green,'2F:ITIC']],dr=(Dn,l)=>Dn/(1+Math.exp(-(l-.5)/.6));
+  g.axes(x0,200,x1,56);[0,40,80].forEach(v=>g.text(v,x0-6,Y(v)+4,'right',.5*a,11));g.text('mean drift (nm), −2 V',x0,46,'left',.65*a,12);
+  D.forEach(([Dn,col,n],i)=>{g.fn(x=>Y(dr(Dn,(x-x0)/(x1-x0)*6-3)),x0,x1,col,2,6,.9*a,null,160);g.text(n,x1+4,Y(dr(Dn,3))+4+[0,8,-4,0][i]*1.2-(i==3?8:0),'left',.8*a,10,col)});
+  const lc=-3+((t*.15)%1)*6;g.dot(X(lc),Y(dr(64,lc)),3.5,'#fff',.9*a,8);g.line([[X(LG(50)),56],[X(LG(50)),200]],C.ink,1,0,.3*a,[3,3]);g.text('50 ns',X(LG(50))-4,70,'right',.55*a,10);
+  // mobility
+  const Ym=lm=>405-(lm+4)/3.5*135;
+  g.axes(x0,405,x1,262);[[-4,'10⁻⁴'],[-3,'10⁻³'],[-2,'10⁻²'],[-1,'10⁻¹']].forEach(([l,s])=>g.text(s,x0-6,Ym(l)+4,'right',.5*a,11));g.text('mobility (cm² V⁻¹ s⁻¹)',x0,250,'left',.65*a,12);
+  [[-3,'0.001'],[-2,'0.01'],[-1,'0.1'],[0,'1'],[1,'10'],[2,'100'],[3,'1000']].forEach(([l,s])=>{g.text(s,X(l),214,'center',.5*a,10);g.text(s,X(l),421,'center',.5*a,10)});g.text('time (ns)',x1,437,'right',.55*a,11);
+  const MY=[[-3,-1.5],[-2,-1.9],[-1,-2.25],[0,-2.6],[.3,-2.8],[1,-3.05],[1.7,-3.4],[2.2,-3.25],[3,-3.3]],MP=[[-3,-2.05],[-2,-2.15],[-1,-2.3],[0,-2.55],[.3,-2.62],[1,-3.0],[1.7,-3.4],[2.2,-3.45],[3,-3.5]];
+  g.fn(x=>Ym(pw(MY,(x-x0)/(x1-x0)*6-3)),x0,x1,C.ink,2.2,6,a,null,160);g.fn(x=>Ym(pw(MP,(x-x0)/(x1-x0)*6-3)),x0,x1,C.red,2.2,6,a,null,160);
+  g.text('Y1',X(-2.8),Ym(-1.5)+4,'left',.8*a,10);g.text('PCBM',X(-2.8),Ym(-2.05)+18,'left',.8*a,10,C.red);
+  [[-3,LG(2),'OEFP'],[LG(2),LG(50),'TPC'],[2,3,'TDCF']].forEach(([l0,l1,n],i)=>{g.line([[X(l0),268],[X(l1),268]],C.teal,2,0,.6*a);g.text(n,(X(l0)+X(l1))/2,282,'center',.6*a,10,C.teal)});
+  g.dot(X(LG(800)),Ym(LG(5e-4)),6,'#bbbbbb',.9*a,6);g.text('SCLC ≈ 5×10⁻⁴',X(LG(800)),Ym(LG(5e-4))-12,'center',.75*a,10);
+  g.text('schematic, after Fig. 8a,b',570,24,'right',.4*a,11)},
+ // 8 gamma vs FF (Fig. 9c) and the rule
+ (t,a)=>{const x0=90,x1=520,X=v=>x0+v/14*(x1-x0),Y=f=>300-(f-55)/20*220;
+  const P=[[3.9,69.1,'PBDB-T:Y1',C.ink],[7.6,72.7,'PBDB-T:PCBM',C.red],[9.5,62.4,'PBDB-T-2Cl:ITIC',C.blue],[12.5,57.6,'PDCBT-2F:ITIC',C.green]],k=Math.floor(t/1.5)%4;
+  g.axes(x0,300,x1,70);[0,4,8,12].forEach(v=>g.text(v,X(v),318,'center',.5*a,11));g.text('γ (10⁻¹⁰ cm³ s⁻¹)',x1,338,'right',.6*a,12);
+  [55,60,65,70,75].forEach(f=>g.text(f,x0-6,Y(f)+4,'right',.5*a,11));g.text('fill factor (%)',x0,58,'left',.6*a,12);
+  P.forEach(([gm,F,n,col],i)=>{const on=i==k;g.dot(X(gm),Y(F),on?7:5.5,col,a,on?14:6);g.text(n,X(gm)+(i==3?-10:10),Y(F)+(i==1?-10:i==3?-12:16),i==3?'right':'left',(on?.95:.75)*a,11,col)});
+  g.rr(120,370,360,44,8,C.green,a,.15,10);g.text('HOMO offset ≥ 100 meV',300,398,'center',.95*a,15,C.green);
+  g.text('γ read from Fig. 9c; FF from Fig. 1d',570,444,'right',.4*a,11)}
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+// pause the story canvas while it is off-screen
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab: toy two-step generation model for acceptor excitations ----
+const KT=.0257; // eV, 300 K
+function toy(E,tx,ts){const kHT=10/(1+Math.exp(-(E-.06)/.025)),pHT=kHT/(kHT+1/tx),kBT=12*Math.exp(-E/KT),pG=kBT/(kBT+1/ts);return{pHT,pG,free:pHT*(1-pG)}}
+const VREF=.86,EREF=.12; // toy VOC: PBDB-T:Y1 cell (0.86 V at 0.12 eV), shifted one-for-one with the offset
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+const pc=v=>(v*100<10?(v*100).toFixed(1):Math.round(v*100))+'%';
+function lab(){const E=+$('off').value,tx=Math.pow(10,+$('tx').value),ts=Math.pow(10,+$('ts').value),s=toy(E,tx,ts);
+  $('offv').value=E.toFixed(E*1000%10?3:2)+' eV';$('txv').value=tx.toFixed(2)+' ps';$('tsv').value=ts.toFixed(1)+' ps';
+  $('r0').textContent=pc(s.pHT);$('r1').textContent=pc(s.pG);$('r2').textContent=Math.round(s.free*100);
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const x0=70,x1=560,X=e=>x0+e/.3*(x1-x0),Y=v=>230-v*180;lg.axes(x0,230,x1,50);
+  [0,.1,.2,.3].forEach(e=>lg.text(e.toFixed(1),X(e),248,'center',.55,11));lg.text('HOMO offset (eV)',x1,266,'right',.6,12);
+  [0,.5,1].forEach(v=>lg.text(Math.round(v*100)+'%',x0-8,Y(v)+4,'right',.5,11));
+  [[.02,'2F:ITIC'],[.10,'2Cl:ITIC'],[.12,'Y1']].forEach(([e,n],i)=>{lg.line([[X(e),50],[X(e),230]],C.ink,1,0,.25,[2,4]);lg.text(n,X(e)+(i==1?-3:3),i==1?30:44,i==1?'right':'left',.5,10)});
+  const F=e=>toy(e,tx,ts);let pm=0;for(let e=0;e<=.3;e+=.002){const v=F(e).free*(VREF+EREF-e);if(v>pm)pm=v}
+  lg.fn(x=>Y(F((x-x0)/(x1-x0)*.3).pHT),x0,x1,C.amber,1.8,0,.85,null,150);lg.fn(x=>Y(1-F((x-x0)/(x1-x0)*.3).pG),x0,x1,C.red,1.8,0,.85,null,150);
+  lg.fn(x=>Y(F((x-x0)/(x1-x0)*.3).free),x0,x1,C.green,3,10,1,null,150);
+  lg.fn(x=>{const e=(x-x0)/(x1-x0)*.3;return Y(F(e).free*(VREF+EREF-e)/pm)},x0,x1,'#ffffff',1.6,0,.75,[5,4],150);
+  lg.dot(X(E),Y(s.free),6,'#fff',1,12);
+  [['CT forms',C.amber],['no back-hop',C.red],['free pairs',C.green],['toy output','#ffffff']].forEach(([n,col],i)=>{const px=x0+8+(i%2)*240,py=290+(i>>1)*18;lg.line([[px,py],[px+16,py]],col,2.4,0,.9,i==3?[4,3]:null);lg.text(n,px+22,py+4,'left',.8,11,col)});
+  // fate of 100 acceptor excitations
+  const bw=x1-x0,parts=[[1-s.pHT,'#8a8f98','relaxed'],[s.pHT*s.pG,C.red,'geminate'],[s.free,C.green,'free pairs']];let xx=x0;
+  lg.text('fate of 100 acceptor excitations',x0,334,'left',.65,12);parts.forEach(([v,col])=>{lg.rect(xx,342,bw*v,26,col,.85);xx+=bw*v});
+  parts.forEach(([v,col,n],i)=>{const px=x0+i*170;lg.dot(px+5,388,4.5,col,1,6);lg.text(n+' '+Math.round(v*100),px+14,392,'left',.85,11.5,col)});
+  lg.text('toy VOC '+(VREF+EREF-E).toFixed(2)+' V (guess)',x0,424,'left',.6,11);
+  lg.text('toy model, not data from the paper',570,444,'right',.45,11)}
+['off','tx','ts'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>
+</body></html>
