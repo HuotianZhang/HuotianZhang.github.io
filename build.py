@@ -31,6 +31,7 @@ EXPLAINERS = {  # key -> artifact id
     "backtransfer": "R5dGWnVtc5zi5Pn3nwo6d2",
     "tta": "Th3x3u3JfPg1z3Yo57vFWz",
     "timeline": "VtmKQ3p5n5s4gMLGE9q7jV",
+    "damacro": "4e81aFQ2D4fLCuiupLQh2y",
 }
 DESC = {
     "home": "Huotian Zhang - device physicist working on organic solar cells, University of Potsdam.",
