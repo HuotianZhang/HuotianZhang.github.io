@@ -36,6 +36,7 @@ EXPLAINERS = {  # key -> artifact id
     "giwaxs": "Rkiopb3C2CVq54LXwRnbnd",
     "whitelight": "3zp4p5msnK85UWTrP5ztw3",
     "photodet": "VxqzQjkZQQX8oHgVrKRd7J",
+    "laser": "DDqBavYE1HB9TM4tD5jLQc",
 }
 DESC = {
     "home": "Huotian Zhang - device physicist working on organic solar cells, University of Potsdam.",

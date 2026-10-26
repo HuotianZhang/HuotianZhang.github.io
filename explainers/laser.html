@@ -1,0 +1,314 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A transport layer that lowers a perovskite laser&#x27;s threshold | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="PTAA pulls holes out, so hot carriers cool faster. The ASE threshold drops 22.9%."><link rel="canonical" href="https://huotianzhang.github.io/explainers/laser.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="A transport layer that lowers a perovskite laser&#x27;s threshold"><meta property="og:description" content="PTAA pulls holes out, so hot carriers cool faster. The ASE threshold drops 22.9%."><meta property="og:url" content="https://huotianzhang.github.io/explainers/laser.html"><meta property="og:image" content="https://huotianzhang.github.io/og/laser.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "A transport layer that lowers a perovskite laser's threshold", "description": "PTAA pulls holes out, so hot carriers cool faster. The ASE threshold drops 22.9%.", "url": "https://huotianzhang.github.io/explainers/laser.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1002/adma.202300922", "name": "Transport layer engineering toward lower threshold for perovskite lasers."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 19px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1002/adma.202300922">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Advanced Materials 2023 · Paper</span>
+  <h1>A transport layer that lowers a perovskite laser's threshold</h1>
+  <p class="dek">An electrically driven perovskite laser needs charge-transport layers on the light-emitting film, and those layers are usually feared to quench the light. This study puts two common ones on a MAPbBr<sub>3</sub> film and measures how much pump light is needed before amplified spontaneous emission (ASE) sets in. The hole-transport polymer PTAA lowers that threshold by 22.9%. Ultrafast spectroscopy points to the reason: by taking holes out of the film, PTAA helps hot carriers cool faster, so fewer are lost to Auger recombination.</p>
+  <p class="cite">J. Zhang<sup>†</sup>, J. Qin<sup>†</sup>, W. Cai, Y. Tang, H. Zhang, T. Wang, A. Bakulin, B. Hu*, X.-K. Liu* &amp; F. Gao*. <i>Transport layer engineering toward lower threshold for perovskite lasers.</i> Adv. Mater. 35, 2300922 (2023). <a href="https://doi.org/10.1002/adma.202300922">doi:10.1002/adma.202300922</a> <span class="note">(† equal contribution · * corresponding authors)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE PROBLEM</span><h2>A laser film has to live between contacts</h2>
+      <p>Metal halide perovskites are attractive laser materials: they are solution-processed, bright, colour-tunable and have a large optical gain. Optically pumped perovskite lasers already run continuously at room temperature, and perovskite devices already carry more than 1 kA cm<sup>−2</sup>. An electrically pumped laser needs both at once, so the perovskite must be sandwiched between transport layers that bring in electrons and holes.</p>
+      <p>In light-emitting diodes such interfaces often quench the light. Do they also raise the lasing threshold? To find out, the authors spin-coat either the hole-transport polymer PTAA or the electron-transport molecule Bphen on top of a MAPbBr<sub>3</sub> film on glass, and pump the film through the glass with femtosecond pulses.</p>
+      <p class="note">Schematic, not to scale, after Fig. 1 and the Experimental Section. All films are sealed with epoxy and a thin cover glass.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · WHAT ASE IS</span><h2>A narrow line grows out of the glow</h2>
+      <p>At low pump fluence (14.0 μJ cm<sup>−2</sup> at 343 nm) the film shows ordinary spontaneous photoluminescence: a broad band peaking at 538 nm, 24 nm wide (FWHM). At higher fluence an extra narrow peak appears near 551 nm and soon dominates the spectrum.</p>
+      <p>That narrow peak is amplified spontaneous emission: light emitted in the film is amplified by stimulated emission as it travels through it. It needs more excited states than ground states, the same population inversion a laser needs, so the ASE threshold is a stand-in for the lasing threshold.</p>
+      <p class="note">Peak positions and width from the text; spectra schematic, after Fig. 1b, each normalised to its maximum.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · READING THE THRESHOLD</span><h2>Where the slope bends and the width jumps</h2>
+      <p>Plot the integrated emission against the pump fluence on log–log axes. Below threshold it grows with a fixed slope; once gain sets in, the slope steepens. For most materials the spectrum narrows at the same point.</p>
+      <p>Here the ASE line sits so far from the spontaneous peak that the spectrum first <em>widens</em> when ASE appears and only narrows when ASE takes over. The threshold is taken where both the slope and the FWHM change clearly: 64.2 μJ cm<sup>−2</sup> for the bare MAPbBr<sub>3</sub> film.</p>
+      <p class="note">Schematic, after Fig. 1c: only the threshold and the 24 nm starting width are from the paper.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · THE SURPRISE</span><h2>PTAA helps, Bphen hurts</h2>
+      <p>Neither layer absorbs in the emission range, and neither changes the perovskite underneath: SEM images, X-ray diffraction, absorption spectra and the emission peak position stay the same. The ASE does change. With PTAA on top, the threshold falls by 22.9%, from 64.2 to 49.5 μJ cm<sup>−2</sup>, and the ASE intensity rises by 18.8%.</p>
+      <p>With Bphen the opposite happens: the threshold rises by 14.6%, to 73.6 μJ cm<sup>−2</sup>, and the ASE intensity drops by 16.2%. A transport layer is clearly not a neutral passenger.</p>
+      <p class="note">All values from the text (Fig. 1e,f; Bphen in Fig. S4).</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · NOT PASSIVATION</span><h2>Less glow, yet a lower threshold</h2>
+      <p>A familiar explanation would be defect passivation: a coating heals surface traps, so the film glows longer and brighter. Below threshold (36.0 μJ cm<sup>−2</sup>, only spontaneous emission) PTAA does the opposite. The emission gets weaker and its lifetime shortens from 7.8 to 6.4 ns, because holes move from the perovskite into PTAA, which the band alignment allows.</p>
+      <p>Bphen makes the film look brighter but leaves the lifetime almost unchanged at 7.7 ns. Electrons are not extracted; the layer, with a refractive index between perovskite and air, only lets more light out of the film. So the sample with the lowest spontaneous efficiency has the lowest ASE threshold, which passivation cannot explain.</p>
+      <p class="note">Lifetimes from the text (Fig. 2b, Fig. S5). The decays are drawn as single exponentials with these lifetimes (schematic).</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · NOT OUT-COUPLING EITHER</span><h2>Above threshold, PTAA speeds up stimulated emission</h2>
+      <p>Could PTAA simply change how light leaves the film? PTAA and Bphen have similar refractive indices (about 1.7), so they should change the out-coupling in a similar way, yet their effects on ASE have opposite signs.</p>
+      <p>Far above threshold (705.4 μJ cm<sup>−2</sup>) the ASE from the PTAA-coated film is much stronger, and the emission lifetime at the ASE peak drops from 6.7 to 1.2 ns. Transient absorption agrees: the photobleach at 527 nm, which tracks the carrier density, decays much faster with PTAA. The carriers are used up quickly by stimulated emission, a sign of larger gain. With Bphen the decay is the same as in the bare film.</p>
+      <p class="note">Values from the text (Fig. 2c,d; Fig. 3e). Decays drawn as single exponentials with these lifetimes (schematic).</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · HOT CARRIERS</span><h2>Holes that leave help the rest cool down</h2>
+      <p>A 343 nm photon carries far more energy than the band gap. The electron and hole it creates start out "hot", high above the band edges, and cool down by handing the excess energy to lattice vibrations. In transient absorption, cooling shows up as a red shift of the bleach peak with time.</p>
+      <p>Exponential fits give a cooling time of 0.49 ps for the bare film and the Bphen film, and 0.42 ps with PTAA. Hole cooling in MAPbBr<sub>3</sub> is known to be slow: hot holes keep the lattice vibrations excited, a hot-phonon bottleneck. Extracting holes into PTAA eases that bottleneck, so the carriers cool faster.</p>
+      <p class="note">Cooling times from the text (Fig. 3f, Fig. S6). Band diagram schematic; the energy levels themselves are in Fig. S1, not reproduced here.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · GAIN BALANCE</span><h2>Every loss raises the bar</h2>
+      <p>The authors write the net gain as G = G<sub>0</sub> − L. G<sub>0</sub> grows with the number of excited carriers; L collects every process that competes with stimulated emission. Threshold is reached at G = 0. A larger loss L therefore needs more carriers, and so a higher pump fluence, before gain appears.</p>
+      <p>Hot holes add to L. Perovskites are ionic, so carriers made with high-energy photons form large polarons that distort the lattice and boost vibrations, which speeds up phonon-assisted Auger recombination, a loss that grows fast at high carrier density. The authors add a second effect: the film is slightly p-type, and excess holes disturb the coherent interaction between electron–hole pairs that lasing relies on. Removing holes with PTAA lowers both.</p>
+      <p class="note">Schematic, after the discussion and Fig. 4a,c: the lines show the logic, not computed values.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · THE CROSS-CHECK</span><h2>Fewer hot carriers, lower threshold</h2>
+      <p>If hot carriers are the problem, pumping with photons closer to the band gap should help even without PTAA. It does. For the bare film the threshold drops from 64.2 μJ cm<sup>−2</sup> at 343 nm to 25.7 μJ cm<sup>−2</sup> at 400 nm and 7.2 μJ cm<sup>−2</sup> at 500 nm.</p>
+      <p>At 508 nm, where few hot holes are made at all, the bare and PTAA-coated films need about the same pump power (≈20 μW): with little Auger loss left, hole extraction has little to fix. The PTAA film still has the shortest emission lifetime at other excitation wavelengths, so its hole extraction does not depend on the pump colour.</p>
+      <p class="note">Thresholds from the text (Fig. 4b; 508 nm in Fig. S8). Photon energies and the excess energy above the 538 nm emission peak (2.30 eV) are computed here from the wavelengths. Counted in photons, the threshold falls about 6-fold from 343 to 500 nm, not 9-fold, because a 500 nm photon carries less energy (also computed here).</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>What does a hot photon cost?</h2>
+  <p class="intro">A toy calculation, not a model from the paper. Each absorbed photon makes one electron–hole pair with an excess energy ΔE = hc/λ − 2.30 eV. In the toy, a pair survives its hot phase with probability 1 / (1 + k·ΔE·τ<sub>c</sub>/0.49 ps), where τ<sub>c</sub> is the cooling time and k a loss strength. The toy threshold is the fluence at which a fixed number of cooled pairs is reached. Two constants (k at its default, and the needed number of pairs) are chosen so that the curve passes through the paper's 343 nm and 500 nm points for the bare film; everything else is the toy's own behaviour. The paper's thresholds are shown as grey markers.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy threshold fluence versus pump wavelength, responding to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="ll"><span class="row"><span>Pump wavelength λ</span><output id="llv">343 nm</output></span><input id="ll" type="range" min="330" max="530" step="1" value="343"></label>
+      <label for="lt"><span class="row"><span>Toy cooling time τ<sub>c</sub></span><output id="ltv">0.49 ps</output></span><input id="lt" type="range" min="0.1" max="1.0" step="0.01" value="0.49"></label>
+      <label for="lk"><span class="row"><span>Toy loss strength k</span><output id="lkv">23.5</output></span><input id="lk" type="range" min="0" max="40" step="0.1" value="23.5"></label>
+      <div class="read"><div><b id="r0">–</b><span>photon energy hc/λ</span></div><div><b id="r1">–</b><span>excess energy ΔE</span></div><div><b id="r2">–</b><span>toy survival of the hot phase</span></div><div><b id="r3">–</b><span>toy threshold fluence</span></div></div>
+      <p class="note">Try this: at 343 nm, shorten the toy cooling time from 0.49 to 0.42 ps, the change PTAA makes in the paper. The toy threshold drops by roughly a seventh, a little less than the 22.9% measured. Then set k to zero: without hot-carrier loss, only the energy per photon is left, and the toy threshold falls far below every measured point.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1002/adma.202300922">Read the paper in Advanced Materials ↗</a>
+  <span class="note">Numbers quoted from the paper (main text, Figs. 1–4 and the Experimental Section; the Supporting Information was not consulted, its figures only as cited in the main text): pump 343 nm, 1 kHz, 290 fs; spontaneous peak 538 nm, FWHM 24 nm at 14.0 μJ cm<sup>−2</sup>; ASE peak ≈551 nm; ASE thresholds 64.2 (bare), 49.5 (PTAA, −22.9%) and 73.6 μJ cm<sup>−2</sup> (Bphen, +14.6%); ASE intensity +18.8% (PTAA) and −16.2% (Bphen); 36.0 μJ cm<sup>−2</sup> below threshold; PL lifetimes 7.8, 6.4 and 7.7 ns; refractive index ≈1.7 for PTAA and Bphen; 705.4 μJ cm<sup>−2</sup>; lifetimes at the ASE peak 6.7 and 1.2 ns; TA bleach at 527 nm; cooling times 0.49, 0.42 and 0.49 ps; thresholds 25.7 (400 nm) and 7.2 μJ cm<sup>−2</sup> (500 nm); ≈20 μW at 508 nm; transport layers 3.0 mg mL<sup>−1</sup> in chlorobenzene. Computed here: photon energies, excess energies above 2.30 eV (the 538 nm peak used as a stand-in for the gap) and threshold photon counts. Schematic or illustrative: the stack drawing, all spectra, curve and decay shapes, the band diagram, the gain-balance lines and the whole lab.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a',grey:'#8a8f98',white:'#f4f1e6'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+// wavelength (nm) -> display colour
+function wl(n){if(n<380)return'#9a8cff';const s=[[380,'#7b5cff'],[440,'#4d6bff'],[480,'#2fb8f0'],[510,'#3fe08a'],[560,'#c8e84a'],[590,'#ffc23c'],[620,'#ff8a3c'],[700,'#ff4d4d'],[800,'#c03030']];for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return'#c03030'}
+const G1=(x,m,s)=>Math.exp(-.5*((x-m)/s)**2);
+const L10=Math.log10,fmtE=(v,d=1)=>{const e=Math.floor(L10(v)),m=v/10**e;return (m.toFixed(d)=='1.0'||m.toFixed(d)=='1'?'':m.toFixed(d)+'×')+'10'+sup(e)};
+function sup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||(c=='-'?'⁻':c)).join('')}
+
+// story canvas
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={'hole transport':'HTL','electron transport':'ETL','epoxy + cover glass':'encapsulation','pump through the glass':'','same n, opposite effect':'same n','femtosecond pump, 343 nm':'pump 343 nm','emission (normalised)':'PL (norm.)','wavelength (nm)':'λ (nm)','spontaneous 538 nm':'538 nm','ASE ≈551 nm':'551 nm','integrated emission (log)':'emission (log)','pump fluence (μJ cm⁻², log)':'fluence (log)','FWHM (nm)':'FWHM','threshold 64.2':'64.2','ASE threshold (μJ cm⁻²)':'threshold (μJ cm⁻²)','ASE intensity (bare = 100%)':'ASE intensity','PL (log), 36.0 μJ cm⁻²':'PL (log)','PL at ASE peak (log), 705.4 μJ cm⁻²':'PL at ASE peak (log)','time (ns)':'t (ns)','hot hole':'hot h⁺','band edge':'edge','conduction band':'CB','valence band':'VB','cooling time (ps)':'τ cool (ps)','carrier density (schematic)':'carriers','gain G₀ (grows with carriers)':'G₀','loss L, slow cooling':'L slow','loss L, fast cooling':'L fast','threshold: G = 0':'G = 0','bare-film threshold (μJ cm⁻²)':'threshold (μJ cm⁻²)','excess above 2.30 eV':'excess','photon energy':'hν','perovskite':'MAPbBr₃'};
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+const GREEN=wl(545),VIO=wl(343);
+const S={b:['bare',C.ink],p:['PTAA',C.amber],n:['Bphen',C.blue]};
+// schematic spectra after Fig. 1b: spontaneous 538 nm (FWHM 24 nm) + ASE ~551 nm (width schematic)
+const spont=l=>G1(l,538,24/2.355),ase=l=>G1(l,551,1.7);
+const spec=w=>{const f=l=>(1-w)*spont(l)+w*3*ase(l);let m=0;for(let l=500;l<=580;l+=.25)m=Math.max(m,f(l));return l=>f(l)/m};
+const SP=[spec(0),spec(.12),spec(.75)];
+// schematic L-L curve after Fig. 1c, threshold 64.2
+const LL=F=>F<64.2?F:64.2*(F/64.2)**3.2/(1+((F/64.2)**2.2-1)*.02);
+const FW=F=>F<64.2?24:F<120?24+14*Math.sin(Math.PI*Math.log(F/64.2)/Math.log(120/64.2)*.5):Math.max(5,38-33*ss(Math.log(F/120)/Math.log(3)));
+
+const SC=[
+ // 0 stacks (schematic)
+ (t,a)=>{const D=[['bare MAPbBr₃',null,null],['+ PTAA','PTAA','hole transport'],['+ Bphen','Bphen','electron transport']],k=Math.floor(t/2)%3;
+  D.forEach(([n,tl,role],i)=>{const x=40+i*186,w=150,on=i==k,yb=330;
+   g.text(n,x+w/2,70,'center',(on?1:.7)*a,13,i==1?C.amber:i==2?C.blue:C.ink);if(role)g.text(role,x+w/2,88,'center',.6*a,10.5);
+   g.rect(x,yb-150,w,30,'#9aa6b5',.22*a);g.text('epoxy + cover glass',x+w/2,yb-131,'center',.55*a,10);
+   if(tl){g.rect(x,yb-118,w,14,i==1?C.amber:C.blue,(on?.7:.4)*a,on?8:0);g.text(tl,x+w/2,yb-107,'center',.95*a,10,'#0b0e14')}
+   g.rect(x,yb-102,w,46,GREEN,(on?.55:.3)*a,on?14:0);g.text('perovskite',x+w/2,yb-75,'center',.95*a,11,'#0b0e14');
+   g.rect(x,yb-54,w,54,'#9aa6b5',.3*a);g.text('glass',x+w/2,yb-22,'center',.7*a,11);
+   if(on)g.rr(x-5,yb-156,w+10,162,4,C.green,.55*a,0);
+   for(let q=0;q<3;q++){const p=(t*.55+q/3)%1;g.wave(x+30+q*45,yb+60-p*70,-Math.PI/2,16,VIO,a*(1-p))}
+   if(on)g.halo(x+w/2,yb-79,60+8*Math.sin(t*3),GREEN,.35*a)});
+  g.text('femtosecond pump, 343 nm',300,416,'center',.75*a,11,'#b9a8ff');g.text('pump through the glass',300,398,'center',.55*a,10);
+  g.text('schematic, not to scale',590,444,'right',.4*a,11)},
+ // 1 spectra (schematic after Fig. 1b)
+ (t,a)=>{const x0=90,x1=560,X=l=>x0+(l-505)/(580-505)*(x1-x0),k=Math.floor(t/1.7)%3,L=['low fluence: 14.0 μJ cm⁻²','near threshold','far above threshold'];
+  g.text('emission (normalised)',x0-60,34,'left',.65*a,11);
+  SP.forEach((f,i)=>{const yb=150+i*110,Y=v=>yb-v*80,on=i==k;g.line([[x0,yb],[x1,yb]],C.ink,1,0,.25*a);
+   for(let l=505;l<580;l+=1)g.rect(X(l),Y(f(l)),X(l+1)-X(l)+.4,yb-Y(f(l)),wl(l),(on?.35:.15)*a);
+   g.fn(x=>Y(f(505+(x-x0)/(x1-x0)*75)),x0,x1,on?'#ffffff':C.ink,on?2.2:1.4,on?8:0,(on?1:.55)*a,null,300);
+   g.text(L[i],x0-70,yb-60,'left',(on?.95:.6)*a,11,on?C.green:C.ink)});
+  g.line([[X(538),64],[X(538),370]],C.ink,1,0,.3*a,[3,4]);g.line([[X(551),64],[X(551),370]],C.ink,1,0,.3*a,[3,4]);
+  g.text('spontaneous 538 nm',X(538)-6,58,'right',.75*a,10.5);g.text('ASE ≈551 nm',X(551)+6,58,'left',.85*a,10.5,C.green);
+  [510,530,550,570].forEach(l=>g.text(l,X(l),390,'center',.5*a,10));g.text('wavelength (nm)',x1,408,'right',.6*a,11);
+  g.text('schematic, after Fig. 1b',590,444,'right',.4*a,11)},
+ // 2 threshold (schematic after Fig. 1c)
+ (t,a)=>{const x0=80,x1=520,yb=370,yt=70,lf=F=>x0+(Math.log10(F)-1)/2*(x1-x0),Fm=F=>Math.log10(LL(F)),Yl=v=>yb-(v-1)/(Fm(1000)-1)*(yb-yt),Yw=w=>yb-w/40*(yb-yt);
+  g.axes(x0,yb,x1,yt);g.line([[x1,yt],[x1,yb]],C.ink,1,0,.3*a);
+  [10,100,1000].forEach(F=>g.text(F,lf(F),yb+18,'center',.5*a,10));g.text('pump fluence (μJ cm⁻², log)',x1,yb+38,'right',.6*a,11);
+  g.text('integrated emission (log)',x0-40,54,'left',.7*a,11,GREEN);g.text('FWHM (nm)',x1+6,54,'left',.7*a,11,C.amber);
+  [0,10,20,30,40].forEach(w=>g.text(w,x1+8,Yw(w)+4,'left',.5*a,10,C.amber));
+  g.line([[lf(64.2),yt],[lf(64.2),yb]],C.ink,1.2,0,.5*a,[4,4]);g.text('threshold 64.2',lf(64.2)+6,yt+12,'left',.9*a,11);
+  g.fn(x=>Yl(Fm(10**(1+(x-x0)/(x1-x0)*2))),x0,x1,GREEN,2.6,10,a,null,300);
+  g.fn(x=>Yw(FW(10**(1+(x-x0)/(x1-x0)*2))),x0,x1,C.amber,2,6,.9*a,null,300);
+  const F=10**(1+((t*.18)%1)*2);g.dot(lf(F),Yl(Fm(F)),5,'#fff',a,12);g.dot(lf(F),Yw(FW(F)),4,C.amber,a,8);
+  g.text('slope steepens',lf(330)+8,Yl(Fm(330))+22,'left',.75*a,10.5,GREEN);g.text('widens, then narrows',lf(64.2)-8,Yw(31),'right',.75*a,10.5,C.amber);
+  g.text('schematic, after Fig. 1c',590,444,'right',.4*a,11)},
+ // 3 thresholds and ASE intensity (text)
+ (t,a)=>{const B=[['b',64.2,100],['p',49.5,118.8],['n',73.6,83.8]],k=Math.floor(t/1.8)%3;
+  const pan=(x0,title,idx,max,lab)=>{const yb=350,Y=v=>yb-v/max*230;g.text(title,x0-20,80,'left',.7*a,11);g.line([[x0,yb],[x0+230,yb]],C.ink,1,0,.3*a);
+   B.forEach((b,i)=>{const[nm,col]=S[b[0]],v=b[idx],x=x0+14+i*74,on=i==k;g.rect(x,Y(v),50,yb-Y(v),col,(on?.85:.45)*a,on?10:0);g.text(lab(v,i),x+25,Y(v)-8,'center',(on?1:.8)*a,11,col);g.text(nm,x+25,yb+20,'center',(on?1:.7)*a,11.5,col)})};
+  pan(70,'ASE threshold (μJ cm⁻²)',1,80,(v,i)=>v.toFixed(1));pan(350,'ASE intensity (bare = 100%)',2,130,(v,i)=>i?(i==1?'+18.8%':'−16.2%'):'100%');
+  const v=B[k][1];for(let j=0;j<6;j++){const p=(t*.6+j/6)%1,y=350-p*(v/80*230);g.wave(98+k*74+((j*11)%30),y,-Math.PI/2,12,VIO,a*(1-p)*.8)}
+  g.text('343 nm pump',300,400,'center',.6*a,11,'#b9a8ff');g.text('values from the text',590,444,'right',.4*a,11)},
+ // 4 low-fluence decays
+ (t,a)=>{const x0=80,x1=560,yb=360,yt=90,X=tt=>x0+tt/30*(x1-x0),Y=v=>yt+(-Math.log10(v))/3*(yb-yt),D=[['b',7.8,1],['p',6.4,.82],['n',7.7,1.12]];
+  g.axes(x0,yb,x1,yt);g.text('PL (log), 36.0 μJ cm⁻²',x0-50,70,'left',.7*a,11);[0,10,20,30].forEach(v=>g.text(v,X(v),yb+18,'center',.5*a,10));g.text('time (ns)',x1,yb+36,'right',.6*a,11);
+  ['1','0.1','0.01','0.001'].forEach((s,i)=>g.text(s,x0-8,Y(10**-i)+4,'right',.5*a,10));
+  const k=Math.floor(t/1.8)%3;D.forEach(([key,tau,amp],i)=>{const[nm,col]=S[key],on=i==k,A=amp/1.12;g.fn(x=>Y(Math.max(.001,A*Math.exp(-((x-x0)/(x1-x0)*30)/tau))),x0,x1,col,on?2.6:1.6,on?10:0,(on?1:.6)*a,key=='p'?null:key=='n'?[6,4]:null);
+   g.text(nm+': τ = '+tau+' ns',x1-150,110+i*20,'left',(on?1:.7)*a,11.5,col)});
+  const tt=(t*4)%30,[,tau,amp]=D[k];g.dot(X(tt),Y(Math.max(.001,amp/1.12*Math.exp(-tt/tau))),4.5,'#fff',a,10);
+  g.text('PTAA: dimmer, shorter → holes extracted',x0+10,yb-14,'left',.8*a,10.5,C.amber);g.text('Bphen: brighter, same τ → more light out',x0+10,yb-32,'left',.8*a,10.5,C.blue);
+  g.text('lifetimes from the text · shapes schematic',590,444,'right',.4*a,11)},
+ // 5 high-fluence decays + index
+ (t,a)=>{const x0=80,x1=380,yb=360,yt=90,X=tt=>x0+tt/8*(x1-x0),Y=v=>yt+(-Math.log10(v))/3*(yb-yt),D=[['b',6.7],['p',1.2]];
+  g.axes(x0,yb,x1,yt);g.text('PL at ASE peak (log), 705.4 μJ cm⁻²',x0-50,70,'left',.7*a,11);[0,2,4,6,8].forEach(v=>g.text(v,X(v),yb+18,'center',.5*a,10));g.text('time (ns)',x1,yb+36,'right',.6*a,11);
+  ['1','0.1','0.01','0.001'].forEach((s,i)=>g.text(s,x0-8,Y(10**-i)+4,'right',.5*a,10));
+  D.forEach(([key,tau],i)=>{const[nm,col]=S[key];g.fn(x=>Y(Math.max(.001,Math.exp(-((x-x0)/(x1-x0)*8)/tau))),x0,x1,col,2.4,8,a);g.text(nm+': '+tau+' ns',X(i?2.2:5.4),Y(Math.exp(-(i?2.2:5.4)/tau))-12,'left',.9*a,11.5,col)});
+  const tt=(t*1.4)%8;D.forEach(([key,tau])=>g.dot(X(tt),Y(Math.max(.001,Math.exp(-tt/tau))),4,S[key][1],a,10));
+  // refractive-index ladder (only 1.7 from the paper)
+  const lx=440;g.text('refractive index',lx,96,'left',.7*a,11);[['perovskite','higher',GREEN,140],['PTAA ≈ Bphen','≈ 1.7',C.amber,230],['air','1',C.ink,320]].forEach(([n,v,col,y])=>{g.rect(lx,y-14,120,28,col,.3*a);g.text(n,lx+60,y+4,'center',.9*a,10.5);g.text(v,lx+60,y+30,'center',.7*a,10.5,col)});
+  g.text('same n, opposite effect',lx+60,370,'center',.75*a,10.5);
+  g.text('lifetimes from the text · shapes schematic',590,444,'right',.4*a,11)},
+ // 6 hot-hole cooling, band diagram (schematic) + cooling times
+ (t,a)=>{const x0=60,x1=300,cb=110,vb=290;
+  g.rect(x0,60,x1-x0,cb-60,C.blue,.12*a);g.line([[x0,cb],[x1,cb]],C.blue,2.4,8,a);g.text('conduction band',x0+4,78,'left',.6*a,10.5,C.blue);
+  g.rect(x0,vb,x1-x0,400-vb,C.red,.12*a);g.line([[x0,vb],[x1,vb]],C.red,2.4,8,a);g.text('valence band',x0+4,392,'left',.6*a,10.5,C.red);
+  g.text('perovskite',(x0+x1)/2,48,'center',.8*a,12,GREEN);
+  // PTAA HOMO slightly above the VB edge (schematic): holes move up into it
+  const px=330,ph=274;g.line([[px,ph],[px+70,ph]],C.amber,2.6,8,a);g.text('PTAA',px+35,ph-12,'center',.9*a,11,C.amber);
+  for(let q=0;q<4;q++){const p=(t*.45+q/4)%1,xh=x0+40+q*52,dep=vb+80*(1-ss(Math.min(1,p/.7)));
+   if(p<.7){g.ring(xh,dep,5,C.red,1.8,a,8);if(q==1)g.text('hot hole',xh+10,dep+4,'left',.6*a,10)}else{const r=(p-.7)/.3;g.ring(xh+r*(px+20+q*12-xh),vb-4-r*(vb-ph-6),5,C.amber,1.8,a*(1-r*.3),8)}
+   g.dot(xh,cb-6-Math.sin(t*2+q)*2,4,C.blue,a,8)}
+  g.arrow(x1-10,360,x1-10,vb+10,C.ink,1.4,.5*a);g.text('cooling',x1-16,350,'right',.6*a,10);
+  // cooling-time bars
+  const B=[['b',.49],['p',.42],['n',.49]],X0=420,yb=380,Y=v=>yb-v/.6*220;g.text('cooling time (ps)',X0-10,130,'left',.7*a,11);g.line([[X0,yb],[X0+170,yb]],C.ink,1,0,.3*a);
+  B.forEach(([key,v],i)=>{const[nm,col]=S[key],x=X0+8+i*56;g.rect(x,Y(v),40,yb-Y(v),col,.7*a,key=='p'?10:0);g.text(v.toFixed(2),x+20,Y(v)-8,'center',.9*a,11,col);g.text(nm,x+20,yb+18,'center',.8*a,10.5,col)});
+  g.text('schematic band diagram · times from the text',590,444,'right',.4*a,11)},
+ // 7 gain balance G = G0 - L (schematic)
+ (t,a)=>{const x0=80,x1=540,yb=360,yt=80,X=n=>x0+n*(x1-x0),Y=v=>yb-v*(yb-yt),Ls=.62,Lf=.46,G0=n=>.08+.9*n;
+  g.axes(x0,yb,x1,yt);g.text('carrier density (schematic)',x1,yb+22,'right',.6*a,11);
+  g.fn(x=>Y(G0((x-x0)/(x1-x0))),x0,x1,GREEN,2.6,10,a);g.text('gain G₀ (grows with carriers)',X(.62),Y(G0(.62))-18,'right',.85*a,11,GREEN);
+  g.line([[x0,Y(Ls)],[x1,Y(Ls)]],C.red,2,6,.9*a);g.text('loss L, slow cooling',x1,Y(Ls)-8,'right',.85*a,11,C.red);
+  g.line([[x0,Y(Lf)],[x1,Y(Lf)]],C.amber,2,6,.9*a);g.text('loss L, fast cooling',x1,Y(Lf)+18,'right',.85*a,11,C.amber);
+  const nS=(Ls-.08)/.9,nF=(Lf-.08)/.9;[[nS,C.red],[nF,C.amber]].forEach(([n,col])=>{g.line([[X(n),Y(G0(n))],[X(n),yb]],col,1.2,0,.6*a,[4,4]);g.dot(X(n),Y(G0(n)),5,col,a,10)});
+  g.text('threshold: G = 0',X(nF)-8,yb-10,'right',.8*a,11);g.arrow(X(nS)-4,yb-30,X(nF)+6,yb-30,C.ink,1.6,.7*a);
+  const n=((t*.2)%1),G=G0(n)-Ls;g.dot(X(n),Y(G0(n)),4,'#fff',a,10);g.text('G = G₀ − L',x0+14,yt+10,'left',.9*a,13);
+  g.text(G>0?'net gain: ASE':'no net gain yet',x0+14,yt+32,'left',.75*a,11,G>0?GREEN:C.ink);
+  g.text('schematic, after the discussion of Fig. 4',590,444,'right',.4*a,11)},
+ // 8 pump wavelength (text) with computed photon energies
+ (t,a)=>{const B=[[343,64.2],[400,25.7],[500,7.2]],x0=90,yb=350,Y=v=>yb-v/70*230,k=Math.floor(t/1.8)%3;
+  g.text('bare-film threshold (μJ cm⁻²)',x0-30,80,'left',.7*a,11);g.line([[x0,yb],[x0+230,yb]],C.ink,1,0,.3*a);
+  B.forEach(([l,v],i)=>{const x=x0+14+i*74,on=i==k,col=wl(l);g.rect(x,Y(v),50,yb-Y(v),col,(on?.85:.45)*a,on?10:0);g.text(v.toFixed(1),x+25,Y(v)-8,'center',(on?1:.8)*a,11,col);g.text(l+' nm',x+25,yb+20,'center',(on?1:.7)*a,11,col)});
+  // photon-energy ladder (computed)
+  const X0=380,y0=360,E=e=>y0-(e-2)/1.8*270;g.text('photon energy',X0,80,'left',.7*a,11);
+  [2,2.5,3,3.5].forEach(e=>g.text(e.toFixed(1)+' eV',X0+200,E(e)+4,'right',.45*a,10));
+  g.line([[X0,E(2.30)],[X0+150,E(2.30)]],GREEN,2.4,8,a);g.text('2.30 eV (538 nm)',X0+150,E(2.30)+18,'right',.75*a,10.5,GREEN);
+  B.forEach(([l],i)=>{const e=1239.84/l,x=X0+18+i*46,on=i==k,col=wl(l);g.rect(x,E(e),26,E(2.30)-E(e),col,(on?.75:.35)*a,on?8:0);g.text(e.toFixed(2),x+13,E(e)-8,'center',(on?1:.7)*a,10.5,col)});
+  g.text('excess above 2.30 eV',X0+75,E(2.30)+38,'center',.7*a,10.5);
+  const[l,v]=B[k];for(let j=0;j<5;j++){const p=(t*.7+j/5)%1;g.wave(x0+18+k*74+((j*9)%34),yb-p*(yb-Y(v)),-Math.PI/2,12,wl(l),a*(1-p))}
+  g.text('thresholds from the text · energies computed',590,444,'right',.4*a,11)},
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+// pause the story canvas while it is off-screen
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+
+// ---- lab: toy hot-carrier cost of the threshold (not the paper's model) ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id),Eg=2.30,hv=l=>1239.84/l,dE=l=>Math.max(0,hv(l)-Eg);
+// calibrate k0 and A on the bare film at tau = 0.49 ps: F(343) = 64.2, F(500) = 7.2 (uJ cm^-2)
+const r=(64.2/7.2)*(hv(500)/hv(343)),K0=(r-1)/(dE(343)-r*dE(500)),A=7.2/(hv(500)*(1+K0*dE(500)));
+const surv=(l,tau,k)=>1/(1+k*dE(l)*tau/.49),Fth=(l,tau,k)=>A*hv(l)/surv(l,tau,k);
+$('lk').value=K0.toFixed(1);
+const PAPER=[[343,64.2,'bare 343'],[400,25.7,'bare 400'],[500,7.2,'bare 500'],[343,49.5,'PTAA 343']];
+function lab(){const l=+$('ll').value,tau=+$('lt').value,k=+$('lk').value,F=Fth(l,tau,k);
+  $('llv').value=l+' nm';$('ltv').value=tau.toFixed(2)+' ps';$('lkv').value=k.toFixed(1);
+  $('r0').textContent=hv(l).toFixed(2)+' eV';$('r1').textContent=dE(l).toFixed(2)+' eV';$('r2').textContent=Math.round(surv(l,tau,k)*100)+'%';$('r3').textContent=F.toFixed(1)+' μJ cm⁻²';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const x0=80,x1=570,yb=370,yt=60,X=v=>x0+(v-330)/200*(x1-x0),Y=v=>yb-(Math.log10(v)-0)/2.3*(yb-yt);
+  for(let v=330;v<530;v+=4)lg.rect(X(v),yb+1,X(v+4)-X(v)+.5,4,wl(v),.55);
+  lg.axes(x0,yb,x1,yt);[350,400,450,500].forEach(v=>lg.text(v,X(v),yb+22,'center',.55,11));lg.text('pump wavelength (nm)',x1,yb+42,'right',.65,12);
+  [1,3,10,30,100].forEach(v=>{lg.text(v,x0-8,Y(v)+4,'right',.55,11);lg.line([[x0,Y(v)],[x1,Y(v)]],C.ink,1,0,.08,[2,4])});lg.text('toy threshold (μJ cm⁻², log)',x0-60,44,'left',.65,12);
+  lg.fn(px=>Y(Math.min(190,Fth(330+(px-x0)/(x1-x0)*200,tau,k))),x0,x1,C.amber,2.4,8,1);
+  lg.fn(px=>Y(Math.min(190,Fth(330+(px-x0)/(x1-x0)*200,.49,K0))),x0,x1,C.ink,1.2,0,.35,[4,4]);
+  PAPER.forEach(([pl,pv,n],i)=>{lg.ring(X(pl),Y(pv),6,C.grey,2,.95);lg.text(n+': '+pv,X(pl)+(i==1?-6:10),Y(pv)+(i==3?18:i==1?24:-8),'left',.8,11,C.grey)});
+  lg.halo(X(l),Y(F),24,'#ffffff',.4);lg.dot(X(l),Y(F),6,'#ffffff',1,12);
+  lg.text('dashed: toy at its calibration (0.49 ps)',x1,yt+6,'right',.5,11);
+  lg.text('toy model · grey rings: paper',590,444,'right',.45,11)}
+['ll','lt','lk'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>
