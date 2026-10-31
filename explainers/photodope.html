@@ -1,0 +1,347 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Small counterions make light-driven doping work better | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Small FSI⁻ anions keep the photocatalyst from stacking. PBTTT conductivity rises to 970 S/cm."><link rel="canonical" href="https://huotianzhang.github.io/explainers/photodope.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="Small counterions make light-driven doping work better"><meta property="og:description" content="Small FSI⁻ anions keep the photocatalyst from stacking. PBTTT conductivity rises to 970 S/cm."><meta property="og:url" content="https://huotianzhang.github.io/explainers/photodope.html"><meta property="og:image" content="https://huotianzhang.github.io/og/photodope.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Small counterions make light-driven doping work better", "description": "Small FSI⁻ anions keep the photocatalyst from stacking. PBTTT conductivity rises to 970 S/cm.", "url": "https://huotianzhang.github.io/explainers/photodope.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1002/adma.72947", "name": "Counterion-controlled photocatalytic doping of organic semiconductors."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 19px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1002/adma.72947">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Advanced Materials 2026 · Paper</span>
+  <h1>Small counterions make light-driven doping work better</h1>
+  <p class="dek">Photocatalytic doping uses a dye that turns into a strong oxidant only when it absorbs light. It pulls electrons out of a polymer film and hands them on to oxygen from the air. A simple salt provides the anions that sit next to the new positive charges. This study shows that the salt does more than that. Small anions keep the dye molecules from stacking in solution, so more of them stay active. As a result, PBTTT reaches 970 S cm⁻¹ with the smallest anion, compared with 187 S cm⁻¹ with the largest.</p>
+  <p class="cite">T. Liu, Z. Liu, I. Sahalianov, Q. He, S. Y. Jeong, H. Zhang, Q. Li, C.-Y. Yang, J. Ji, L. Bynens, W. Maes, F. Gao, H. Y. Woo, M. Heeney, G. Baryshnikov, M. Fahlman &amp; S. Fabiano*. <i>Counterion-controlled photocatalytic doping of organic semiconductors.</i> Advanced Materials 38, e72947 (2026). <a href="https://doi.org/10.1002/adma.72947">doi:10.1002/adma.72947</a> <span class="note">(* corresponding author · open access, CC BY 4.0)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE CYCLE</span><h2>A dye that oxidizes only in the light</h2>
+      <p>Doping an organic semiconductor means adding or removing electrons. Normally that takes a strong molecular dopant, and strong dopants tend to be reactive and unstable. Photocatalytic doping avoids them. A thin polymer film is dipped into an acetonitrile solution of a photocatalyst and lit with blue light (455 nm, 50 mW cm⁻²).</p>
+      <p>The photocatalyst here is 10-methylacridinium (Acr-Me<sup>+</sup>). It is harmless in the dark. Its excited state, Acr-Me<sup>+</sup>*, takes an electron from the polymer PBTTT, which leaves a positive polaron on the chain. Oxygen from the air then takes the electron back, so the catalyst returns to its starting state. Only the oxygen and the salt are used up. The Li<sup>+</sup> salt supplies the anions that move into the film to balance the polarons' charge.</p>
+      <p class="note">Schematic, after Fig. 1a. The film is ~30 nm thick; the solution holds 10 mM Acr-Me⁺ and 100 mM Li⁺ salt (Methods).</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · NO SALT, NO DOPING</span><h2>The counterion is not optional</h2>
+      <p>Without any added salt the doped PBTTT film reaches only 1.31 ± 0.23 S cm⁻¹. With LiTFSI, the salt used in the group's earlier work, it reaches 659 ± 188 S cm⁻¹, more than two orders of magnitude higher.</p>
+      <p>A polaron left on its own is unstable. It needs a negative ion close by, and the only anions that can enter the film come from the salt. Up to now the salt was treated as passive, a supply of counterions that does not change how fast the electron transfer runs.</p>
+      <p class="note">Values from the text (Fig. 1c, Fig. S1). Log scale.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · SIZE MATTERS</span><h2>The smaller the anion, the higher the conductivity</h2>
+      <p>The authors tested four lithium salts of the same family of imide anions. Their side groups grow from F (FSI<sup>−</sup>) through CF<sub>3</sub> (TFSI<sup>−</sup>) and C<sub>2</sub>F<sub>5</sub> (PFSI<sup>−</sup>) to C<sub>4</sub>F<sub>9</sub> (NFSI<sup>−</sup>). Conductivity falls as the anion grows: 970 ± 107 S cm⁻¹ with FSI<sup>−</sup>, 659 ± 188 with TFSI<sup>−</sup> and 187 ± 40 with NFSI<sup>−</sup>.</p>
+      <p>The trend is the same in thin and thick films, so it is not about how deep ions can diffuse. It also holds for other acridinium catalysts and for the glycolated polymer PgBTTT, which reaches 2005 ± 160 S cm⁻¹ with FSI<sup>−</sup>. Other doping methods, such as ion-exchange doping, usually work best with <em>large</em> counterions. That opposite trend hints at a different mechanism.</p>
+      <p class="note">Values from the text (Fig. 1c–e, Fig. S6). The PFSI⁻ value is in Table S1 (not consulted) and is not drawn. Anion drawings are schematic.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · WATCHING IT HAPPEN</span><h2>The neutral band fades, the polaron band grows</h2>
+      <p>Absorption spectra track the doping directly. Neutral PBTTT absorbs at 550 nm. Polarons absorb in the infrared, monitored here at 1600 nm. With FSI<sup>−</sup> the 550 nm peak bleaches fast and the infrared band rises strongly within the first 5 minutes of light. After 10 minutes the neutral peak is almost gone, so the film is fully doped.</p>
+      <p>With NFSI<sup>−</sup> the bleaching is much slower, and a residual neutral peak is still there after 15 minutes. Conductivity rises fastest with FSI<sup>−</sup> over the same first 5 minutes.</p>
+      <p class="note">Schematic, after Fig. 2a,b: band shapes and time courses are drawn, not digitised.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · COUNTING CHARGES</span><h2>Three methods give the same order</h2>
+      <p>X-ray photoelectron spectroscopy separates the sulfur signal of neutral and oxidized thiophene units. The oxidized fraction, used as the doping level, is 41%, 37%, 33% and 16% for FSI<sup>−</sup>, TFSI<sup>−</sup>, PFSI<sup>−</sup> and NFSI<sup>−</sup>. The counterions' own O, N and F signals follow the same order, so fewer anions enter the film as they grow.</p>
+      <p>Electron paramagnetic resonance (EPR), which detects the unpaired spins of polarons, weakens from FSI<sup>−</sup> to NFSI<sup>−</sup>. Pristine PBTTT shows no signal. The Seebeck coefficient, which falls as carrier density rises, is lowest with FSI<sup>−</sup> (23.44 ± 0.80 µV K⁻¹) and highest with NFSI<sup>−</sup> (38.62 ± 0.45 µV K⁻¹).</p>
+      <p class="note">Values from the text (Fig. 2c–e, Fig. S11). Changing the assumed XPS peak shift by ±0.1 eV changes the doping levels by only ~3–4%.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · INSIDE THE FILM</span><h2>Anions settle among the side chains</h2>
+      <p>X-ray scattering (GIWAXS) shows that PBTTT stays edge-on after doping, with its backbones standing upright on the substrate. Doping widens the lamellar spacing, the distance between backbones set apart by the side chains, and slightly shrinks the π–π stacking distance. Both changes fit counterions sitting mainly among the side chains.</p>
+      <p>From FSI<sup>−</sup> to NFSI<sup>−</sup> the π–π distance grows from 3.57 to 3.67 Å, and the lamellar spacing falls from 27.92 to 26.62 Å. These changes track the lower doping level. Fewer anions inside means less swelling and looser π-stacking.</p>
+      <p class="note">End values from the text (Fig. 2f, Table S2). The drawing is schematic and not to scale.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · THE CATALYST STACKS</span><h2>Large anions leave the dye aggregated</h2>
+      <p>The key evidence comes from the solution. Dilute Acr-Me<sup>+</sup> (0.1 mM) absorbs at 358 and 416 nm, and the salts leave these peaks alone. A broad band between 500 and 700 nm, however, grows as the anion gets larger. It is stronger at 10 mM, the concentration used for doping. This band is charge-transfer absorption between stacked acridinium ions, a sign of aggregates. The 10 mM solution looks bright yellow with FSI<sup>−</sup> and dark green with NFSI<sup>−</sup>. The salts themselves are transparent and redox-inert.</p>
+      <p>Time-resolved fluorescence, measured in Huotian's part of the work, shows that the excited catalyst lives longer with small anions: 31.28 ns (FSI<sup>−</sup>), 26.99 ns (TFSI<sup>−</sup>), 24.08 ns (PFSI<sup>−</sup>) and 21.72 ns (NFSI<sup>−</sup>). A longer-lived excited state has more time to reach the polymer and take an electron.</p>
+      <p class="note">Peak positions and lifetimes from the text (Fig. 3a–c, Fig. S21). Spectra and vial colours are schematic, after Fig. 3b,c. The PL experiments were done by H. Zhang and F. Gao (author contributions).</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · WHY SMALL WINS</span><h2>FSI⁻ wedges the stacks apart</h2>
+      <p>Density functional theory (DFT) calculations reproduce the 450–700 nm band for stacks of two to four Acr-Me<sup>+</sup> ions. The bulkier anions (TFSI<sup>−</sup>, PFSI<sup>−</sup>, NFSI<sup>−</sup>) stabilise the stacks through van der Waals contacts. Only the small FSI<sup>−</sup> pushes into or next to a dimer, increases the spacing between the ions and weakens the aggregate band. The more FSI<sup>−</sup> ions, the larger the distortion.</p>
+      <p>Breaking up the stacks also changes the electron affinity (EA) of the catalyst. Measured EA levels are −4.35 eV for pristine (aggregated) Acr-Me<sup>+</sup>, −4.37 eV with NFSI<sup>−</sup> and −4.51 eV with FSI<sup>−</sup>, close to the monomer. DFT gives a ~0.1 eV increase with FSI<sup>−</sup>. The shift is modest, but the group earlier saw several-fold conductivity gains from 0.1–0.2 eV EA differences between catalysts. Together with more free catalyst molecules, it can explain the better doping.</p>
+      <p class="note">EA values from the text (Fig. S22); DFT results from Fig. 4 and the text. Molecule drawings are schematic.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · THE CONTROL</span><h2>Take the salt away, and the difference goes too</h2>
+      <p>If the anion acted only inside the film, its size should matter at any concentration. The test: use only 0.1 equivalents of LiFSI or LiNFSI instead of 10. At this low dose both solutions show a similar 500–700 nm aggregate band, and the doped films reach similar conductivities.</p>
+      <p>So the counterion acts already in the solution, where electrons are transferred, by controlling how many catalyst molecules are free and active. Counterion size is a new design handle for photocatalytic doping. The authors note that the microscopic details may differ for other acridinium catalysts.</p>
+      <p class="note">Schematic, after Fig. 3d,e. The paper reports the 0.1 eq conductivities as similar; numbers are not quoted in the text, so the bars are drawn equal.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>Aggregates versus active catalyst</h2>
+  <p class="intro">A toy, not a simulation from the paper. A fraction f of the catalyst is free (monomeric); stacked molecules are taken as inactive. A free excited catalyst either takes an electron from the polymer, with a toy rate k<sub>q</sub> = 0.1 ns⁻¹, or relaxes with its lifetime τ, so the share of excitations that dope is k<sub>q</sub>τ/(1 + k<sub>q</sub>τ). The film's oxidized fraction p then rises as p<sub>max</sub>(1 − e<sup>−rt</sup>). The rate r is proportional to f times that share, and the toy saturation p<sub>max</sub> is 0.5. The canvas shows the resulting toy absorption spectrum: neutral band ∝ 1 − p/p<sub>max</sub>, polaron band ∝ p. Presets set τ to the measured fluorescence lifetimes; f is a guess in both.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy absorption spectrum of a film being doped, responding to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="lf"><span class="row"><span>Toy free-catalyst fraction f</span><output id="lfv">0.80</output></span><input id="lf" type="range" min="0.05" max="1" step="0.01" value="0.8"></label>
+      <label for="lt"><span class="row"><span>Excited-state lifetime τ</span><output id="ltv">31.3 ns</output></span><input id="lt" type="range" min="5" max="40" step="0.1" value="31.3"></label>
+      <label for="lm"><span class="row"><span>Illumination time</span><output id="lmv">5 min</output></span><input id="lm" type="range" min="0" max="15" step="0.5" value="5"></label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px"><button id="pF" type="button" class="btn" style="border:0;cursor:pointer;font:inherit;font-weight:600">FSI⁻-like</button><button id="pN" type="button" class="btn" style="border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--warm)">NFSI⁻-like</button></div>
+      <div class="read"><div><b id="r0">–</b><span>share of excitations that dope (toy)</span></div><div><b id="r1">–</b><span>toy oxidized fraction p</span></div><div><b id="r2">–</b><span>neutral band left</span></div></div>
+      <p class="note">Try this: press “FSI⁻-like” (f = 0.8, τ = 31.28 ns) and “NFSI⁻-like” (f = 0.3, τ = 21.72 ns) at 5 min. The lifetime alone changes the doping share only a little. Most of the gap in the toy comes from f, the free catalyst. The paper does not measure f; it argues from the aggregate band, the lifetimes and the EA shift together. In the toy, every curve eventually saturates at the same p<sub>max</sub>. In the paper the NFSI⁻ film stays less doped (16% vs 41% by XPS), so the real process is not only slower.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1002/adma.72947">Read the paper in Advanced Materials ↗</a>
+  <span class="note">Numbers quoted from the paper (main text, Figs. 1–4 and Methods; the Supporting Information was not consulted, its figures only as cited in the main text): 455 nm LED, 50 mW cm⁻²; ~30 nm films; 10 mM Acr-Me⁺, 100 mM Li⁺ salt; conductivity 1.31 ± 0.23 (no salt), 659 ± 188 (TFSI⁻), 970 ± 107 (FSI⁻), 187 ± 40 (NFSI⁻) S cm⁻¹ for PBTTT, 2005 ± 160 S cm⁻¹ for PgBTTT with FSI⁻; IE 4.95 (PBTTT) vs 4.41 eV (PgBTTT); 550 nm neutral and 1600 nm polaron bands, 5/10/15 min; XPS doping level 41/37/33/16%; Seebeck 23.44 ± 0.80 and 38.62 ± 0.45 µV K⁻¹; π–π 3.57 → 3.67 Å, lamellar 27.92 → 26.62 Å; Acr-Me⁺ peaks 358 and 416 nm, aggregate band 500–700 nm, 0.1 and 10 mM; fluorescence lifetimes 31.28/26.99/24.08/21.72 ns; EA −4.35/−4.37/−4.51 eV, DFT ~0.1 eV; 0.1 eq control. Schematic: the catalytic cycle, every spectrum and time course, anion and molecule drawings, the film structure drawing, the vial colours and the 0.1 eq bars. The Try-it lab is a toy model (rate constant, f and p<sub>max</sub> are invented). Note: the conclusion of the paper gives 658 S cm⁻¹ for NFSI⁻; the results section and Fig. 1c give 187 ± 40 S cm⁻¹ for NFSI⁻ and 659 ± 188 S cm⁻¹ for TFSI⁻, which this page follows.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a',grey:'#8a8f98',white:'#f4f1e6'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+// wavelength (nm) -> display colour
+function wl(n){if(n<380)return'#9a8cff';const s=[[380,'#7b5cff'],[440,'#4d6bff'],[480,'#2fb8f0'],[510,'#3fe08a'],[560,'#c8e84a'],[590,'#ffc23c'],[620,'#ff8a3c'],[700,'#ff4d4d'],[800,'#c03030']];for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return'#c03030'}
+const G1=(x,m,s)=>Math.exp(-.5*((x-m)/s)**2);
+const L10=Math.log10,fmtE=(v,d=1)=>{const e=Math.floor(L10(v)),m=v/10**e;return (m.toFixed(d)=='1.0'||m.toFixed(d)=='1'?'':m.toFixed(d)+'×')+'10'+sup(e)};
+function sup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||(c=='-'?'⁻':c)).join('')}
+
+
+// story canvas
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"e⁻ from PBTTT":"e⁻","O₂ (air) takes the e⁻":"O₂ takes e⁻","PBTTT film (~30 nm)":"PBTTT film","polaron + counterion":"polaron + anion","Li⁺ X⁻ salt in acetonitrile":"Li⁺X⁻ salt","455 nm light":"455 nm","conductivity (S cm⁻¹, log)":"σ (S/cm, log)","> two orders of magnitude":">100×","conductivity (S cm⁻¹)":"σ (S/cm)","anion size →":"size →","PFSI⁻: Table S1":"PFSI⁻: SI","ion-exchange doping: large anions usually win":"ion exchange: large wins","absorbance (film, FSI⁻)":"abs. (FSI⁻)","wavelength (nm) →":"nm →","illumination time (min) →":"time (min) →","neutral 550 nm":"550 nm","polaron 1600 nm":"1600 nm","residual after 15 min":"residual","XPS doping level":"XPS doping","Seebeck coefficient (µV K⁻¹)":"Seebeck (µV/K)","EPR polaron signal":"EPR signal","edge-on lamellae (schematic)":"edge-on (schematic)","lamellar spacing":"lamellar","π–π stacking":"π–π","absorbance, 10 mM Acr-Me⁺ + 10 eq salt":"abs. 10 mM","aggregate band 500–700 nm":"aggregate band","fluorescence lifetime (ns)":"PL lifetime (ns)","energy level (eV)":"E (eV)","pristine":"pristine","bulky anion keeps the stack":"stack kept","FSI⁻ pushes the pair apart":"pair pushed apart","10 eq salt (standard)":"10 eq","0.1 eq salt (control)":"0.1 eq","aggregate band similar":"bands similar","conductivities similar":"σ similar","no salt":"no salt"};
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+const AN=[['FSI⁻',C.green,0],['TFSI⁻',C.blue,1],['PFSI⁻',C.violet,2],['NFSI⁻',C.amber,4]]; // name, colour, tail length (C atoms) per side
+// schematic imide anion: R-SO2-N(-)-SO2-R, tail of n CF2/CF3 units on each side
+function anion(x,y,n,col,a,s=1){const L=[];g.dot(x,y,5*s,col,a,6);
+  [-1,1].forEach(d=>{const sx=x+d*13*s;g.line([[x,y],[sx,y]],col,2*s,0,.8*a);g.dot(sx,y,4.5*s,C.ink,.75*a);let px=sx,py=y;
+    const m=Math.max(1,n);for(let i=0;i<m;i++){const nx=px+d*11*s,ny=py+(i%2?7:-7)*s;g.line([[px,py],[nx,ny]],col,1.8*s,0,.7*a);g.dot(nx,ny,n?3.4*s:2.8*s,n?C.grey:col,.9*a);px=nx;py=ny}})}
+// schematic acridinium: three fused hexagons, seen edge-on as a plate when side=true
+function acr(x,y,r,col,a,glow=0){for(let i=-1;i<=1;i++){const p=[];for(let j=0;j<=6;j++){const b=j/6*TAU+TAU/12;p.push([x+i*r*1.732+r*Math.cos(b),y+r*Math.sin(b)])}g.line(p,col,1.6,glow,a)}g.text('+',x,y+4,'center',.9*a,11,col)}
+function plate(x,y,w,col,a,glow=0){g.rr(x-w/2,y-4,w,8,4,col,a,.45,glow)}
+const A0=C.green,A3=C.amber;
+
+const SC=[
+ // 0 catalytic cycle (schematic after Fig. 1a)
+ (t,a)=>{const cx=185,cy=215,R=105,P={g:[cx,cy-R],x:[cx+R*.87,cy+R*.5],r:[cx-R*.87,cy+R*.5]};
+  ctx.save();ctx.globalAlpha=.25*a;ctx.strokeStyle=C.ink;ctx.lineWidth=1.4;ctx.setLineDash([3,5]);ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.stroke();ctx.restore();
+  const arcA=(a0,a1,col)=>{const p=[];for(let i=0;i<=30;i++){const b=a0+(a1-a0)*i/30;p.push([cx+R*Math.cos(b),cy+R*Math.sin(b)])}g.line(p,col,2.4,6,a);const b=a1,tx=-Math.sin(b),ty=Math.cos(b);g.arrow(cx+R*Math.cos(b)-tx*2,cy+R*Math.sin(b)-ty*2,cx+R*Math.cos(b)+tx*3,cy+R*Math.sin(b)+ty*3,col,2.4,a)};
+  arcA(-Math.PI/2+.32,Math.PI/6-.36,C.blue);arcA(Math.PI/6+.36,5*Math.PI/6-.36,C.pink);arcA(5*Math.PI/6+.36,3*Math.PI/2-.32,C.green);
+  // nodes
+  const node=(p,lab,sub,col)=>{g.halo(p[0],p[1],34,col,.25*a);g.dot(p[0],p[1],22,'#0b0e14',a);g.ring(p[0],p[1],22,col,2,a,8);g.text(lab,p[0],p[1]+5,'center',.95*a,13,col);if(sub)g.text(sub,p[0],p[1]+44,'center',.6*a,10.5)};
+  node(P.g,'Acr⁺','ground state',C.ink);node(P.x,'Acr⁺*','excited',C.blue);node(P.r,'Acr•','reduced',C.pink);
+  // photons
+  for(let k=0;k<3;k++){const p=(t*.5+k/3)%1;g.wave(250+k*10-p*0,40+p*60,1.9,18,'#3d8bff',a*(1-p)*.9)}
+  g.text('455 nm light',300,56,'left',.8*a,11,C.blue);
+  // film
+  const fx=390,fy=110,fw=190,fh=200;g.rr(fx,fy,fw,fh,5,C.ink,.45*a,.05);g.text('PBTTT film (~30 nm)',fx+fw/2,fy-12,'center',.8*a,11);
+  for(let i=0;i<6;i++){const y=fy+22+i*31;g.fn(x=>y+3*Math.sin((x-fx)/9),fx+12,fx+fw-12,'#9aa6b5',1.6,0,.5*a)}
+  const R2=rng(3),ph=(t*.25)%1;for(let k=0;k<7;k++){const x=fx+22+R2()*(fw-44),y=fy+22+Math.floor(R2()*6)*31,on=k/7<ph+.2;g.dot(x,y,7,C.red,(on?.95:.35)*a,on?10:0);g.text('+',x,y+4,'center',a,11,'#0b0e14');g.dot(x+12,y+14,4,C.green,(on?.9:.3)*a)}
+  g.text('polaron + counterion',fx+fw/2,fy+fh+20,'center',.7*a,11);
+  g.arrow(fx-8,P.x[1]-6,P.x[0]+28,P.x[1]-6,C.red,2,a*.9);g.text('e⁻ from PBTTT',fx-6,P.x[1]-18,'right',.85*a,11,C.red);
+  // electron dot travelling from film to PC to O2
+  const q=(t*.35)%1;if(q<.4){const s=q/.4;g.dot(fx-8+(P.x[0]+26-fx+8)*s,P.x[1]-6,3.5,'#fff',a,10)}
+  g.text('O₂ (air) takes the e⁻',P.r[0]-10,P.r[1]+72,'center',.85*a,11,C.green);
+  // salt
+  g.text('Li⁺ X⁻ salt in acetonitrile',fx+fw/2,385,'center',.75*a,11);anion(fx+fw/2-28,410,1,C.green,a,.8);g.dot(fx+fw/2+52,410,4,C.ink,.7*a);g.text('Li⁺',fx+fw/2+62,414,'left',.6*a,10.5);
+  g.arrow(fx+fw/2,372,fx+fw/2,fy+fh+30,C.green,1.6,.7*a);
+  g.text('schematic, after Fig. 1a',590,444,'right',.4*a,11)},
+ // 1 with vs without salt (values from text), log scale
+ (t,a)=>{const yb=360,yt=80,L=v=>Math.log10(v),Y=v=>yb-(L(v)+1)/5*(yb-yt);
+  g.axes(110,yb,500,yt);[0.1,1,10,100,1000,10000].forEach(v=>{g.text(v>=1000?fmtE(v,0):String(v),100,Y(v)+4,'right',.55*a,10.5);g.line([[110,Y(v)],[500,Y(v)]],C.ink,1,0,.07*a,[2,4])});
+  g.text('conductivity (S cm⁻¹, log)',60,56,'left',.65*a,11);
+  const D=[['no salt',1.31,.23,C.grey],['LiTFSI',659,188,C.blue]];
+  D.forEach(([n,v,e,col],i)=>{const x=170+i*190;g.rect(x,Y(v),90,yb-Y(v),col,.75*a,i?10:0);g.line([[x+45,Y(v+e)],[x+45,Y(Math.max(.11,v-e))]],C.ink,1.4,0,.75*a);
+   g.text(v+' ± '+e,x+45,Y(v+e)-10,'center',.95*a,13,col);g.text(n,x+45,yb+22,'center',.9*a,12)});
+  const p=.5+.5*Math.sin(t*2);g.arrow(305,Y(1.31)-6,305,Y(659)+8,C.ink,1.8,(.5+.4*p)*a);g.text('> two orders of magnitude',318,(Y(1.31)+Y(659))/2,'left',.8*a,11);
+  g.text('PBTTT, Acr-Me⁺, 455 nm',300,400,'center',.6*a,11);
+  g.text('values from the text (Fig. 1c, Fig. S1)',590,444,'right',.4*a,11)},
+ // 2 anion size vs conductivity
+ (t,a)=>{const yb=330,yt=150,Y=v=>yb-v/1200*(yb-yt),V={0:[970,107],1:[659,188],3:[187,40]},k=Math.floor(t/1.3)%4;
+  AN.forEach(([n,col,tl],i)=>{const x=90+i*115,on=i==k;anion(x,70,tl,col,on?1*a:.7*a,.62);g.text(n,x,102,'center',.9*a,12,col);
+   if(V[i]){const[v,e]=V[i];g.rect(x-30,Y(v),60,yb-Y(v),col,(on?.85:.6)*a,on?10:0);g.line([[x,Y(v+e)],[x,Y(v-e)]],C.ink,1.4,0,.75*a);g.text(String(v),x,Y(v+e)-8,'center',.95*a,13,col)}
+   else{g.rr(x-30,yb-60,60,60,3,col,.35*a,.04);g.text('PFSI⁻:',x,yb-34,'center',.6*a,9.5);g.text('Table S1',x,yb-18,'center',.6*a,9.5)}});
+  g.line([[50,yb],[520,yb]],C.ink,1,0,.3*a);[0,500,1000].forEach(v=>g.text(String(v),44,Y(v)+4,'right',.5*a,10));
+  g.text('conductivity (S cm⁻¹)',40,134,'left',.6*a,10.5);g.arrow(60,358,520,358,C.ink,1.2,.5*a);g.text('anion size →',520,376,'right',.6*a,11);
+  g.text('PgBTTT + FSI⁻: 2005 ± 160',300,400,'center',.85*a,12,C.green);
+  g.text('ion-exchange doping: large anions usually win',300,422,'center',.55*a,10.5);
+  g.text('values from the text (Fig. 1c,e)',590,444,'right',.4*a,11)},
+ // 3 absorption: spectra (left) and kinetics (right), schematic after Fig. 2a,b
+ (t,a)=>{const x0=50,x1=320,yb=330,yt=110,lam0=400,lam1=2400,X=l=>x0+(l-lam0)/(lam1-lam0)*(x1-x0),Y=v=>yb-v*(yb-yt);
+  const neu=l=>(G1(l,550,60)+.35*G1(l,600,40))/1.3,pol=l=>.75*G1(l,1600,420)+.25*G1(l,850,120);
+  g.axes(x0,yb,x1,yt);g.text('absorbance (film, FSI⁻)',x0-20,74,'left',.65*a,11);[500,1000,1500,2000].forEach(l=>g.text(String(l),X(l),yb+18,'center',.5*a,10));g.text('wavelength (nm) →',x1,yb+38,'right',.6*a,10.5);
+  const T=[0,1,3,5,10],D=m=>1-Math.exp(-m/2.2),k=Math.floor(t/1.1)%5;
+  T.forEach((m,i)=>{const d=D(m),on=i==k,col=i==0?C.ink:wl(450+i*40);g.fn(x=>{const l=lam0+(x-x0)/(x1-x0)*(lam1-lam0);return Y(.92*((1-d)*neu(l)+d*pol(l)))},x0,x1,on?'#ffffff':col,on?2.6:1.4,on?8:0,(on?1:.6)*a)});
+  g.text(T[k]+' min',X(1400),yt+10,'left',.9*a,12);g.line([[X(550),yt],[X(550),yb]],C.ink,1,0,.3*a,[2,3]);g.line([[X(1600),yt],[X(1600),yb]],C.ink,1,0,.3*a,[2,3]);
+  g.text('550',X(550),yt-6,'center',.6*a,10);g.text('1600',X(1600),yt-6,'center',.6*a,10);
+  // kinetics
+  const k0=370,k1=570,KX=m=>k0+m/15*(k1-k0),KY=v=>yb-v*(yb-yt);g.axes(k0,yb,k1,yt);[0,5,10,15].forEach(m=>g.text(String(m),KX(m),yb+18,'center',.5*a,10));g.text('illumination time (min) →',k1,yb+38,'right',.6*a,10.5);
+  const DF=m=>1-Math.exp(-m/2.2),DN=m=>.75*(1-Math.exp(-m/7));
+  g.fn(x=>KY(1-DF((x-k0)/(k1-k0)*15)),k0,k1,A0,2.2,6,a);g.fn(x=>KY(DF((x-k0)/(k1-k0)*15)),k0,k1,A0,2.2,6,a,[6,4]);
+  g.fn(x=>KY(1-DN((x-k0)/(k1-k0)*15)),k0,k1,A3,2.2,6,a);g.fn(x=>KY(DN((x-k0)/(k1-k0)*15)),k0,k1,A3,2.2,6,a,[6,4]);
+  g.text('solid: neutral 550 nm',k0,92,'left',.75*a,10.5);g.text('dashed: polaron 1600 nm',k0,76,'left',.75*a,10.5);
+  g.text('FSI⁻',KX(3),KY(1-DF(3))+16,'left',.9*a,11,A0);g.text('NFSI⁻',KX(6),KY(1-DN(6))-12,'left',.9*a,11,A3);g.text('residual after 15 min',k1,KY(1-DN(15))+20,'right',.65*a,10,A3);
+  const m=(t*1.5)%15;g.dot(KX(m),KY(1-DF(m)),3.5,'#fff',a,8);g.dot(KX(m),KY(1-DN(m)),3.5,'#fff',a,8);
+  g.text('schematic, after Fig. 2a,b',590,444,'right',.4*a,11)},
+ // 4 XPS / EPR / Seebeck
+ (t,a)=>{const yb=300,yt=110,Y=v=>yb-v/50*(yb-yt),D=[41,37,33,16],k=Math.floor(t/1.2)%4;
+  g.text('XPS doping level',170,80,'center',.8*a,12);g.line([[40,yb],[300,yb]],C.ink,1,0,.3*a);[0,25,50].forEach(v=>g.text(v+'%',36,Y(v)+4,'right',.5*a,10));
+  AN.forEach(([n,col],i)=>{const x=60+i*62,on=i==k;g.rect(x,Y(D[i]),44,yb-Y(D[i]),col,(on?.9:.6)*a,on?10:0);g.text(D[i]+'%',x+22,Y(D[i])-8,'center',.95*a,13,col);g.text(n,x+22,yb+20,'center',.85*a,10.5,col)});
+  // EPR: derivative lines decreasing amplitude
+  g.text('EPR polaron signal',460,80,'center',.8*a,12);const amp=[1,.8,.62,.35];
+  AN.forEach(([n,col],i)=>{const y=125+i*30;g.fn(x=>y-amp[i]*13*(-(x-460)/14)*Math.exp(-.5*((x-460)/14)**2)*1.65,380,540,col,1.8,i==k?8:0,a)});
+  g.text('undoped: none',460,250,'center',.6*a,10.5);
+  // Seebeck
+  g.text('Seebeck coefficient (µV K⁻¹)',460,290,'center',.8*a,11);const SY=v=>400-v/45*90;
+  [[0,23.44,.8],[3,38.62,.45]].forEach(([i,v,e],j)=>{const x=405+j*70,col=AN[i][1];g.rect(x,SY(v),44,400-SY(v),col,.75*a);g.text(v.toFixed(2),x+22,SY(v)-6,'center',.95*a,12,col);g.text(AN[i][0],x+22,416,'center',.85*a,10.5,col)});
+  g.line([[390,400],[540,400]],C.ink,1,0,.3*a);
+  g.text('values from the text (Fig. 2c–e, Fig. S11)',300,444,'center',.4*a,11)},
+ // 5 GIWAXS: edge-on lamellae with anions in side-chain regions; end values
+ (t,a)=>{const x0=40,x1=330,y0=80,R=rng(5),sw=Math.sin(t*1.2)*.5+.5;
+  g.text('edge-on lamellae (schematic)',(x0+x1)/2,62,'center',.75*a,11);
+  for(let L=0;L<3;L++){const yb=y0+20+L*100;// backbone stack: plates in a row seen edge-on (π-stacking along x)
+    for(let i=0;i<12;i++){const x=x0+16+i*23;g.rect(x-2,yb,4,36,C.blue,.85*a,4)}
+    for(let i=0;i<12;i++){const x=x0+16+i*23;g.fn(xx=>yb+36+(xx-x)*0,x,x+.1,C.ink,1,0,0);g.line([[x,yb+36],[x+5,yb+46],[x-3,yb+56],[x+4,yb+66]],C.grey,1.2,0,.55*a);g.line([[x,yb],[x-5,yb-10],[x+3,yb-20]],C.grey,1.2,0,.55*a)}
+    if(L<2)for(let k=0;k<6;k++){const x=x0+30+R()*(x1-x0-60),y=yb+52+R()*24;g.dot(x,y,4,C.green,(.6+.4*sw)*a,6)}}
+  g.arrow(x1+14,y0+20,x1+14,y0+120,C.ink,1.4,.7*a);g.arrow(x1+14,y0+120,x1+14,y0+20,C.ink,1.4,.7*a);g.text('lamellar',x1+20,y0+74,'left',.75*a,10.5);
+  g.text('π–π',x0+16+11,y0+12,'left',.7*a,10);g.line([[x0+16,y0+16],[x0+39,y0+16]],C.ink,1.2,0,.6*a);
+  g.text('substrate',(x0+x1)/2,410,'center',.55*a,10.5);g.rect(x0,394,x1-x0,4,C.ink,.4*a);
+  // values
+  const V=[['π–π stacking','3.57 Å','3.67 Å'],['lamellar spacing','27.92 Å','26.62 Å']];
+  V.forEach(([n,f,nn],i)=>{const y=150+i*120;g.text(n,500,y-34,'center',.8*a,12);g.text('FSI⁻',440,y,'left',.8*a,11,A0);g.text(f,575,y,'right',.95*a,14,A0);g.text('NFSI⁻',440,y+28,'left',.8*a,11,A3);g.text(nn,575,y+28,'right',.95*a,14,A3)});
+  g.text('green dots: counterions',x0,436,'left',.6*a,10.5,C.green);
+  g.text('values from the text (Fig. 2f)',590,444,'right',.4*a,11)},
+ // 6 solution absorption, vials, lifetimes
+ (t,a)=>{const x0=60,x1=330,yb=300,yt=100,X=l=>x0+(l-300)/450*(x1-x0),Y=v=>yb-v*(yb-yt),k=Math.floor(t/1.2)%4,agg=[.12,.3,.45,.65];
+  g.axes(x0,yb,x1,yt);[300,400,500,600,700].forEach(l=>g.text(String(l),X(l),yb+18,'center',.5*a,10));g.text('wavelength (nm) →',x1,yb+38,'right',.6*a,10.5);
+  g.text('absorbance, 10 mM Acr-Me⁺ + 10 eq salt',x0-20,80,'left',.65*a,10.5);
+  g.rect(X(500),yt,X(700)-X(500),yb-yt,C.ink,.05*a);g.text('aggregate band 500–700 nm',X(600),yt+14,'center',.7*a,10);
+  AN.forEach(([n,col],i)=>{const on=i==k;g.fn(x=>{const l=300+(x-x0)/(x1-x0)*450;return Y(Math.min(1,.55*G1(l,358,14)+.85*G1(l,416,18)+agg[i]*G1(l,610,70)))},x0,x1,col,on?2.6:1.4,on?8:0,(on?1:.6)*a)});
+  g.text('358',X(358),Y(.58)-6,'center',.6*a,10);g.text('416',X(416),Y(.88)-6,'center',.6*a,10);
+  // vials
+  [['FSI⁻','#f2d64a',A0],['NFSI⁻','#2f5a3a',A3]].forEach(([n,col,lc],i)=>{const x=x0+40+i*130,y=345;g.rr(x,y,46,64,6,C.ink,.5*a,.02);g.rect(x+3,y+18,40,43,col,.92*a);g.text(n,x+23,y+80,'center',.85*a,10.5,lc)});
+  // lifetimes
+  const L=[31.28,26.99,24.08,21.72],LY=v=>300-v/35*170;g.text('fluorescence lifetime (ns)',480,80,'center',.8*a,11);g.line([[385,300],[575,300]],C.ink,1,0,.3*a);
+  AN.forEach(([n,col],i)=>{const x=386+i*49,on=i==k;g.rect(x,LY(L[i]),34,300-LY(L[i]),col,(on?.9:.6)*a,on?10:0);g.text(L[i].toFixed(1),x+17,LY(L[i])-8,'center',.95*a,11.5,col);g.text(n,x+17,318,'center',.8*a,9.5,col)});
+  // decay marker
+  const p=(t*.4)%1;g.dot(386+k*49+17,LY(L[k]*(1-p)),3,'#fff',(1-p)*a,8);
+  g.text('spectra schematic, after Fig. 3b,c; lifetimes Fig. S21',590,444,'right',.4*a,11)},
+ // 7 DFT picture + EA levels
+ (t,a)=>{const jit=Math.sin(t*2)*1.5,sp=6+8*(.5+.5*Math.sin(t*1.1));
+  // bulky anion: stack kept
+  g.text('bulky anion keeps the stack',150,62,'center',.8*a,11.5,A3);
+  plate(150,140,90,C.blue,a,6);plate(150,152,90,C.blue,a,6);anion(150,200,4,A3,a,.6);
+  g.text('stacked: CT band',150,240,'center',.6*a,10.5);
+  // FSI: pushes apart
+  g.text('FSI⁻ pushes the pair apart',150,290,'center',.8*a,11.5,A0);
+  plate(150,330-sp/2,90,C.blue,a,6);plate(150,345+sp/2+jit*.3,90,C.blue,a,6);anion(150,337.5+jit*.2,0,A0,a,.55);anion(232,345,0,A0,a,.55);anion(70,330,0,A0,a,.55);
+  g.text('distance ↑, band weaker',150,410,'center',.6*a,10.5);
+  // EA levels
+  const ey0=110,ey1=360,E=e=>ey0+(e-(-4.30))/(-4.60-(-4.30))*(ey1-ey0);
+  g.text('energy level (eV)',470,62,'center',.75*a,11);g.line([[335,ey0-10],[335,ey1+10]],C.ink,1,0,.3*a);
+  [-4.3,-4.4,-4.5,-4.6].forEach(e=>g.text(e.toFixed(1),327,E(e)+4,'right',.5*a,10));
+  const LV=[['pristine',-4.35,C.ink,380],['NFSI⁻',-4.37,A3,450],['FSI⁻',-4.51,A0,520]];
+  LV.forEach(([n,e,col,x])=>{g.line([[x-26,E(e)],[x+26,E(e)]],col,3,8,a);g.text(e.toFixed(2),x,E(e)-8,'center',.95*a,11.5,col);g.text(n,x,E(e)+20,'center',.75*a,10.5,col)});
+  g.arrow(450,E(-4.36)+30,520,E(-4.51)-24,C.ink,1.4,.5*a);
+  g.text('EA levels: Fig. S22 · DFT schematic, after Fig. 4',590,444,'right',.4*a,11)},
+ // 8 0.1 eq control (schematic after Fig. 3d,e)
+ (t,a)=>{const yb=330,yt=120,Y=v=>yb-v/1100*(yb-yt);
+  g.text('10 eq salt (standard)',170,70,'center',.85*a,12);g.text('0.1 eq salt (control)',440,70,'center',.85*a,12);
+  g.line([[60,yb],[290,yb]],C.ink,1,0,.3*a);g.line([[330,yb],[560,yb]],C.ink,1,0,.3*a);
+  [[0,970],[3,187]].forEach(([i,v],j)=>{const x=95+j*95,col=AN[i][1];g.rect(x,Y(v),60,yb-Y(v),col,.8*a,8);g.text(String(v),x+30,Y(v)-8,'center',.95*a,13,col);g.text(AN[i][0],x+30,yb+20,'center',.85*a,11,col)});
+  [0,3].forEach((i,j)=>{const x=365+j*95,col=AN[i][1];g.rr(x,Y(330),60,yb-Y(330),3,col,.8*a,.35);g.text(AN[i][0],x+30,yb+20,'center',.85*a,11,col)});
+  g.text('≈',440,Y(330)-14,'center',.9*a,18);g.text('S cm⁻¹',60,110,'left',.55*a,10.5);
+  g.text('conductivities similar',440,yb+46,'center',.7*a,11);g.text('aggregate band similar',440,yb+64,'center',.7*a,11);
+  g.text('different aggregation',170,yb+46,'center',.7*a,11);
+  g.text('equal bars: values not quoted in the text',440,yb+90,'center',.45*a,10);
+  g.text('schematic, after Fig. 3d,e',590,444,'right',.4*a,11)},
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab: toy model (not a simulation from the paper) ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id),KQ=.1,PMAX=.5,R0=.9; // toy constants: kq (1/ns), saturation, rate scale (1/min)
+const share=tau=>KQ*tau/(1+KQ*tau),pAt=(f,tau,m)=>PMAX*(1-Math.exp(-R0*f*share(tau)*m));
+function lab(){const f=+$('lf').value,tau=+$('lt').value,m=+$('lm').value;
+  $('lfv').value=f.toFixed(2);$('ltv').value=tau.toFixed(1)+' ns';$('lmv').value=m+' min';
+  const s=share(tau),p=pAt(f,tau,m),d=p/PMAX;
+  $('r0').textContent=(s*100).toFixed(0)+'%';$('r1').textContent=p.toFixed(2);$('r2').textContent=((1-d)*100).toFixed(0)+'%';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const x0=70,x1=570,yb=290,yt=70,X=l=>x0+(l-400)/2000*(x1-x0),Y=v=>yb-v*(yb-yt);
+  lg.axes(x0,yb,x1,yt);[500,1000,1500,2000].forEach(l=>lg.text(String(l),X(l),yb+20,'center',.55,11));lg.text('wavelength (nm)',x1,yb+40,'right',.65,12);lg.text('toy absorbance',x0-50,40,'left',.65,12);
+  const neu=l=>(G1(l,550,60)+.35*G1(l,600,40))/1.3,pol=l=>.75*G1(l,1600,420)+.25*G1(l,850,120);
+  lg.fn(x=>{const l=400+(x-x0)/(x1-x0)*2000;return Y(.92*neu(l))},x0,x1,C.ink,1.2,0,.35,[4,4]);
+  lg.fn(x=>{const l=400+(x-x0)/(x1-x0)*2000;return Y(.92*((1-d)*neu(l)+d*pol(l)))},x0,x1,C.green,2.6,8,1);
+  lg.text('dashed: undoped',x1,yt+6,'right',.6,11);lg.text('← neutral 550 nm',X(700),Y(.75),'left',.85,11,C.ink);lg.text('polaron band',X(1600),Y(.92*.75*d)-12,'center',.85,11,C.green);
+  // time course strip
+  const k0=x0,k1=x1,ky0=425,ky1=375,KX=mm=>k0+mm/15*(k1-k0),KY=v=>ky0-v/PMAX*(ky0-ky1);
+  lg.line([[k0,ky0],[k1,ky0]],C.ink,1,0,.3);lg.fn(x=>KY(pAt(f,tau,(x-k0)/(k1-k0)*15)),k0,k1,C.amber,2,6,1);lg.dot(KX(m),KY(p),4,'#fff',1,8);
+  lg.text('toy p(t) over 0–15 min',k0+8,ky1-4,'left',.7,10.5,C.amber);
+  lg.text('toy model',590,444,'right',.45,11)}
+['lf','lt','lm'].forEach(id=>$(id).addEventListener('input',lab));
+$('pF').addEventListener('click',()=>{$('lf').value=.8;$('lt').value=31.28;lab()});$('pN').addEventListener('click',()=>{$('lf').value=.3;$('lt').value=21.72;lab()});lab();
+</script>
+</body></html>
