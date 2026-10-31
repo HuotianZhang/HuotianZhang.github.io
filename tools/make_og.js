@@ -13,7 +13,7 @@ let pw; try { pw = require('playwright') } catch { pw = require('/opt/node22/lib
 const CHROMIUM = process.env.PW_CHROMIUM || (fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
 
 // key -> index of the story step whose scene represents the paper (0-based)
-const STEP = { ff: 1, cocrystal: 3, lockring: 1, barrierless: 7, vloss: 1, ternary: 6, optgap: 7, arrhenius: 5, backtransfer: 6, tta: 8, timeline: 3, damacro: 0, tpa: 4, giwaxs: 8, whitelight: 3, photodet: 4, laser: 3 };
+const STEP = { ff: 1, cocrystal: 3, lockring: 1, barrierless: 7, vloss: 1, ternary: 6, optgap: 7, arrhenius: 5, backtransfer: 6, tta: 8, timeline: 3, damacro: 0, tpa: 4, giwaxs: 8, whitelight: 3, photodet: 4, laser: 3, forecast: 0 };
 const HOME_CARDS = ['ff', 'cocrystal', 'lockring', 'barrierless'];
 
 const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'og');

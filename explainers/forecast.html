@@ -1,0 +1,329 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Forecasting how organic solar cells age, from the first hours | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="A two-parameter formula fits the first hours. A learned correction makes 10× forecasts reliable."><link rel="canonical" href="https://huotianzhang.github.io/explainers/forecast.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="Forecasting how organic solar cells age, from the first hours"><meta property="og:description" content="A two-parameter formula fits the first hours. A learned correction makes 10× forecasts reliable."><meta property="og:url" content="https://huotianzhang.github.io/explainers/forecast.html"><meta property="og:image" content="https://huotianzhang.github.io/og/forecast.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Forecasting how organic solar cells age, from the first hours", "description": "A two-parameter formula fits the first hours. A learned correction makes 10× forecasts reliable.", "url": "https://huotianzhang.github.io/explainers/forecast.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1039/d6el00116e", "name": "Degradation forecasting for accelerated lifetime studies of organic photovoltaics via symbolic regression."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 19px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1039/d6el00116e">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · EES Solar 2026 · Paper</span>
+  <h1>Forecasting how organic solar cells age, from the first hours</h1>
+  <p class="dek">A stability test of an organic solar cell can take hundreds or thousands of hours, and that is too slow when new materials are made by the dozen. This study fits the first 10% of an ageing curve with one short formula and extrapolates it to the full test time. The formula itself comes from symbolic regression. A random forest, trained on earlier complete curves, then corrects each forecast. With the correction, about 90% of forecasts land within 3–4% of the measured value, so 20 h of testing stands in for 200 h.</p>
+  <p class="cite">Q. Song*, V. M. Le Corre, T. Heumueller, H. Zhang, H. Tang, Z. Peng, A. J. Bornschlegl, X. Du*, L. Lüer* &amp; C. J. Brabec*. <i>Degradation forecasting for accelerated lifetime studies of organic photovoltaics via symbolic regression.</i> EES Solar 2, 973–983 (2026). <a href="https://doi.org/10.1039/d6el00116e">doi:10.1039/d6el00116e</a> <span class="note">(* corresponding authors · open access, CC BY 4.0)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · THE PROBLEM</span><h2>Waiting for a cell to age</h2>
+      <p>Single-junction organic solar cells now exceed 20% efficiency, but they still do not last long enough. Finding out whether a new blend is stable means running it under light for hundreds to thousands of hours. Stronger stress shortens the test but can switch on degradation routes that do not occur in real operation.</p>
+      <p>The alternative here is a forecast. Measure the performance Y<sub>1</sub> up to an early time t<sub>1</sub>, fit the curve and predict the value Y<sub>2</sub> at a later time t<sub>2</sub>, at the same, constant stress. The acceleration factor AF = t<sub>2</sub>/t<sub>1</sub> says how far the forecast reaches beyond the data. An earlier deep-learning approach worked at AFs that varied from 5 to 20; the aim here is a fixed AF of 10 with a known error.</p>
+      <p class="note">Schematic, after Fig. 1a. The curve is drawn with eqn (1) and illustrative parameters, not a measured device.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · THE DATA</span><h2>Hundreds of ageing curves from a robot</h2>
+      <p>All training and test devices come from the robotic line AMANDA Line 1, which makes and measures cells automatically. They aged for 200 h under a metal halide lamp at room temperature, in nitrogen in a glovebox. Two campaigns are combined: one keeps PM6:Y6 fixed and varies more than 100 processing conditions; the other, previously unpublished, tests more than 40 donor–acceptor pairs with fixed processing.</p>
+      <p>One carrier holds 9 substrates with 6 pixels each, so 54 cells see the same lamp and the same compartment temperature. A flicker in either shows up in all 54 curves at once, an artifact the method has to live with. Curves that first improve ("light soaking") were left out, because they start from an ill-defined state.</p>
+      <p class="note">Curve counts from Fig. 2 and the text. The 1000 h set, used only to test generalization, is the DeepDeg dataset (ref. 19 of the paper). Carrier drawing schematic.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · SORT BY SHAPE</span><h2>Six curves stand for the whole set</h2>
+      <p>Symbolic regression is costly, so it is not run on all 226 curves. Instead each curve is fitted with a sum of exponentials, and the number of exponentials needed for a residual-free fit (one, two or three) puts it into a shape class.</p>
+      <p>One, two and three representative curves are then taken from the three classes, six in total. They cover the main shapes: stable or mildly degrading, steady continuous loss, and a strong burn-in that later levels off. The authors stress that the classes describe shapes, not microscopic mechanisms.</p>
+      <p class="note">Schematic, after Fig. 1b and Fig. S2: the curves show the three shape classes, not the selected devices.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · SYMBOLIC REGRESSION</span><h2>Let an algorithm write the formula</h2>
+      <p>Class symbolic regression, here the code PhySO, searches over mathematical expressions with reinforcement learning. It looks for the simplest formula that fits all six curves with shared structure, and the search was restricted to forms that decrease monotonically, as expected for ageing under inert illumination.</p>
+      <p>Each candidate has an accuracy (R<sup>2</sup>) and a complexity. Plotted against each other they form a Pareto front. Formulas with only 3 free parameters already reach R<sup>2</sup> &gt; 0.95; the three-exponential classification model needs up to 6. Fewer parameters means less redundancy, and that matters when a fit has to be extrapolated.</p>
+      <p class="note">Schematic, after Fig. 1c and Fig. S4: positions of the candidates are illustrative.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · THE FORMULA</span><h2>Linear at first, then dispersive</h2>
+      <p>Among the accurate candidates, the forecasts from 10 h and 50 h windows were statistically indistinguishable for all but one, so the formula with the fewest parameters was chosen:</p>
+      <p style="font:500 17px var(--mono);text-align:center">y = a − t·(2t + √(b+1))<sup>c</sup> / b</p>
+      <p>Here y is the normalised metric, t the ageing time in hours, and a = 1 is the normalised starting value, so only b and c are fitted. At short times the loss grows linearly with t. Once 2t ≫ √(b+1) it grows as t<sup>c+1</sup>, a dispersive decay; b sets when the change happens and c the long-time exponent. Because y keeps falling forever, the formula is meant for small to medium losses, not outright failure, and the authors call it a compact forecasting expression, not a universal law.</p>
+      <p class="note">Formula and limits from eqn (1) and the text. The plot uses illustrative b and c on log–log axes, where the two regimes are straight lines.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · DOES IT FIT?</span><h2>Trained on current, it fits efficiency too</h2>
+      <p>On the six training curves the normalised RMS error is 0.17–0.61%. On all 226 short-circuit-current (J<sub>SC</sub>) curves of 200 h the median is 0.32% and 218 curves (98.2%) stay below 1%.</p>
+      <p>The formula was found from J<sub>SC</sub> alone, yet it also fits the efficiency (PCE): 92.5% of 133 curves below 1%, median 0.43%. Fill factor and V<sub>OC</sub> behave similarly (over 90% below 1%). On 246 J<sub>SC</sub> curves of 1000 h, five times longer than training, 95.5% stay below 2%, median 1.20%. Coupled degradation processes give all the metrics a similar shape in time.</p>
+      <p class="note">All values from the text (Fig. 2, Figs. S7–S8). The 2% threshold for the 1000 h set was chosen by the authors because longer runs are noisier.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · FORECASTING</span><h2>How long must you measure?</h2>
+      <p>Now the formula is fitted only to the data up to t<sub>1</sub> and extrapolated to the end of the run. The forecast error is the mean absolute deviation over the last four time points. The longer the test window, the smaller the error, until it reaches the measurement noise.</p>
+      <p>For 200 h of J<sub>SC</sub>, the mean error falls below 3% once t<sub>1</sub> &gt; 35 h (the median below 2% already after 10 h). For PCE the mean error drops below 4% after about 40 h; for the 1000 h set after about 450 h. The 3% mark follows the 1–3% uncertainty of certified efficiency measurements. Single-, bi- and stretched-exponential fits do worse at early times in both 200 h sets; for 1000 h the stretched exponential wins only in the 50 h window.</p>
+      <p class="note">Crossing times from the text (Fig. 3, Figs. S10–S11). Curve shapes are schematic and omit the small bump the paper reports near 40 h.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · LEARNING THE ERROR</span><h2>A random forest corrects each forecast</h2>
+      <p>Error propagation from the fit uncertainties assumes that only random noise is at play, and real curves carry short-time fluctuations that break that assumption. So the authors let a random forest learn the signed forecast deviation from earlier complete curves. Its inputs are the fitted b and c (log-transformed) and their correlation, the drop ΔY seen so far, the forecast Y<sub>2</sub> and the noise level.</p>
+      <p>Y<sub>2</sub> matters most, followed by c and b for the 200 h J<sub>SC</sub> set; lower forecasts carry larger errors. Tested on held-out curves (ten 80/20 splits balanced by stability), the correction shrinks the mean absolute deviation from 3.37% to 1.52% (200 h J<sub>SC</sub>), from 8.70% to 2.06% (200 h PCE) and from 9.37% to 1.25% (1000 h J<sub>SC</sub>).</p>
+      <p class="note">Values (mean ± spread over the splits) from the text (Fig. 4a,b; Fig. S18).</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · TEN TIMES FASTER</span><h2>20 hours for a 200-hour verdict</h2>
+      <p>The practical test: does about 90% of the forecasts fall within the error threshold? Without the correction this holds only for AF of 1.43–3.33. With it, 10% of the ageing time is enough. At AF 10, 91.96% of held-out 200 h J<sub>SC</sub> forecasts are within 3%, and 90.00% (200 h PCE) and 91.60% (1000 h J<sub>SC</sub>) within 4%. Turned into stable/unstable calls (final retention ≥ 0.90, or ≥ 0.80 for 1000 h), the decisions are right 96.7%, 88.9% and 92.6% of the time.</p>
+      <p>For a new lab the authors suggest running 20–30% of devices to the end at first to calibrate the forest, then 5–10%. All data were taken in nitrogen under constant light; oxygen, humidity, thermal cycling, UV, applied bias and outdoor conditions were not tested and may need retraining.</p>
+      <p class="note">Values from the text (Fig. 4c–e, Figs. S19–S20, Fig. 5). Calibration fractions are the authors' heuristics.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>Forecast a toy device</h2>
+  <p class="intro">A toy, not the paper's pipeline or data. The toy device ages exactly by eqn (1) with the b and c you set, plus random noise of size σ, measured every hour for 200 h. You only "see" the points up to the test window t<sub>1</sub>. The page fits eqn (1) to those points (b and c by grid search, a = 1) and, for comparison, a single exponential y = e<sup>−t/τ</sup>, then extrapolates both to 200 h. Because the toy truth has the formula's own shape, the eqn (1) forecast is limited only by noise; real curves also carry setup artifacts, which is the job of the paper's random forest.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy ageing curve with fitted forecasts, responding to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="lt1"><span class="row"><span>Test window t<sub>1</sub></span><output id="lt1v">20 h</output></span><input id="lt1" type="range" min="6" max="200" step="2" value="20"></label>
+      <label for="lc"><span class="row"><span>Toy exponent c</span><output id="lcv">−0.30</output></span><input id="lc" type="range" min="-0.8" max="0" step="0.01" value="-0.3"></label>
+      <label for="lb"><span class="row"><span>Toy b (transition)</span><output id="lbv">220</output></span><input id="lb" type="range" min="1" max="3" step="0.002" value="2.342"></label>
+      <label for="ln"><span class="row"><span>Toy noise σ</span><output id="lnv">0.10%</output></span><input id="ln" type="range" min="0" max="1" step="0.05" value="0.1"></label>
+      <button id="lnew" type="button" class="btn" style="border:0;cursor:pointer;font:inherit;font-weight:600">New noise draw</button>
+      <div class="read"><div><b id="r0">–</b><span>acceleration factor 200 h / t<sub>1</sub></span></div><div><b id="r1">–</b><span>true value at 200 h</span></div><div><b id="r2">–</b><span>eqn (1) forecast, error</span></div><div><b id="r3">–</b><span>single-exponential forecast, error</span></div></div>
+      <p class="note">Try this: at t<sub>1</sub> = 20 h (AF 10), press “New noise draw” a few times. Even with only 0.1% noise the eqn (1) forecast at 200 h moves by a percent or more from draw to draw; at 0.5% it often misses by several percent. Lengthen t<sub>1</sub> and the spread shrinks. That draw-to-draw scatter, on top of setup artifacts, is what the paper's random forest learns to correct. The single exponential stays off even without noise, because it cannot bend like a dispersive decay.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1039/d6el00116e">Read the paper in EES Solar ↗</a>
+  <span class="note">Numbers quoted from the paper (main text and Figs. 1–5; the Supporting Information was not consulted, its figures only as cited in the main text): 200 h ageing under a metal halide lamp, room temperature, N<sub>2</sub>; &gt;40 donor–acceptor systems, &gt;100 processing conditions; 6 pixels × 9 substrates = 54 cells per carrier; earlier AF 5–20; 6 representative curves; R<sup>2</sup> &gt; 0.95 with 3 free parameters vs up to 6; eqn (1) with a = 1; training n-RMSE 0.17–0.61%, reduced χ<sup>2</sup> 0.85–2.07; 226 / 133 / 246 curves; 98.2% (&lt;1%), 92.5% (&lt;1%), 95.5% (&lt;2%); medians 0.32%, 0.43%, 1.20% and means 0.35%, 0.53%, 1.30%; forecast thresholds 3% / 4% reached after 35 h, ≈40 h and ≈450 h; random-forest correction 3.37 ± 0.78 → 1.52 ± 0.56%, 8.70 ± 1.64 → 2.06 ± 0.77%, 9.37 ± 1.18 → 1.25 ± 0.15%; uncorrected AF 1.43–3.33; at AF 10, 91.96 ± 4.47%, 90.00 ± 3.51%, 91.60 ± 2.27% within threshold; decision accuracy 96.7%, 88.9%, 92.6%; calibration 20–30%, then 5–10%. Schematic: every curve shape, the candidate cloud of the Pareto plot, the carrier drawing, and the b, c values used for illustration.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a',grey:'#8a8f98',white:'#f4f1e6'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+// wavelength (nm) -> display colour
+function wl(n){if(n<380)return'#9a8cff';const s=[[380,'#7b5cff'],[440,'#4d6bff'],[480,'#2fb8f0'],[510,'#3fe08a'],[560,'#c8e84a'],[590,'#ffc23c'],[620,'#ff8a3c'],[700,'#ff4d4d'],[800,'#c03030']];for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return'#c03030'}
+const G1=(x,m,s)=>Math.exp(-.5*((x-m)/s)**2);
+const L10=Math.log10,fmtE=(v,d=1)=>{const e=Math.floor(L10(v)),m=v/10**e;return (m.toFixed(d)=='1.0'||m.toFixed(d)=='1'?'':m.toFixed(d)+'×')+'10'+sup(e)};
+function sup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||(c=='-'?'⁻':c)).join('')}
+
+// story canvas
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"normalised performance Y": "Y (norm.)", "forecast ± uncertainty": "forecast", "AMANDA Line 1 (robot)": "AMANDA robot", "200 h · N₂ · room temperature": "200 h · N₂ · RT", "PM6:Y6, >100 processing routes": "PM6:Y6, 100+ routes", ">40 donor–acceptor pairs": ">40 D:A pairs", "200 h JSC: 226 curves": "JSC 200 h: 226", "200 h PCE: 133 curves": "PCE 200 h: 133", "1000 h JSC: 246 curves": "JSC 1000 h: 246", "54 cells share lamp and temperature": "54 cells, one lamp", "1 carrier = 9 substrates × 6 pixels": "9 substrates × 6 pixels", "chosen: 3 free parameters": "chosen: 3 params", "complexity (free parameters / terms) →": "complexity →", "3-exponential model: up to 6 parameters": "3-exp model: ≤6 params", "share of curves fitted by eqn (1) with n-RMSE below threshold": "curves fitted below threshold", "trained on 6 JSC curves only (n-RMSE 0.17–0.61%)": "trained on 6 JSC curves", "226 curves · <1%": "226 · <1%", "133 curves · <1%": "133 · <1%", "246 curves · <2%": "246 · <2%", "median 0.32%": "med. 0.32%", "median 0.43%": "med. 0.43%", "median 1.20%": "med. 1.20%", "eqn (1) alone": "eqn (1)", "+ forest correction": "+ forest", "mean |forecast deviation|, held-out": "mean |deviation|", "blue: from the data · red: from the fit": "blue: data · red: fit", "without correction: ~90% reached only at AF 1.43–3.33": "uncorrected: only AF 1.43–3.33", "at AF 10 (t₁ = 20 h of 200 h, or 100 h of 1000 h)": "at AF 10", "decisions 96.7%": "✓ 96.7%", "decisions 88.9%": "✓ 88.9%", "decisions 92.6%": "✓ 92.6%", "stable / unstable calls correct": "✓ stable/unstable calls right", "mean forecast error vs test window": "mean forecast error", "2t ≈ √(b+1): set by b": "set by b", "dispersive: slope c + 1": "slope c + 1", "linear: slope 1": "slope 1", "t₁ ≈ 450 h": "450 h", "t₁ ≈ 40 h": "40 h", "t₁ ≈ 35 h": "35 h"};
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+// eqn (1) of the paper with a = 1: y = 1 - t (2t + sqrt(b+1))^c / b
+const EQ=(t,b,c)=>1-t*Math.pow(2*t+Math.sqrt(b+1),c)/b;
+const B0=220,C0=-.3; // illustrative parameters (not fitted values from the paper)
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function gauss(R){let u=0,v=0;while(!u)u=R();v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v)}
+const NZ=(()=>{const R=rng(42),a=[];for(let i=0;i<400;i++)a.push(gauss(R));return a})();
+const RED=C.red,BL=C.blue,GR=C.green,AM=C.amber;
+
+const SC=[
+ // 0 forecast concept (schematic after Fig. 1a)
+ (t,a)=>{const x0=80,x1=560,yb=370,yt=70,X=h=>x0+h/200*(x1-x0),Y=v=>yb-(v-.8)/.22*(yb-yt),t1=20;
+  g.axes(x0,yb,x1,yt);[0,50,100,150].forEach(h=>g.text(h,X(h),yb+20,'center',.55*a,11));g.text('ageing time t (h)',x1,yb+40,'right',.65*a,11);
+  [.8,.9,1].forEach(v=>g.text(v.toFixed(1),x0-10,Y(v)+4,'right',.55*a,11));g.text('normalised performance Y',x0-60,44,'left',.65*a,11);
+  g.rect(x0,yt,X(t1)-x0,yb-yt,BL,.1*a);g.text('measured',X(t1/2),yt+18,'center',.8*a,11,BL);g.text('t₁',X(t1)+4,yb+20,'center',.9*a,12,BL);
+  // uncertainty band growing with extrapolation
+  ctx.save();ctx.globalAlpha=.16*a;ctx.fillStyle=AM;ctx.beginPath();for(let h=t1;h<=200;h+=2)ctx.lineTo(X(h),Y(EQ(h,B0,C0)+.0015+.00012*(h-t1)));for(let h=200;h>=t1;h-=2)ctx.lineTo(X(h),Y(EQ(h,B0,C0)-.0015-.00012*(h-t1)));ctx.fill();ctx.restore();
+  g.fn(x=>Y(EQ((x-x0)/(x1-x0)*200,B0,C0)),X(t1),x1,AM,2.2,6,a,[6,5]);
+  for(let h=0;h<=t1;h+=1)g.dot(X(h),Y(EQ(h,B0,C0)+.0025*NZ[h]),2.6,BL,.95*a,4);
+  const y2=EQ(200,B0,C0);g.dot(X(200),Y(y2),5,AM,a,12);g.text('Y₂ forecast',X(200)-8,Y(y2)+34,'right',.85*a,11,AM);g.text('t₂ = 200',X(200),yb+20,'center',.9*a,12,AM);
+  g.text('forecast ± uncertainty',X(110),Y(EQ(110,B0,C0))-44,'center',.75*a,11,AM);
+  const p=(t*.12)%1,hc=t1+p*(200-t1);g.halo(X(hc),Y(EQ(hc,B0,C0)),18,'#ffffff',.35*a);
+  g.text('AF = t₂ / t₁ = 200 h / 20 h = 10',x1,yt-14,'right',.9*a,12);
+  g.text('schematic, after Fig. 1a',590,444,'right',.4*a,11)},
+ // 1 the data: one carrier, 9 substrates x 6 pixels (schematic)
+ (t,a)=>{const fl=.75+.25*Math.max(0,Math.sin(t*1.7))*Math.max(0,Math.sin(t*4.3));
+  g.rect(70,52,250,14,'#d9e3ef',.35*a);g.text('metal halide lamp',195,44,'center',.7*a,11);
+  for(let k=0;k<7;k++){const p=(t*.6+k/7)%1;g.wave(85+k*36,70+p*46,Math.PI/2,14,'#f4f1e6',a*(1-p)*.7*fl)}
+  g.rr(66,128,258,248,6,C.ink,.5*a,.06);
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++){const x=78+i*82,y=140+j*78;g.rect(x,y,72,68,'#9aa6b5',.22*a);
+    for(let q=0;q<6;q++){const px=x+8+(q%3)*21,py=y+10+Math.floor(q/3)*28;g.rect(px,py,15,20,GR,(.25+.55*fl)*a,6*fl)}}
+  g.text('1 carrier = 9 substrates × 6 pixels',195,398,'center',.8*a,11.5);g.text('54 cells share lamp and temperature',195,416,'center',.6*a,10.5);
+  const L=[['AMANDA Line 1 (robot)',C.ink],['200 h · N₂ · room temperature',C.ink],['',''],['PM6:Y6, >100 processing routes',BL],['>40 donor–acceptor pairs',BL],['',''],['200 h JSC: 226 curves',AM],['200 h PCE: 133 curves',AM],['1000 h JSC: 246 curves',AM]];
+  L.forEach(([s,c],i)=>{if(s)g.text(s,350,110+i*30,'left',.85*a,11.5,c)});
+  g.text('schematic carrier',590,444,'right',.4*a,11)},
+ // 2 shape classes (schematic after Fig. 1b / S2)
+ (t,a)=>{const k=Math.floor(t/1.4)%6,G=[['1 exponential',[[.04,40,0,1]]],['2 exponentials',[[.07,30,.06,400],[.1,15,.1,300]]],['3 exponentials',[[.08,4,.06,60,0,1],[.12,3,.05,40,.04,500],[.15,5,.06,80,.03,300]]]];
+  let idx=0;G.forEach(([n,cs],gi)=>{const x0=40+gi*190,w=160,y0=110,h=230,X=hh=>x0+hh/200*w,Y=v=>y0+(1-v)/.3*h;
+   g.rr(x0-8,y0-40,w+16,h+60,5,gi==0?GR:gi==1?BL:AM,.5*a,.05);g.text(n,x0+w/2,y0-18,'center',.9*a,12,gi==0?GR:gi==1?BL:AM);
+   g.line([[x0,y0],[x0,y0+h],[x0+w,y0+h]],C.ink,1,0,.3*a);
+   cs.forEach(p=>{const on=idx==k;const f=hh=>{let v=1;for(let m=0;m+1<p.length;m+=2)v-=p[m]*(1-Math.exp(-hh/p[m+1]));return v};
+     g.fn(x=>Y(f((x-x0)/w*200)),x0,x0+w,on?'#ffffff':(gi==0?GR:gi==1?BL:AM),on?2.6:1.8,on?10:0,a);idx++})});
+  g.text('6 representative curves: 1 + 2 + 3',300,400,'center',.85*a,12);g.text('time (0–200 h) →',300,420,'center',.5*a,10.5);
+  g.text('schematic, after Fig. 1b',590,444,'right',.4*a,11)},
+ // 3 Pareto front (schematic after Fig. 1c / S4)
+ (t,a)=>{const x0=90,x1=550,yb=360,yt=70,X=c=>x0+(c-1)/9*(x1-x0),Y=r=>yb-(r-.6)/.4*(yb-yt),R=rng(9);
+  g.axes(x0,yb,x1,yt);g.text('complexity (free parameters / terms) →',x1,yb+40,'right',.65*a,11);g.text('accuracy R²',x0-60,50,'left',.65*a,11);
+  [.6,.8,.95,1].forEach(v=>g.text(v.toFixed(2),x0-10,Y(v)+4,'right',.55*a,10.5));
+  g.line([[x0,Y(.95)],[x1,Y(.95)]],C.ink,1,0,.35*a,[4,4]);g.text('R² = 0.95',x1,Y(.95)-8,'right',.6*a,10.5);
+  for(let i=0;i<70;i++){const c=1+R()*9,front=1-.42*Math.exp(-(c-1)/1.1);g.dot(X(c),Y(Math.max(.6,front-R()*.3)),3,C.grey,.7*a)}
+  g.fn(x=>Y(1-.42*Math.exp(-((x-x0)/(x1-x0)*9)/1.1)),x0,x1,C.ink,1.4,0,.6*a);
+  const cs=3.4,ry=1-.42*Math.exp(-(cs-1)/1.1);g.halo(X(cs),Y(ry),26+4*Math.sin(t*3),RED,.45*a);g.dot(X(cs),Y(ry),6,RED,a,12);
+  g.rect(X(cs)+8,Y(ry)+12,196,20,'#0b0e14',.85*a);g.text('chosen: 3 free parameters',X(cs)+12,Y(ry)+26,'left',.9*a,11.5,RED);
+  g.text('3-exponential model: up to 6 parameters',x1,yb-20,'right',.6*a,10.5);
+  g.text('Pareto front',X(8),Y(.995)-10,'center',.6*a,10.5);
+  g.text('schematic, after Fig. 1c',590,444,'right',.4*a,11)},
+ // 4 eqn (1) asymptotes on log-log axes (illustrative b, c)
+ (t,a)=>{const x0=90,x1=550,yb=370,yt=90,lt0=-1,lt1=3,X=l=>x0+(l-lt0)/(lt1-lt0)*(x1-x0),ll0=-4.5,ll1=-.5,Y=l=>yb-(l-ll0)/(ll1-ll0)*(yb-yt),s=Math.sqrt(B0+1);
+  g.text('y = a − t·(2t + √(b+1))ᶜ / b',300,40,'center',.95*a,15);
+  g.axes(x0,yb,x1,yt);[-1,0,1,2,3].forEach(l=>g.text(['0.1','1','10','100','1000'][l+1],X(l),yb+20,'center',.55*a,11));g.text('time t (h, log)',x1,yb+40,'right',.65*a,11);
+  [-4,-3,-2,-1].forEach(l=>g.text('10'+sup(l),x0-10,Y(l)+4,'right',.55*a,10.5));g.text('loss 1 − y (log)',x0-60,78,'left',.65*a,11);
+  const L=lt=>{const tt=10**lt;return Math.log10(tt*Math.pow(2*tt+s,C0)/B0)};
+  g.fn(x=>Y(Math.min(ll1,Math.log10(10**((x-x0)/(x1-x0)*(lt1-lt0)+lt0)*Math.pow(s,C0)/B0))),x0,X(2.2),BL,1.4,0,.8*a,[5,5]);
+  g.fn(x=>Y(Math.log10(Math.pow(2,C0)/B0)+(C0+1)*((x-x0)/(x1-x0)*(lt1-lt0)+lt0)),X(-.6),x1,AM,1.4,0,.8*a,[5,5]);
+  g.fn(x=>Y(L((x-x0)/(x1-x0)*(lt1-lt0)+lt0)),x0,x1,'#ffffff',2.6,8,a);
+  const lc=Math.log10(s/2);g.line([[X(lc),yt+20],[X(lc),yb]],C.ink,1,0,.35*a,[2,4]);g.text('2t ≈ √(b+1): set by b',X(lc)+6,yb-12,'left',.7*a,10.5);
+  g.text('linear: slope 1',X(-.5)+14,Y(L(-.5))+26,'left',.85*a,11,BL);g.text('dispersive: slope c + 1',X(1.3),Y(Math.log10(Math.pow(2,C0)/B0)+(C0+1)*1.3)+30,'left',.85*a,11,AM);
+  const p=(t*.1)%1,lp=lt0+p*(lt1-lt0);g.dot(X(lp),Y(L(lp)),4,'#ffffff',a,12);
+  g.text('illustrative b = 220, c = −0.3',590,444,'right',.45*a,11)},
+ // 5 fit quality across datasets (values from the text)
+ (t,a)=>{const D=[['200 h JSC','226 curves','<1%',98.2,'median 0.32%',AM],['200 h PCE','133 curves','<1%',92.5,'median 0.43%',GR],['1000 h JSC','246 curves','<2%',95.5,'median 1.20%',BL]],yb=340,yt=130,Y=v=>yb-v/100*(yb-yt),k=Math.floor(t/1.6)%3;
+  g.text('share of curves fitted by eqn (1) with n-RMSE below threshold',300,40,'center',.75*a,11.5);
+  g.line([[60,yb],[560,yb]],C.ink,1,0,.3*a);[0,50,100].forEach(v=>{g.text(v+'%',52,Y(v)+4,'right',.5*a,10.5);g.line([[60,Y(v)],[560,Y(v)]],C.ink,1,0,.08*a,[2,4])});
+  D.forEach(([n,m,th,v,md,col],i)=>{const x=110+i*160,on=i==k;g.rect(x,Y(v),90,yb-Y(v),col,(on?.8:.5)*a,on?12:0);g.text(v+'%',x+45,Y(v)-10,'center',.95*a,14,col);
+   g.text(n,x+45,yb+22,'center',.9*a,11.5);g.text(m+' · '+th,x+45,yb+40,'center',.6*a,10.5);g.text(md,x+45,yb+58,'center',.6*a,10.5)});
+  g.text('trained on 6 JSC curves only (n-RMSE 0.17–0.61%)',300,64,'center',.6*a,10.5);
+  g.text('values from Fig. 2 and the text',590,444,'right',.4*a,11)},
+ // 6 forecast error vs test time (schematic shapes, crossing times from the text)
+ (t,a)=>{const P=[['200 h JSC',200,35,3,AM],['200 h PCE',200,40,4,GR],['1000 h JSC',1000,450,4,BL]];
+  P.forEach(([n,T,tc,th,col],i)=>{const x0=60+i*185,w=150,yb=330,yt=110,X=h=>x0+h/T*w,em=12,Y=e=>yb-e/em*(yb-yt);
+   const f0=.3*th,k=Math.log((3*th-f0)/(th-f0))/tc,E=h=>f0+(3*th-f0)*Math.exp(-k*h); // passes the threshold at tc (schematic)
+   g.line([[x0,yt],[x0,yb],[x0+w,yb]],C.ink,1,0,.3*a);g.text(n,x0+w/2,yt-28,'center',.9*a,12,col);
+   g.line([[x0,Y(th)],[x0+w,Y(th)]],RED,1,0,.6*a,[4,4]);g.text(th+'%',x0+w+4,Y(th)+4,'left',.75*a,10.5,RED);
+   g.fn(x=>Y(Math.min(em,E((x-x0)/w*T))),x0+1,x0+w,col,2.2,6,a);
+   g.line([[X(tc),Y(th)],[X(tc),yb]],C.ink,1,0,.45*a,[2,3]);g.dot(X(tc),Y(th),4.5,'#ffffff',a,10);g.text(('t₁ ≈ '+tc+' h'),X(tc)+6,Y(th)-12,'left',.85*a,11);
+   g.text('0',x0,yb+18,'center',.5*a,10);g.text(T+' h',x0+w,yb+18,'center',.5*a,10);
+   const p=(t*.15+i/3)%1;g.dot(x0+p*w,Y(Math.min(em,E(p*T))),3,'#ffffff',.8*a,8)});
+  g.text('mean forecast error vs test window',300,50,'center',.75*a,11.5);g.text('test window t₁ →',540,380,'right',.6*a,11);
+  g.text('red dashed: error threshold',60,410,'left',.6*a,10.5,RED);
+  g.text('schematic, after Fig. 3',590,444,'right',.4*a,11)},
+ // 7 random-forest correction (values from the text)
+ (t,a)=>{const F=[['Y₂ (forecast)',BL],['ΔY so far',BL],['noise level',BL],['log b',RED],['log c',RED],['b–c correlation',RED]],k=Math.floor(t/1)%6;
+  g.text('features',90,60,'center',.7*a,11.5);
+  F.forEach(([s,col],i)=>{const y=80+i*44,on=i==k;g.rr(20,y,140,32,4,col,(on?1:.6)*a,on?.3:.12,on?8:0);g.text(s,90,y+21,'center',.9*a,11)});
+  g.arrow(170,200,212,200,C.ink,2,.6*a);g.text('forest',192,186,'center',.6*a,10.5);
+  const D=[['200 h JSC',3.37,.78,1.52,.56],['200 h PCE',8.70,1.64,2.06,.77],['1000 h JSC',9.37,1.18,1.25,.15]],yb=330,yt=90,Y=v=>yb-v/12*(yb-yt);
+  g.line([[225,yb],[580,yb]],C.ink,1,0,.3*a);[0,4,8,12].forEach(v=>g.text(v+'%',220,Y(v)+4,'right',.5*a,10));
+  g.text('mean |forecast deviation|, held-out',400,60,'center',.7*a,11.5);
+  D.forEach(([n,u,ue,c,ce],i)=>{const x=245+i*115;g.rect(x,Y(u),40,yb-Y(u),C.grey,.55*a);g.rect(x+46,Y(c),40,yb-Y(c),GR,.85*a,10);
+   g.line([[x+20,Y(u+ue)],[x+20,Y(u-ue)]],C.ink,1.4,0,.7*a);g.line([[x+66,Y(c+ce)],[x+66,Y(c-ce)]],C.ink,1.4,0,.7*a);
+   g.text(u.toFixed(2),x+20,Y(u+ue)-8,'center',.75*a,10.5);g.text(c.toFixed(2),x+66,Y(c+ce)-8,'center',.95*a,10.5,GR);g.text(n,x+43,yb+20,'center',.85*a,11)});
+  g.rect(250,372,12,12,C.grey,.6*a);g.text('eqn (1) alone',268,383,'left',.7*a,10.5);g.rect(380,372,12,12,GR,.85*a);g.text('+ forest correction',398,383,'left',.8*a,10.5,GR);
+  g.text('blue: from the data · red: from the fit',20,410,'left',.55*a,10);
+  g.text('values from the text (Fig. 4a,b; Fig. S18)',590,444,'right',.4*a,11)},
+ // 8 AF 10: share within threshold and decision accuracy (values from the text)
+ (t,a)=>{const D=[['200 h JSC','within 3%',91.96,4.47,96.7,AM],['200 h PCE','within 4%',90.00,3.51,88.9,GR],['1000 h JSC','within 4%',91.60,2.27,92.6,BL]],yb=290,yt=90,Y=v=>yb-v/100*(yb-yt),k=Math.floor(t/1.6)%3;
+  g.text('at AF 10 (t₁ = 20 h of 200 h, or 100 h of 1000 h)',300,40,'center',.85*a,12);
+  g.line([[60,yb],[560,yb]],C.ink,1,0,.3*a);[0,50,100].forEach(v=>g.text(v+'%',52,Y(v)+4,'right',.5*a,10.5));
+  g.line([[60,Y(90)],[560,Y(90)]],RED,1.2,0,.7*a,[5,4]);g.text('90%',52,Y(90)+12,'right',.8*a,10.5,RED);
+  D.forEach(([n,th,v,e,acc,col],i)=>{const x=110+i*160,on=i==k;g.rect(x,Y(v),90,yb-Y(v),col,(on?.8:.5)*a,on?12:0);
+   g.line([[x+45,Y(v+e)],[x+45,Y(v-e)]],C.ink,1.4,0,.75*a);g.text(v.toFixed(2)+'%',x+45,Y(v+e)-10,'center',.95*a,13,col);
+   g.text(n,x+45,yb+20,'center',.9*a,11.5);g.text(th,x+45,yb+38,'center',.6*a,10.5);
+   g.text(('decisions '+acc+'%'),x+45,yb+66,'center',(on?.95:.7)*a,11)});
+  g.text('stable / unstable calls correct',300,yb+90,'center',.55*a,10.5);g.text('red dashed: 90% criterion',300,yb+112,'center',.65*a,10.5,RED);
+  g.text('without correction: ~90% reached only at AF 1.43–3.33',300,68,'center',.65*a,10.5);
+  g.text('values from the text (Fig. 4c–e, Fig. S20)',590,444,'right',.4*a,11)},
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+// pause the story canvas while it is off-screen
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+
+
+// ---- lab: toy forecast (not the paper's pipeline or data) ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id),TT=[];for(let h=0;h<=200;h+=1)TT.push(h);
+let seed=2,LN=[];const draw=()=>{const R=rng(seed*7+1);LN=TT.map(()=>gauss(R))};draw();
+// eqn (1) fit by grid search over log10 b and c (a = 1), and a one-parameter exponential fit
+const GB=[],GC=[];for(let i=0;i<=80;i++)GB.push(10**(i/80*3.5-.5));for(let i=0;i<=80;i++)GC.push(-.95+i/80*.95);
+function fitEq(ts,ys){let best=[1,0,1e9];for(const b of GB)for(const c of GC){let e=0;for(let i=0;i<ts.length;i++){const d=EQ(ts[i],b,c)-ys[i];e+=d*d}if(e<best[2])best=[b,c,e]}return best}
+function fitExp(ts,ys){let best=[1,1e9];for(let i=0;i<=200;i++){const tau=10**(1+i/200*5);let e=0;for(let j=0;j<ts.length;j++){const d=Math.exp(-ts[j]/tau)-ys[j];e+=d*d}if(e<best[1])best=[tau,e]}return best}
+function lab(){const t1=+$('lt1').value,c=+$('lc').value,b=10**(+$('lb').value),sg=+$('ln').value/100;
+  $('lt1v').value=t1+' h';$('lcv').value=(c<0?'−':'')+Math.abs(c).toFixed(2);$('lbv').value=b<10?b.toFixed(1):Math.round(b);$('lnv').value=(sg*100).toFixed(2)+'%';
+  const ys=TT.map((h,i)=>EQ(h,b,c)+(h?sg*LN[i]:0)),ti=TT.filter(h=>h<=t1),yi=ys.slice(0,ti.length);
+  const [fb,fc]=fitEq(ti,yi),[tau]=fitExp(ti,yi),yt=EQ(200,b,c),yf=EQ(200,fb,fc),ye=Math.exp(-200/tau);
+  const pct=v=>(v*100).toFixed(1)+'%',err=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1);
+  $('r0').textContent=(200/t1).toFixed(t1>=100?2:1)+'×';$('r1').textContent=pct(yt);$('r2').textContent=pct(yf)+' ('+err(yf-yt)+')';$('r3').textContent=pct(ye)+' ('+err(ye-yt)+')';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  let lo=Math.min(yt,yf,ye,...ys)-.02;lo=Math.max(.3,Math.floor(lo*20)/20);const hi=1.02;
+  const x0=80,x1=570,yb=370,ytp=60,X=h=>x0+h/200*(x1-x0),Y=v=>yb-(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(yb-ytp);
+  lg.rect(x0,ytp,X(t1)-x0,yb-ytp,C.blue,.1);lg.axes(x0,yb,x1,ytp);
+  [0,50,100,150,200].forEach(h=>lg.text(h,X(h),yb+22,'center',.55,11));lg.text('ageing time (h)',x1,yb+42,'right',.65,12);
+  const st=(hi-lo)>.3?.1:.05;for(let v=Math.ceil(lo/st)*st;v<=1.0001;v+=st){lg.text(v.toFixed(2),x0-8,Y(v)+4,'right',.55,11);lg.line([[x0,Y(v)],[x1,Y(v)]],C.ink,1,0,.07,[2,4])}
+  lg.text('toy normalised performance',x0-60,30,'left',.65,12);
+  TT.forEach((h,i)=>lg.dot(X(h),Y(ys[i]),h<=t1?2.6:1.6,h<=t1?C.blue:C.grey,h<=t1?1:.45,h<=t1?4:0));
+  lg.fn(x=>Y(Math.exp(-((x-x0)/(x1-x0)*200)/tau)),x0,x1,C.violet,1.6,0,.85,[5,5]);
+  lg.fn(x=>Y(EQ((x-x0)/(x1-x0)*200,fb,fc)),x0,x1,C.amber,2.4,8,1);
+  lg.dot(X(200),Y(yt),5,'#ffffff',1,10);lg.dot(X(200),Y(yf),4,C.amber,1,10);lg.dot(X(200),Y(ye),4,C.violet,1,8);
+  lg.text('t₁',X(t1),ytp-8,'center',.85,12,C.blue);
+  lg.text('— eqn (1) fit',x0+10,yb-34,'left',.85,11,C.amber);lg.text('-- single exponential',x0+10,yb-16,'left',.85,11,C.violet);
+  if(yt<.5)lg.text('loss > 50%: beyond the range eqn (1) is meant for',x1,ytp+16,'right',.8,11,C.red);
+  lg.text('toy model · grey: unseen future',590,444,'right',.45,11)}
+['lt1','lc','lb','ln'].forEach(id=>$(id).addEventListener('input',lab));$('lnew').addEventListener('click',()=>{seed++;draw();lab()});lab();
+</script>
+</body></html>
