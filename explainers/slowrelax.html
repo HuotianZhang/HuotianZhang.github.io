@@ -1,0 +1,351 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Charges that leave before they cool down | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="Photocharges leave before they fully relax. Voc sits 0.1–0.2 V above equilibrium."><link rel="canonical" href="https://huotianzhang.github.io/explainers/slowrelax.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="Charges that leave before they cool down"><meta property="og:description" content="Photocharges leave before they fully relax. Voc sits 0.1–0.2 V above equilibrium."><meta property="og:url" content="https://huotianzhang.github.io/explainers/slowrelax.html"><meta property="og:image" content="https://huotianzhang.github.io/og/slowrelax.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Charges that leave before they cool down", "description": "Photocharges leave before they fully relax. Voc sits 0.1–0.2 V above equilibrium.", "url": "https://huotianzhang.github.io/explainers/slowrelax.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1021/acs.jpclett.1c02235", "name": "Slow relaxation of photogenerated charge carriers boosts open-circuit voltage of organic solar cells."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 19px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1021/acs.jpclett.1c02235">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · J. Phys. Chem. Lett. 2021 · Paper</span>
+  <h1>Charges that leave before they cool down</h1>
+  <p class="dek">The usual theory of an organic solar cell's voltage assumes that light-generated charges have fully relaxed (thermalized) before anything else happens. This study tests that assumption by modelling one device in two ways. A drift–diffusion model builds in thermal equilibrium. A kinetic Monte Carlo model follows every hop of every charge. Only the Monte Carlo model gets the measured open-circuit voltage right. The equilibrium model comes out 0.1–0.2 V too low. Many charges reach the electrodes before they have relaxed in the disordered energy landscape, and that leftover energy shows up as extra voltage.</p>
+  <p class="cite">T. Upreti, S. Wilken, H. Zhang &amp; M. Kemerink*. <i>Slow relaxation of photogenerated charge carriers boosts open-circuit voltage of organic solar cells.</i> J. Phys. Chem. Lett. 12, 9874–9881 (2021). <a href="https://doi.org/10.1021/acs.jpclett.1c02235">doi:10.1021/acs.jpclett.1c02235</a> <span class="note">(* corresponding author)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · TWO KINDS OF RELAXATION</span><h2>Charges slide slowly down a rough landscape</h2>
+      <p>In an organic semiconductor, charges sit on molecules, and no two molecules have quite the same energy. The available energies form a broad, roughly Gaussian density of states (DOS) with width σ. A freshly made charge relaxes in two stages. First it couples to molecular vibrations and drops to the lowest excited state of its molecule. That takes less than a picosecond.</p>
+      <p>That molecule is usually not the lowest one around, though. To go lower, the charge has to hop from molecule to molecule. This is thermally activated tunnelling, and it is slow. If the charge waited long enough, it would settle about σ²/kT below the centre of the DOS. Earlier experiments and simulations showed that, in organic solar cells, charges are usually collected before this second stage is finished.</p>
+      <p class="note">Schematic. The equilibrium depth σ²/kT is the value the paper uses for the fully relaxed case (Blakesley and Neher model).</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · THE EQUILIBRIUM RULEBOOK</span><h2>Every standard loss term assumes cooled charges</h2>
+      <p>The textbook expression for the open-circuit voltage is V<sub>OC</sub> = (kT/q)·ln(J<sub>SC</sub>/J<sub>0</sub> + 1). J<sub>SC</sub> is the short-circuit current. J<sub>0</sub> is the dark saturation current, which holds all recombination losses. A reciprocity relation (Rau) gives J<sub>0</sub> from the photovoltaic quantum efficiency, the electroluminescence efficiency EQE<sub>EL</sub> and the blackbody spectrum.</p>
+      <p>Three loss channels are usually counted. The first is the driving force from the donor/acceptor energy offset, still 0.2–0.3 V. The second is non-radiative recombination, kT/q·ln(EQE<sub>EL</sub>), at least ~0.2 V even in the best cells. The third is energetic disorder: the wider the DOS, the deeper charges sink and the lower V<sub>OC</sub>. All three assume, openly or not, that the charges are in thermal equilibrium with the lattice. That is a safe assumption for silicon, where charges cool in under a picosecond. It is less safe here.</p>
+      <p class="note">Equation and loss ranges from the text (eqs 1, 2). Bar heights are schematic.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · TWO MODELS, ONE DEVICE</span><h2>Follow every hop, or assume equilibrium</h2>
+      <p>The authors use a kinetic Monte Carlo (KMC) model they had calibrated against experiments. It follows each charge hopping through a Gaussian DOS, so slow relaxation is built in. It also includes injection from the contacts, charge-transfer (CT) recombination and a simple morphology: a mixed TQ1:PC<sub>71</sub>BM matrix with embedded PC<sub>71</sub>BM aggregates. KMC is the gold standard for charge transport in these materials.</p>
+      <p>Then they feed the same parameters into a drift–diffusion (DD) model. It uses the same injection barriers and the same gap between the donor HOMO and the acceptor LUMO. Disorder enters through established mobility functions. The one real difference is that DD uses Boltzmann statistics, so it assumes the charges have thermalized. Any mismatch between the two therefore measures the effect of non-equilibrium.</p>
+      <p class="note">Schematic.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · THE MISSING 0.2 V</span><h2>Equilibrium undershoots the voltage</h2>
+      <p>For a 70 nm TQ1:PC<sub>71</sub>BM cell, the KMC model reproduces the measured J–V curve, open-circuit voltage included. The DD model gets the short-circuit current and the general shape about right, but its V<sub>OC</sub> is about 0.2 V too low: 0.66 V, against 0.88 V from KMC.</p>
+      <p>A third, independent estimate agrees with DD. Inserting the KMC input parameters into eq. 1 under strict equilibrium gives V<sub>OC</sub> ≈ 0.69 V. So if the device were in thermal equilibrium, it would lose about 0.2 V more than it actually does. In the authors' words, the device operates as a hot-carrier solar cell.</p>
+      <p class="note">V<sub>OC</sub> values from the text. Curves are schematic, after Fig. 1a. They come from a toy diode model tuned to those V<sub>OC</sub> values and are not digitised.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · NOT A THICKNESS ARTEFACT</span><h2>The gap stays at every thickness</h2>
+      <p>Changing the active-layer thickness changes how long charges need to get out and how dense they are, so the authors made cells from about 65 to 310 nm. They used transfer-matrix modelling to get the generation profile for each thickness. KMC tracks the measured V<sub>OC</sub> (0.88–0.90 V) throughout. DD stays near 0.68–0.71 V, and the gap does not close.</p>
+      <p>DD also makes V<sub>OC</sub> follow the interference ripple in the photocurrent, just as eq. 1 predicts. So does the analytical Blakesley–Neher model, which shrinks the effective gap by σ²/kT. Neither the experiment nor KMC shows that link. Why no clear drop for thicker films? Relaxation in disordered media goes roughly linearly in log(time), so the modest change in extraction time across this thickness range matters little. Both models describe J<sub>SC</sub> well, and the fill factor reasonably well.</p>
+      <p class="note">Points read off Fig. 2a (approximate). The paper's y-axis has a break between 0.72 and 0.86 V; here the axis is continuous.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · WHERE THE CHARGES GO</span><h2>Even at open circuit, most charges leave</h2>
+      <p>KMC can tell where each photogenerated charge ends up. The <em>total escape</em> yield counts every charge that exits through either contact. The <em>net escape</em> yield counts exits through the correct contact, minus exits through the wrong one. At short circuit the two differ a lot. Despite a built-in field of ~1 V, many charges leave through the wrong, non-selective contact. That points to fast, diffusive, non-equilibrium motion that only a large field can suppress.</p>
+      <p>At V<sub>OC</sub>, about 80% of the photogenerated charges do not recombine at all; they leave through one of the contacts. About 30% leave through the correct contact. CT recombination saturates already at small forward bias, which rules out field-dependent generation as the reason for the unsaturated photocurrent.</p>
+      <p class="note">Curves read off Fig. 1b (approximate); the ~80% and ~30% at V<sub>OC</sub> are from the text.</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · TWO CURRENTS IN BALANCE</span><h2>Hot charges out, cool charges in</h2>
+      <p>At V<sub>OC</sub> the net current is zero. So if ~30% of the photogenerated charges are still extracted at the correct contact, an equal injection current must flow the other way. The contacts inject these charges, and the contacts act as thermal reservoirs, so the injected charges <em>are</em> thermalized.</p>
+      <p>That splits the device into two populations. The photogenerated charges are hot and recombine weakly; most of them leave. The injected charges are cool and recombine strongly. This fits an earlier observation that recombination near V<sub>OC</sub> in this system follows near-equilibrium rates. It also explains why equilibrium concepts have seemed to work so well.</p>
+      <p class="note">Schematic, after Fig. 3. As in the paper's cartoon, the gradual partial relaxation of the photocharges is not shown.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · TEMPERATURE, AND A MODERN BLEND</span><h2>Same story for PM6:Y6</h2>
+      <p>The extra energy of the photocharges acts like a carrier temperature above the lattice temperature, so temperature-dependent J–V curves are a strong test. For a 75 nm TQ1:PC<sub>71</sub>BM cell, KMC follows the measured V<sub>OC</sub> from 150 to 295 K, with the same parameters as before. At room temperature DD sits 0.17 V below. The slope of V<sub>OC</sub> versus T is similar in both models, because it is set by the injection current, which is thermalized in both.</p>
+      <p>Is this only an issue for old, strongly disordered fullerene blends? The authors repeated the test on a 115 nm PM6:Y6 cell, a 16%-class non-fullerene blend. Its disorder (σ<sub>HOMO</sub> ≈ 89 meV, σ<sub>LUMO</sub> ≈ 68 meV) is well above kT ≈ 25 meV. The difference is smaller, 0.13 V at room temperature, but DD still undershoots and KMC still fits.</p>
+      <p class="note">Points read off Fig. 4b,d (approximate); 0.17 V and 0.13 V are marked in the figure, σ values are from the text.</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · CAN EQUILIBRIUM BE SAVED?</span><h2>Reciprocity breaks when only one side is hot</h2>
+      <p>In the dark, every charge is injected from a thermal contact, yet the KMC dark current still turns on at a higher voltage than in DD. In a Shockley picture that means a smaller J<sub>0</sub>. To get it from reciprocity, part of the absorption spectrum would have to give no current. Matching the KMC value of 0.88 V would need the internal quantum efficiency (IQE) to fall to zero below ~1.12 eV. The IQE calculated by KMC actually rolls off near 0.86 eV. Using that IQE gives only ~0.73 V. Reciprocity assumes that injection and extraction mirror each other. That fails when one channel is far from equilibrium and the other is not.</p>
+      <p>Why did earlier V<sub>OC</sub> predictions from measured EQE<sub>EL</sub> work? The authors suggest that errors cancel. The usual EQE<sub>EL</sub> of 10⁻⁵–10⁻⁶ implies a 0.3–0.35 V non-radiative loss. An EQE<sub>EL</sub> near 10⁻², set by the ratio of S<sub>1</sub> and CT lifetimes, gives ~0.12 V. That difference is close to the ~0.2 V found here. A higher V<sub>OC</sub> does not automatically mean higher efficiency, because J<sub>SC</sub> and FF count too. Whether hot charges can be used to beat the Shockley–Queisser limit, or to make thicker cells, is left open.</p>
+      <p class="note">0.88, 0.73, 0.69, 0.66 V and 1.12/0.86 eV from the text. The IQE curve is schematic, after Fig. 5b.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>How far does a charge relax before it leaves?</h2>
+  <p class="intro">A toy, not a simulation from the paper. A charge starts at the centre of a Gaussian DOS of width σ and loses energy linearly in log(time). It reaches the equilibrium depth σ²/kT after a toy time t<sub>eq</sub> = t<sub>0</sub>·10<sup>(σ/kT)²</sup>, with t<sub>0</sub> = 1 ps. Both constants are invented. They only mimic the strong growth of the relaxation time with σ/kT seen in Monte Carlo studies. Choose when the charge is extracted and read off how much energy it still carries above equilibrium. This energy excess is a toy number, not the paper's V<sub>OC</sub> gain.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Toy relaxation of a charge in a Gaussian density of states, responding to the sliders"></canvas>
+    <div class="ctrl">
+      <label for="ls"><span class="row"><span>Disorder σ (DOS width)</span><output id="lsv">68 meV</output></span><input id="ls" type="range" min="30" max="100" step="1" value="68"></label>
+      <label for="lT"><span class="row"><span>Temperature T</span><output id="lTv">295 K</output></span><input id="lT" type="range" min="150" max="320" step="5" value="295"></label>
+      <label for="le"><span class="row"><span>Toy extraction time</span><output id="lev">10 ns</output></span><input id="le" type="range" min="0" max="7" step="0.1" value="4"></label>
+      <div class="read"><div><b id="r0">–</b><span>equilibrium depth σ²/kT</span></div><div><b id="r1">–</b><span>toy relaxation completed</span></div><div><b id="r2">–</b><span>toy energy above equilibrium</span></div></div>
+      <p class="note">Try this: at σ = 68 meV (PM6:Y6 LUMO, from the paper) and 295 K, the toy charge needs about 15 µs to reach equilibrium; extracted after 10 ns it still carries ~80 meV above it. Lower σ to ~35 meV and it relaxes within ~0.1 ns. Cooling the device makes σ/kT larger, so relaxation becomes even slower. In the paper the voltage gain is not simply this energy surplus, because cool injected charges set the recombination (step 7).</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1021/acs.jpclett.1c02235">Read the paper in J. Phys. Chem. Lett. ↗</a>
+  <span class="note">Numbers quoted from the paper (main text and Figs. 1–5; the Supporting Information was not consulted): V<sub>OC</sub> 0.1–0.2 V above equilibrium; offset loss 0.2–0.3 V, non-radiative loss ≥ ~0.2 V; 70 nm TQ1:PC<sub>71</sub>BM cell, V<sub>OC</sub> 0.66 V (DD), ≈0.69 V (eq. 1, equilibrium), 0.88 V (KMC); ~1 V built-in field; ~80% total and ~30% net escape at V<sub>OC</sub>; KMC recombination fraction ~10⁻¹ (upper limit); 75 nm TQ1:PC<sub>71</sub>BM and 115 nm PM6:Y6 cells, gaps 0.17 and 0.13 V; σ<sub>HOMO</sub> ≈ 89 meV, σ<sub>LUMO</sub> ≈ 68 meV, kT ≈ 25 meV, σ = 45–80 meV across blends (earlier work); IQE cut-off 1.12 eV vs roll-off 0.86 eV, V<sub>OC</sub> ≈ 0.73 V with the empirical IQE; EQE<sub>EL</sub> 10⁻⁵–10⁻⁶ (0.3–0.35 V) vs ~10⁻² (~0.12 V). Read off the figures (approximate): thickness series (Fig. 2a), escape and recombination yields (Fig. 1b), V<sub>OC</sub> versus temperature (Fig. 4b,d). Schematic: the DOS and hopping drawings, the loss ladder, the model comparison, the J–V curves (toy diode model tuned to the quoted V<sub>OC</sub> values), the current-balance cartoon and the IQE curve. The Try-it lab is a toy model with invented constants.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a',grey:'#8a8f98',white:'#f4f1e6'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+// wavelength (nm) -> display colour
+function wl(n){if(n<380)return'#9a8cff';const s=[[380,'#7b5cff'],[440,'#4d6bff'],[480,'#2fb8f0'],[510,'#3fe08a'],[560,'#c8e84a'],[590,'#ffc23c'],[620,'#ff8a3c'],[700,'#ff4d4d'],[800,'#c03030']];for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return'#c03030'}
+const G1=(x,m,s)=>Math.exp(-.5*((x-m)/s)**2);
+const L10=Math.log10,fmtE=(v,d=1)=>{const e=Math.floor(L10(v)),m=v/10**e;return (m.toFixed(d)=='1.0'||m.toFixed(d)=='1'?'':m.toFixed(d)+'×')+'10'+sup(e)};
+function sup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||(c=='-'?'⁻':c)).join('')}
+
+
+// story canvas
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"density of states":"DOS","position in the device →":"position →","electron energy ↑":"energy ↑","< 1 ps: vibrations":"< 1 ps","slow hopping":"hopping","equilibrium: σ²/kT below centre":"equilibrium −σ²/kT","extracted early":"extracted","photon energy":"photon","donor/acceptor offset 0.2–0.3 V":"offset 0.2–0.3 V","non-radiative ≥ ~0.2 V":"non-rad. ≥0.2 V","disorder: carriers sink deeper":"disorder","all assume thermalized carriers":"assume thermalized","KMC: every hop":"KMC","DD: Boltzmann, smooth bands":"DD","same gap · same injection barriers · same disorder (via mobility)":"same parameters in both","current density (mA cm⁻²)":"J (mA/cm²)","voltage (V) →":"V →","measured":"meas.","DD model":"DD","KMC model":"KMC","eq. 1, equilibrium: 0.69 V":"","J = 0 at V_OC":"","V_OC (V)":"","thickness (nm) →":"nm →","Blakesley–Neher (σ²/kT)":"B–N","total escape":"total","net escape":"net","CT recombination":"CT rec.","exciton recombination ≈ 0":"exciton ≈ 0","gap: exits via the wrong contact":"wrong contact","yield":"yield","position in device →":"position →","J_photo: hot, mostly extracted":"J_photo (hot)","J_inj: thermalized, from contacts":"J_inj (cool)","J_rec: mainly injected charges":"J_rec","temperature (K) →":"T (K) →","IQE (KMC)":"IQE","cut needed for 0.88 V":"cut for 0.88 V","photon energy (eV) →":"eV →","V_OC estimates (TQ1:PC₇₁BM, 70 nm)":"V_OC estimates","DD (equilibrium)":"DD","eq. 1, equilibrium":"eq. 1","eq. 1, KMC IQE":"eq.1 + IQE","KMC ≈ experiment":"KMC"};
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+function rng(seed){let s=seed>>>0||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function gauss(R){let u=0,v=0;while(!u)u=R();while(!v)v=R();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v)}
+const HOT=C.green,COOL=C.blue,KMC=C.red,DDc=C.blue;
+// read off the figures (approximate)
+const TH={x:[65,90,125,150,195,245,305,312],ex:[.891,.880,.890,.888,.886,.898,.897,.896],kmc:[.882,.885,.890,.888,.890,.897,.886,.885]};
+const THDD=[[50,.689],[60,.702],[75,.706],[90,.704],[110,.696],[130,.687],[150,.684],[175,.686],[200,.689],[220,.688],[250,.686],[275,.683],[300,.683],[330,.684]];
+const THBN=[[50,.705],[70,.711],[90,.709],[110,.702],[130,.695],[160,.690],[200,.689],[250,.684],[300,.679],[330,.676]];
+const YT={V:[0,.1,.2,.3,.4,.5,.6,.7,.8,.88,.92],tot:[.93,.93,.92,.92,.91,.91,.90,.88,.85,.80,.74],net:[.83,.83,.83,.82,.80,.77,.73,.65,.52,.30,.16],ct:[.02,.02,.02,.02,.03,.03,.05,.10,.20,.33,.40]};
+const TQ={T:[150,180,200,220,240,260,280,295],ex:[.957,.960,.960,.950,.935,.915,.889,.877],kmc:[.947,.962,.958,.950,.931,.915,.905,.877],ddT:[200,220,240,260,280,295],dd:[.796,.783,.768,.748,.722,.707]};
+const PY={T:[125,150,180,200,230,250,275,300],ex:[1.01,.99,.968,.955,.928,.912,.883,.864],kmc:[.977,.989,.966,.959,.937,.912,.884,.864],ddT:[180,200,230,250,275,300],dd:[.842,.829,.812,.790,.761,.734]};
+// toy diode J-V (schematic): photocurrent with mild voltage dependence, diode with ideality n; J0 set so that J(Voc)=0
+function jv(Voc,Jsc=8.6,n=1.7,a=.28){const vt=.02569*n,ph=V=>Jsc*(1-a*(V/.9)**2),J0=ph(Voc)/(Math.exp(Voc/vt)-1);return V=>-ph(V)+J0*(Math.exp(V/vt)-1)}
+const JM=jv(.88),JD=jv(.66);
+function lineData(X,Y,xs,ys,col,w,a,glow=6,dash){g.line(xs.map((x,i)=>[X(x),Y(ys[i])]),col,w,glow,a,dash)}
+const SC=[
+ // 0 Gaussian DOS and slow hopping (schematic)
+ (t,a)=>{const yc=190,sp=60,R=rng(4),x0=150,x1=540;
+  g.text('electron energy ↑',20,40,'left',.65*a,11);g.text('density of states',70,400,'center',.65*a,11);
+  // DOS sideways
+  g.fill(y=>0,0,0,0,C.ink,0);ctx.save();ctx.globalAlpha=.22*a;ctx.fillStyle=C.violet;ctx.beginPath();ctx.moveTo(20,60);for(let y=60;y<=360;y+=3)ctx.lineTo(20+100*G1(y,yc,sp),y);ctx.lineTo(20,360);ctx.fill();ctx.restore();
+  g.line(Array.from({length:101},(_,i)=>{const y=60+i*3;return[20+100*G1(y,yc,sp),y]}),C.violet,2,6,a);
+  // sites
+  for(let i=0;i<70;i++){const x=x0+R()*(x1-x0-20),y=yc+sp*gauss(R);if(y>70&&y<350)g.line([[x-7,y],[x+7,y]],C.ink,1.6,0,.35*a)}
+  // equilibrium level
+  const yeq=yc+sp*1.6;g.line([[20,yeq],[x1+20,yeq]],C.amber,1.4,0,.75*a,[6,5]);g.text('equilibrium: σ²/kT below centre',x1+10,yeq+20,'right',.85*a,11,C.amber);
+  // electrode
+  g.rect(x1+20,60,14,300,C.ink,.35*a);g.text('contact',x1+27,380,'center',.6*a,10.5);
+  // path: fast drop then slow log-like descent while moving right
+  const P=[[x0,90],[x0,yc-20]];for(let i=1;i<=14;i++){const x=x0+i*(x1-x0)/14.5,y=yc-20+sp*1.15*Math.log10(1+i*2)/Math.log10(29)+(i%2?-9:7);P.push([x,y])}P.push([x1+18,P[P.length-1][1]]);
+  g.line(P,HOT,1.4,0,.35*a,[3,4]);P.slice(2,-1).forEach(p=>g.line([[p[0]-7,p[1]],[p[0]+7,p[1]]],HOT,2,4,.8*a));
+  g.arrow(x0-14,92,x0-14,yc-24,C.pink,1.8,.9*a);g.text('< 1 ps: vibrations',x0-6,80,'left',.85*a,11,C.pink);
+  g.text('slow hopping',(x0+x1)/2,yc-40,'center',.85*a,11,HOT);
+  const L=P.length-1,q=(t*.16)%1,f=q*L,i=Math.min(L-1,Math.floor(f)),u=ss(f-i),pt=[lerp(P[i][0],P[i+1][0],u),lerp(P[i][1],P[i+1][1],u)];
+  g.halo(pt[0],pt[1],22,HOT,.45*a);g.dot(pt[0],pt[1],5.5,'#fff',a,10);
+  g.text('extracted early',x1+8,P[L][1]-30,'right',.85*a,11,HOT);
+  g.arrow(x1+44,P[L][1],x1+44,yeq,C.ink,1.2,.5*a);g.arrow(x1+44,yeq,x1+44,P[L][1],C.ink,1.2,.5*a);
+  g.text('position in the device →',x1,420,'right',.55*a,11);
+  g.text('schematic',590,444,'right',.4*a,11)},
+ // 1 equilibrium rulebook: loss ladder (schematic heights)
+ (t,a)=>{g.text('V_OC = (kT/q) ln(J_SC / J_0 + 1)',300,52,'center',.95*a,16,C.ink);
+  const x=190,w=120,top=100,bot=400,k=Math.floor(t/1.6)%3;
+  const L=[['donor/acceptor offset 0.2–0.3 V',top,top+60,C.amber],['non-radiative ≥ ~0.2 V',top+60,top+115,C.red],['disorder: carriers sink deeper',top+115,top+150,C.violet]];
+  g.line([[x-20,top],[x+w+20,top]],C.ink,2,6,.9*a);g.text('photon energy',x-26,top+4,'right',.8*a,12);
+  L.forEach(([n,y0,y1,col],i)=>{g.rect(x,y0,w,y1-y0,col,(i==k?.75:.4)*a,i==k?10:0);g.text(n,x+w+16,(y0+y1)/2+4,'left',(i==k?1:.7)*a,12,col)});
+  g.rect(x,top+150,w,bot-top-150,C.green,.55*a,8);g.text('qV_OC',x+w/2,(top+150+bot)/2+5,'center',.95*a,15,'#0b0e14');
+  g.line([[x-20,bot],[x+w+20,bot]],C.ink,1.2,0,.5*a);
+  const p=.5+.5*Math.sin(t*2);g.text('all assume thermalized carriers',x+w+16,top+210,'left',(.55+.35*p)*a,12,C.ink);
+  g.text('ranges from the text; heights schematic',590,444,'right',.4*a,11)},
+ // 2 KMC vs DD (schematic)
+ (t,a)=>{const R=rng(9);g.text('KMC: every hop',150,52,'center',.9*a,13,KMC);g.text('DD: Boltzmann, smooth bands',450,52,'center',.9*a,13,DDc);
+  g.line([[300,70],[300,380]],C.ink,1,0,.2*a);
+  // KMC lattice
+  const S=[];for(let i=0;i<8;i++)for(let j=0;j<7;j++){const x=50+i*30,y=95+j*40,e=gauss(R);S.push([x,y,e]);g.dot(x,y,3+1.2*e+.5,e>0?C.pink:C.violet,(.35+.12*Math.abs(e))*a)}
+  const path=[[50,215],[80,215],[80,175],[110,175],[140,175],[140,215],[170,215],[200,215],[200,255],[230,255],[260,255]];
+  g.line(path,KMC,1.4,0,.45*a,[3,3]);const q=(t*.25)%1,f=q*(path.length-1),i=Math.floor(f),u=ss(f-i),pt=[lerp(path[i][0],path[i+1][0],u),lerp(path[i][1],path[i+1][1],u)];g.dot(pt[0],pt[1],6,'#fff',a,12);
+  g.text('random site energies',150,380,'center',.6*a,10.5);
+  // DD smooth band + Boltzmann cloud
+  g.fn(x=>140+(x-330)*.18,330,570,DDc,2.4,8,a);g.text('transport level',570,128,'right',.6*a,10.5);
+  for(let k=0;k<18;k++){const x=330+((k*29+t*25)%240),y=150+(x-330)*.18+Math.abs(gauss(R))*14;g.dot(x,y,3,DDc,.55*a,4)}
+  g.fn(x=>330+0,330,330,C.ink,0,0,0);
+  g.text('carriers assumed at kT',450,250,'center',.7*a,11,DDc);g.text('μ(F, n, T) carries the disorder',450,275,'center',.6*a,10.5);
+  g.text('same gap · same injection barriers · same disorder (via mobility)',300,420,'center',.7*a,11);
+  g.text('schematic',590,444,'right',.4*a,11)},
+ // 3 J-V: toy diode curves (schematic after Fig. 1a)
+ (t,a)=>{const x0=80,x1=560,yt=70,yb=370,X=v=>x0+v/1.0*(x1-x0),Y=j=>yt+(6-j)/16*(yb-yt);
+  g.axes(x0,yb,x1,yt);g.line([[x0,Y(0)],[x1,Y(0)]],C.ink,1,0,.35*a);[-9,-6,-3,0,3,6].forEach(j=>g.text(String(j),x0-8,Y(j)+4,'right',.5*a,10));[0,.2,.4,.6,.8,1].forEach(v=>g.text(v.toFixed(1),X(v),yb+18,'center',.5*a,10));
+  g.text('current density (mA cm⁻²)',x0-60,50,'left',.6*a,11);g.text('voltage (V) →',x1,yb+38,'right',.6*a,11);
+  const cl=j=>Math.max(-10,Math.min(6,j));
+  g.fn(x=>Y(cl(JD((x-x0)/(x1-x0)))),x0,X(.74),DDc,2.4,8,a);
+  g.fn(x=>Y(cl(JM((x-x0)/(x1-x0)))),x0,X(.97),C.ink,2.2,0,.9*a);
+  for(let v=0;v<=.92;v+=.08)g.dot(X(v),Y(cl(JM(v))),4,KMC,.9*a,6);
+  g.dot(X(.66),Y(0),5,DDc,a,10);g.dot(X(.88),Y(0),5,KMC,a,10);
+  const p=.5+.5*Math.sin(t*2);g.arrow(X(.67),Y(0)-22,X(.87),Y(0)-22,C.amber,2,(.6+.4*p)*a);g.text('≈ 0.2 V',X(.77),Y(0)-32,'center',.95*a,13,C.amber);
+  g.text('0.66 V',X(.66)-10,Y(0)+22,'right',.85*a,11,DDc);g.text('0.88 V',X(.88)+4,Y(0)+22,'left',.85*a,11,KMC);
+  g.text('measured',x0+20,Y(-2),'left',.85*a,11);g.text('KMC model',x0+20,Y(-3),'left',.85*a,11,KMC);g.text('DD model',x0+20,Y(-4),'left',.85*a,11,DDc);
+  const q=(t*.15)%1,v=q*.95;g.dot(X(v),Y(cl(JM(v))),3.5,'#fff',a,10);
+  g.text('eq. 1, equilibrium: 0.69 V',X(.69),Y(4.5),'center',.7*a,10.5);g.line([[X(.69),Y(3.6)],[X(.69),Y(0)-4]],C.ink,1,0,.4*a,[2,3]);
+  g.text('70 nm TQ1:PC₇₁BM',x0+10,yt+14,'left',.75*a,11);
+  g.text('schematic, after Fig. 1a; V_OC values from the text',590,444,'right',.4*a,11)},
+ // 4 thickness series, read off Fig. 2a
+ (t,a)=>{const x0=80,x1=560,yt=60,yb=360,X=d=>x0+(d-40)/300*(x1-x0),Y=v=>yb-(v-.66)/.26*(yb-yt);
+  g.axes(x0,yb,x1,yt);[.68,.72,.76,.80,.84,.88,.92].forEach(v=>g.text(v.toFixed(2),x0-8,Y(v)+4,'right',.5*a,10));[50,100,150,200,250,300].forEach(d=>g.text(String(d),X(d),yb+18,'center',.5*a,10));
+  g.text('V_OC (V)',x0-60,44,'left',.6*a,11);g.text('thickness (nm) →',x1,yb+38,'right',.6*a,11);
+  g.line(THBN.map(([d,v])=>[X(d),Y(v)]),C.ink,1.4,0,.6*a,[5,4]);
+  g.line(THDD.map(([d,v])=>[X(d),Y(v)]),DDc,2.4,8,a);
+  lineData(X,Y,TH.x,TH.kmc,KMC,2,a);TH.x.forEach((d,i)=>{g.dot(X(d),Y(TH.kmc[i]),3.5,KMC,a,4);g.rect(X(d)-4.5,Y(TH.ex[i])-4.5,9,9,C.ink,.95*a)});
+  const k=Math.floor(t/1.1)%TH.x.length;g.halo(X(TH.x[k]),Y(TH.ex[k]),18,C.ink,.4*a);
+  g.text('experiment (squares)',X(200),Y(.915),'left',.85*a,11);g.text('KMC model',X(60),Y(.86),'left',.85*a,11,KMC);
+  g.text('DD model',X(200),Y(.705),'left',.85*a,11,DDc);g.text('Blakesley–Neher (σ²/kT)',X(160),Y(.668),'left',.7*a,10.5);
+  const p=.5+.5*Math.sin(t*2);g.arrow(X(330),Y(.69),X(330),Y(.88),C.amber,2,(.6+.4*p)*a);g.text('~0.2 V',X(325),Y(.79),'right',.9*a,12,C.amber);
+  g.text('read off Fig. 2a (approximate); continuous axis',590,444,'right',.4*a,11)},
+ // 5 escape and recombination yields, read off Fig. 1b
+ (t,a)=>{const x0=80,x1=520,yt=70,yb=370,X=v=>x0+v/1.0*(x1-x0),Y=y=>yb-y*(yb-yt);
+  g.axes(x0,yb,x1,yt);[0,.2,.4,.6,.8,1].forEach(y=>g.text(y.toFixed(1),x0-8,Y(y)+4,'right',.5*a,10));[0,.2,.4,.6,.8,1].forEach(v=>g.text(v.toFixed(1),X(v),yb+18,'center',.5*a,10));
+  g.text('yield',x0-50,52,'left',.6*a,11);g.text('voltage (V) →',x1,yb+38,'right',.6*a,11);
+  ctx.save();ctx.globalAlpha=.15*a;ctx.fillStyle=C.amber;ctx.beginPath();YT.V.forEach((v,i)=>ctx.lineTo(X(v),Y(YT.tot[i])));for(let i=YT.V.length-1;i>=0;i--)ctx.lineTo(X(YT.V[i]),Y(YT.net[i]));ctx.fill();ctx.restore();
+  lineData(X,Y,YT.V,YT.tot,C.amber,2.4,a,8);lineData(X,Y,YT.V,YT.net,C.teal,2.4,a,8);lineData(X,Y,YT.V,YT.ct,C.violet,2.2,a,6);g.line([[X(0),Y(.005)],[X(.92),Y(.005)]],KMC,1.8,0,.8*a);
+  g.line([[X(.88),yt],[X(.88),yb]],C.ink,1,0,.45*a,[3,3]);g.text('V_OC',X(.88),yt-6,'center',.7*a,11);
+  g.text('total escape',X(.3),Y(.97),'left',.9*a,11.5,C.amber);g.text('net escape',X(.3),Y(.74),'left',.9*a,11.5,C.teal);g.text('CT recombination',X(.62),Y(.24),'right',.9*a,11.5,C.violet);g.text('exciton recombination ≈ 0',X(.05),Y(.05),'left',.7*a,10.5,KMC);
+  g.text('gap: exits via the wrong contact',X(.05),Y(.875)+4,'left',.75*a,10.5,C.amber);
+  const p=.5+.5*Math.sin(t*2);g.dot(X(.88),Y(.80),5,C.amber,a,10+6*p);g.dot(X(.88),Y(.30),5,C.teal,a,10+6*p);
+  g.text('~80%',X(.88)+10,Y(.80)-8,'left',.95*a,13,C.amber);g.text('~30%',X(.88)+10,Y(.30)+16,'left',.95*a,13,C.teal);
+  g.text('KMC, 70 nm TQ1:PC₇₁BM',x0+12,Y(.62),'left',.7*a,11);
+  g.text('read off Fig. 1b (approximate); 80/30% from the text',590,444,'right',.4*a,11)},
+ // 6 current balance at open circuit (schematic after Fig. 3)
+ (t,a)=>{const L=150,Rr=450,yTop=110,yBot=330;
+  g.text('electron energy ↑',20,40,'left',.6*a,11);g.text('position in device →',Rr+60,420,'right',.6*a,11);
+  // contacts (filled reservoirs)
+  g.rect(70,yBot-30,L-70,90,C.ink,.35*a);g.rect(Rr,yTop-10,80,70,C.ink,.35*a);g.text('contact',110,yBot+80,'center',.6*a,10.5);g.text('contact',Rr+40,yTop-20,'center',.6*a,10.5);
+  // active layer box (transport levels)
+  g.line([[L,yTop+20],[Rr,yTop+20]],C.ink,1.6,0,.7*a);g.line([[L,yBot-40],[Rr,yBot-40]],C.ink,1.6,0,.7*a);g.line([[L,yTop+20],[L,yBot-40]],C.ink,1.2,0,.45*a);g.line([[Rr,yTop+20],[Rr,yBot-40]],C.ink,1.2,0,.45*a);
+  // J_photo (hot, high energy) arrows
+  g.arrow(Rr-20,yTop-2,L+30,yTop-2,HOT,2.2,a,8);g.arrow(L+30,yBot-18,Rr-20,yBot-18,HOT,2.2,a,8);g.text('J_photo: hot, mostly extracted',300,yTop-16,'center',.9*a,11.5,HOT);
+  // J_inj (cool) arrows inside
+  g.arrow(Rr-10,yTop+44,Rr-100,yTop+44,COOL,2,a,6);g.arrow(L+10,yBot-64,L+100,yBot-64,COOL,2,a,6);g.text('J_inj: thermalized, from contacts',300,yBot+12,'center',.9*a,11.5,COOL);
+  // recombination: wavy lines
+  [[260,yTop+52,yBot-70,.95],[330,yTop+52,yBot-70,.95],[210,yTop+30,yBot-50,.3]].forEach(([x,y0,y1,al],i)=>{const p=[];for(let s=0;s<=30;s++){const y=y0+(y1-y0)*s/30;p.push([x+4*Math.sin(s*1.2+t*4),y])}g.line(p,C.red,1.6,6,al*a)});
+  g.text('J_rec: mainly injected charges',300,yBot+34,'center',.85*a,11,C.red);
+  // particles
+  for(let k=0;k<4;k++){const q=(t*.3+k/4)%1;g.dot(Rr-20-q*(Rr-L-50),yTop-2,3.5,'#fff',a,10);g.dot(L+30+q*(Rr-L-50),yBot-18,3.5,'#fff',a,10);g.dot(Rr-10-q*90,yTop+44,3,COOL,a,8);g.dot(L+10+q*90,yBot-64,3,COOL,a,8)}
+  g.text('J = 0 at V_OC',570,300,'right',.75*a,12);
+  g.text('schematic, after Fig. 3',590,444,'right',.4*a,11)},
+ // 7 temperature, read off Fig. 4b,d
+ (t,a)=>{const panel=(D,x0,x1,tmin,tmax,lab,gap,gT)=>{const yt=80,yb=350,X=T=>x0+(T-tmin)/(tmax-tmin)*(x1-x0),Y=v=>yb-(v-.68)/.36*(yb-yt);
+   g.axes(x0,yb,x1,yt);[.7,.8,.9,1].forEach(v=>g.text(v.toFixed(1),x0-6,Y(v)+4,'right',.5*a,10));[150,200,250,300].filter(T=>T>=tmin).forEach(T=>g.text(String(T),X(T),yb+18,'center',.5*a,10));
+   g.text(lab,(x0+x1)/2,yt-18,'center',.9*a,12);
+   lineData(X,Y,D.ddT,D.dd,DDc,2.2,a);D.ddT.forEach((T,i)=>g.ring(X(T),Y(D.dd[i]),3.5,DDc,1.5,a));
+   lineData(X,Y,D.T,D.kmc,KMC,2,a);D.T.forEach((T,i)=>{g.dot(X(T),Y(D.kmc[i]),3.5,KMC,a,4);g.rect(X(T)-4,Y(D.ex[i])-4,8,8,C.ink,.95*a)});
+   const i=D.T.length-1,j=D.ddT.length-1,p=.5+.5*Math.sin(t*2);g.arrow(X(gT),Y(D.dd[j])-4,X(gT),Y(D.ex[i])+6,C.amber,2,(.6+.4*p)*a);g.text(gap,X(gT)-6,Y(D.ex[i])+30,'right',.95*a,13,C.amber)};
+  panel(TQ,60,280,140,300,'TQ1:PC₇₁BM, 75 nm','0.17 V',295);panel(PY,350,570,120,305,'PM6:Y6, 115 nm','0.13 V',300);
+  g.text('V_OC (V)',20,52,'left',.6*a,11);g.text('temperature (K) →',570,388,'right',.6*a,11);
+  g.text('squares: experiment · red: KMC · blue: DD',300,412,'center',.7*a,11);
+  g.text('PM6:Y6: σ_HOMO ≈ 89 meV, σ_LUMO ≈ 68 meV ≫ kT ≈ 25 meV',300,432,'center',.6*a,10.5);
+  g.text('read off Fig. 4b,d',590,30,'right',.4*a,11)},
+ // 8 IQE cut-off vs KMC IQE (schematic after Fig. 5b) and V_OC estimates
+ (t,a)=>{const x0=60,x1=320,yt=90,yb=340,X=e=>x0+(e-.6)/.8*(x1-x0),Y=q=>yb-q*(yb-yt);
+  g.axes(x0,yb,x1,yt);[.6,.8,1,1.2,1.4].forEach(e=>g.text(e.toFixed(1),X(e),yb+18,'center',.5*a,10));[0,.5,1].forEach(q=>g.text(q.toFixed(1),x0-6,Y(q)+4,'right',.5*a,10));
+  g.text('photon energy (eV) →',x1,yb+38,'right',.6*a,11);g.text('IQE',x0-40,72,'left',.6*a,11);
+  g.rect(X(.6),yt,X(1.12)-X(.6),yb-yt,C.ink,.12*a);g.line([[X(1.12),yt],[X(1.12),yb]],C.ink,1.2,0,.6*a,[3,3]);g.text('cut needed for 0.88 V',X(1.12)+4,yt-8,'center',.75*a,10.5);
+  g.fn(x=>{const e=.6+(x-x0)/(x1-x0)*.8;return Y(.95/(1+Math.exp(-(e-.86)/.045)))},x0,x1,KMC,2.4,8,a);g.text('IQE (KMC)',X(1.26),Y(.84),'center',.85*a,11,KMC);
+  g.line([[X(.86),Y(.475)],[X(.86),yb]],KMC,1,0,.5*a,[2,3]);g.text('0.86',X(.86),yb-6,'left',.75*a,10,KMC);
+  const B=[['DD (equilibrium)',.66,DDc],['eq. 1, equilibrium',.69,C.grey],['eq. 1, KMC IQE',.73,C.violet],['KMC ≈ experiment',.88,KMC]],bx0=370,bx1=580,BY=v=>380-(v-.5)/.45*300,k=Math.floor(t/1.3)%4;
+  g.text('V_OC estimates (TQ1:PC₇₁BM, 70 nm)',475,72,'center',.75*a,11);g.line([[bx0,380],[bx1,380]],C.ink,1,0,.3*a);
+  B.forEach(([n,v,col],i)=>{const x=bx0+8+i*52,on=i==k;g.rect(x,BY(v),38,380-BY(v),col,(on?.85:.55)*a,on?10:0);g.text(v.toFixed(2),x+19,BY(v)-8,'center',.95*a,12,col);if(on)g.text(n,475,412,'center',.9*a,11.5,col)});
+  g.text('values from the text; IQE curve schematic, after Fig. 5b',590,444,'right',.4*a,11)},
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab: toy model (not a simulation from the paper) ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id),KB=.08617; // Boltzmann constant in meV/K
+// toy: mean energy (meV, relative to DOS centre) falls linearly in log t from 0 at t0 = 1 ps to -s²/kT at t_eq = t0·10^((s/kT)²)
+const Etoy=(s,kT,lt)=>{const Leq=(s/kT)**2;return -s*s/kT*Math.min(1,Math.max(0,lt)/Leq)};
+const f2=v=>v>=10?String(Math.round(v)):String(+v.toPrecision(2));const fmtT=lt=>{const ps=10**lt;return ps<1e3?f2(ps)+' ps':ps<1e6?f2(ps/1e3)+' ns':f2(ps/1e6)+' µs'};
+function lab(){const s=+$('ls').value,T=+$('lT').value,le=+$('le').value,kT=KB*T,eq=s*s/kT,E=Etoy(s,kT,le),Leq=(s/kT)**2;
+  $('lsv').value=s+' meV';$('lTv').value=T+' K';$('lev').value=fmtT(le);
+  $('r0').textContent=eq.toFixed(0)+' meV';$('r1').textContent=Math.round(100*Math.min(1,le/Leq))+'%';$('r2').textContent=(E+eq).toFixed(0)+' meV';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  // left: DOS sideways, energy axis in meV (0 = centre), range +150 .. -450
+  const ey=e=>60+(150-e)/600*340,yb=400;
+  lx.save();lx.globalAlpha=.22;lx.fillStyle=C.violet;lx.beginPath();lx.moveTo(30,ey(150));for(let e=150;e>=-450;e-=4)lx.lineTo(30+90*G1(e,0,s),ey(e));lx.lineTo(30,ey(-450));lx.fill();lx.restore();
+  lg.line(Array.from({length:151},(_,i)=>{const e=150-i*4;return[30+90*G1(e,0,s),ey(e)]}),C.violet,2,6,1);
+  lg.text('DOS',75,46,'center',.7,11);
+  // right: E vs log t
+  const x0=180,x1=570,X=l=>x0+(l+1)/9*(x1-x0);
+  lg.axes(x0,yb,x1,50);[0,2,4,6,8].forEach(l=>lg.text(fmtT(l),X(l),yb+18,'center',.55,10.5));lg.text('time after generation (log) →',x1,yb+38,'right',.65,11.5);
+  [100,0,-100,-200,-300,-400].forEach(e=>lg.text(String(e),x0-6,ey(e)+4,'right',.5,10));lg.text('mean energy (meV)',x0,40,'left',.65,11.5);
+  lg.line([[30,ey(0)],[x1,ey(0)]],C.ink,1,0,.25,[2,4]);
+  const yq=ey(-Math.min(eq,450));lg.line([[30,yq],[x1,yq]],C.amber,1.4,0,.85,[6,5]);lg.text(eq>450?'equilibrium: −'+eq.toFixed(0)+' meV (off scale)':'equilibrium −σ²/kT',x0+8,yq+18,'left',.85,11,C.amber);
+  lg.fn(x=>ey(Math.max(-450,Etoy(s,kT,(x-x0)/(x1-x0)*9-1))),x0,x1,C.green,2.6,8,1);
+  const xe=X(le),ye=ey(Math.max(-450,E));lg.line([[xe,50],[xe,yb]],C.ink,1,0,.5,[3,3]);lg.dot(xe,ye,5.5,'#fff',1,12);lg.text('extracted',xe+8,62,'left',.8,11);
+  if(E+eq>1){const y1=Math.min(yq,ey(-450));lg.arrow(xe+16,ye,xe+16,y1,C.amber,1.6,.8);lg.text('surplus',xe+22,(ye+y1)/2,'left',.8,11,C.amber)}
+  lg.dot(30+90*G1(E,0,s),ye,5,'#fff',1,10);
+  lg.text('toy model',590,20,'right',.45,11)}
+['ls','lT','le'].forEach(id=>$(id).addEventListener('input',lab));lab();
+</script>
+</body></html>
