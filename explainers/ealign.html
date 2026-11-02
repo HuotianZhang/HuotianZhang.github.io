@@ -1,0 +1,365 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A step in the vacuum level at the donor/acceptor interface | Huotian Zhang</title><style>html,body{margin:0;padding:0}img{max-width:100%}</style><meta name="description" content="The vacuum level jumps within 1–2 layers. HOMO offsets shrink to near zero."><link rel="canonical" href="https://huotianzhang.github.io/explainers/ealign.html"><meta property="og:type" content="article"><meta property="og:site_name" content="Huotian Zhang"><meta property="og:title" content="A step in the vacuum level at the donor/acceptor interface"><meta property="og:description" content="The vacuum level jumps within 1–2 layers. HOMO offsets shrink to near zero."><meta property="og:url" content="https://huotianzhang.github.io/explainers/ealign.html"><meta property="og:image" content="https://huotianzhang.github.io/og/ealign.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "A step in the vacuum level at the donor/acceptor interface", "description": "The vacuum level jumps within 1–2 layers. HOMO offsets shrink to near zero.", "url": "https://huotianzhang.github.io/explainers/ealign.html", "author": {"@type": "Person", "name": "Huotian Zhang", "url": "https://huotianzhang.github.io/"}, "about": {"@type": "ScholarlyArticle", "sameAs": "https://doi.org/10.1038/s41467-022-29702-w", "name": "Mapping the energy level alignment at donor/acceptor interfaces in non-fullerene organic solar cells."}}</script></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: scrollytelling. Text steps scroll on the left; one sticky luminous canvas on the right changes scene. Then a hands-on "lab" with sliders. */
+:root{
+  --bg:#fbfbfa; --fg:#1d2126; --muted:#5d646e; --rule:#e2e4e7; --panel:#0b0e14; --acc:#2f6db3; --warm:#c9822b; --card:#ffffff;
+  --sans:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --serif:"Source Serif 4",Georgia,serif; --mono:"Source Code Pro",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--fg:#e7e9ec;--muted:#a3aab4;--rule:#2a2e35;--acc:#86b7ee;--warm:#e6a75c;--card:#181b20;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:18px/1.62 var(--sans)}
+a{color:var(--acc)} a:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{background:#16191d;color:#e9ebee}
+.top .in{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 20px;font-size:15.5px}
+.top a{color:inherit;text-decoration:none;opacity:.85}.top a:hover{opacity:1;text-decoration:underline}
+header.intro{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:44px 8px;display:grid;gap:12px}
+.kicker{font:500 13px var(--mono);letter-spacing:.06em;color:var(--warm);text-transform:uppercase}
+h1{font:600 clamp(32px,5vw,52px)/1.08 var(--serif);margin:0;max-width:20ch;text-wrap:balance;letter-spacing:-.01em}
+.dek{font-size:21px;color:var(--muted);max-width:60ch;margin:0}
+.cite{font-size:15px;color:var(--muted);max-width:80ch}
+.story{max-width:1180px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:44px}
+.steps{padding-block:12vh 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:12px;max-width:34rem;opacity:.35;transition:opacity .4s}
+.step.on{opacity:1}
+.step h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance}
+.step p{margin:0}
+.step .n{font:500 12.5px var(--mono);color:var(--muted);letter-spacing:.08em}
+.note{font-size:14.5px;color:var(--muted)}
+.stick{position:sticky;top:calc(env(safe-area-inset-top,0px) + 6vh);height:84vh;align-self:start}
+.stick canvas{width:100%;height:100%;display:block;background:var(--panel);border-radius:6px}
+.lab{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:40px 30px;display:grid;gap:18px}
+.lab h2{font:600 30px/1.2 var(--serif);margin:0}
+.lab .intro{max-width:66ch;color:var(--muted);margin:0}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+.labgrid canvas{width:100%;aspect-ratio:4/3;display:block;background:var(--panel);border-radius:6px}
+.ctrl{display:grid;gap:18px}
+.ctrl label{display:grid;gap:4px;font-size:15.5px}
+.ctrl .row{display:flex;justify-content:space-between;gap:10px}
+.ctrl output{font:500 14.5px var(--mono);color:var(--acc)}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc)}
+.read{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.read div{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:10px 12px}
+.read b{display:block;font:600 19px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+.read span{font-size:13.5px;color:var(--muted)}
+footer{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;border-top:1px solid var(--rule);display:grid;gap:10px;font-size:16px}
+.btn{display:inline-block;background:var(--acc);color:var(--bg);text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;width:max-content;max-width:100%}
+@media (max-width:860px){
+  .story{grid-template-columns:1fr;gap:0}
+  .stick{order:-1;top:env(safe-area-inset-top,0px);height:46vh;z-index:2;padding-block:8px;background:var(--bg)}
+  .steps{padding-block:4vh 20vh}.step{min-height:70vh;opacity:1}
+  .labgrid{grid-template-columns:1fr}
+}
+@media (max-width:860px){.stick{margin-inline:-20px;height:50vh}.stick canvas{border-radius:0}}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+<style>.ctrl select{font:500 15px var(--sans);padding:6px 8px;border:1px solid var(--rule);border-radius:4px;background:var(--card);color:var(--fg)}</style>
+
+<nav class="top"><div class="in"><a href="../index.html">← Huotian Zhang</a><a href="https://doi.org/10.1038/s41467-022-29702-w">Read the paper ↗</a></div></nav>
+
+<header class="intro">
+  <span class="kicker">Explainer · Nature Communications 2022 · Paper</span>
+  <h1>A step in the vacuum level at the donor/acceptor interface</h1>
+  <p class="dek">Energy diagrams of organic solar cells are usually drawn from neat-film energy levels, as if the vacuum level stayed flat across the donor/acceptor interface. Drawn that way, the four high-performing pairs studied here show HOMO offsets of 0.68–0.91 eV. This study builds donor/acceptor bilayers one molecular layer at a time and measures the energy levels layer by layer. The vacuum level jumps by up to 0.7 eV within one or two layers of the interface, and the energy levels do not bend. The corrected diagrams have near-zero offsets and larger interfacial gaps, in line with the charge-transfer energies and voltages measured in devices.</p>
+  <p class="cite">X. Li*, Q. Zhang, J. Yu, Y. Xu, R. Zhang, C. Wang, H. Zhang, S. Fabiano, X. Liu, J. Hou, F. Gao &amp; M. Fahlman*. <i>Mapping the energy level alignment at donor/acceptor interfaces in non-fullerene organic solar cells.</i> Nature Communications 13, 2046 (2022). <a href="https://doi.org/10.1038/s41467-022-29702-w">doi:10.1038/s41467-022-29702-w</a> <span class="note">(* corresponding authors)</span></p>
+</header>
+
+<div class="story">
+  <div class="steps">
+    <section class="step" data-s="0"><span class="n">1 / 9 · A CONTRADICTION</span><h2>Neat-film levels predict a gap that is too small</h2>
+      <p>Charges are made, and lost, at the interface between donor and acceptor. So the energy level alignment there sets the driving force for charge separation and the energy of the charge-transfer (CT) state. Fullerene cells usually needed an offset of more than 0.3 eV. Many non-fullerene (NFA) cells work with offsets near zero, but those offsets were mostly estimated from optics or cyclic voltammetry. Other studies, which measured HOMO levels by photoelectron spectroscopy, concluded that a HOMO offset of about 0.5 eV is still needed.</p>
+      <p>The trouble shows when you draw the usual diagram. For PM6 and IT4F, the neat-film levels used in this paper give ΔHOMO = 0.73 eV and a photovoltaic gap Γ (donor HOMO to acceptor LUMO) of only 0.96 eV. Yet the CT state measured in the PM6:IT4F device sits at 1.46 eV. A CT state, with the electron on the acceptor and the hole on the donor, would be expected to lie at or below that gap, not 0.5 eV above it. The flat-vacuum-level assumption behind the diagram had never been tested for NFA interfaces.</p>
+      <p class="note">Levels as used in Table 2: HOMO from UPS on neat films, LUMO from literature (IPES), which together give the paper's ΔHOMO, ΔLUMO and Γ. E<sub>CT</sub> from Table 2.</p></section>
+    <section class="step" data-s="1"><span class="n">2 / 9 · TWO WAYS OUT</span><h2>Bend the levels, or shift the vacuum level</h2>
+      <p>The interfacial gap could be larger than the neat-film diagram says in two ways. In the <em>energy level bending</em> picture, used in the earlier photoelectron study, quadrupole fields at the interface bend the HOMO and LUMO over some distance. The vacuum level stays put.</p>
+      <p>In the <em>vacuum level shift</em> picture, a dipole layer sits right at the interface. It makes the vacuum level jump by Δ. All levels on one side move rigidly with it, and nothing bends. Both pictures can raise the interfacial gap from Γ to Γ′. They predict different depth profiles, though. Bending changes the HOMO position layer by layer near the interface; a dipole step changes the work function abruptly while the HOMO, measured from the local vacuum level, stays the same.</p>
+      <p class="note">Schematic, after Fig. 1a,b.</p></section>
+    <section class="step" data-s="2"><span class="n">3 / 9 · MEASURING IT</span><h2>Photoelectrons read the top layer</h2>
+      <p>Ultraviolet photoelectron spectroscopy (UPS) gives two numbers for a film on a grounded substrate, both referenced to the Fermi level. The secondary-electron cut-off gives the work function (WF), which is where the local vacuum level sits. The valence-band edge, added to the WF, gives the ionization potential (IP), the HOMO energy below vacuum.</p>
+      <p>First test: spin-coat a donor (PBDB-T or PM6) on gold, then an acceptor (ITIC or IT4F) on top from an orthogonal solvent. Adding the acceptor raised the WF by 0.60–0.71 eV in all four pairs. The IPs equalled those of the neat acceptors (ITIC 5.74, IT4F 5.79 ± 0.1 eV). But UPS only sees the topmost molecular layer. It cannot tell where in the stack the WF changed, or what the IP is right at the interface.</p>
+      <p class="note">Schematic, after Supplementary Figs. 1 and 3. ΔWF range and neat-acceptor IPs from the text.</p></section>
+    <section class="step" data-s="3"><span class="n">4 / 9 · ONE LAYER AT A TIME</span><h2>Building the interface monolayer by monolayer</h2>
+      <p>These large molecules cannot be evaporated, and spin-coated layers mix. So the authors used the Langmuir–Schäfer (LS) technique. A dilute solution spreads on water; two barriers compress the floating film into a closed monolayer (at 25 mN m⁻¹ for polymers, 30 mN m⁻¹ for small molecules); a substrate touches it horizontally and picks it up. Repeating this gives stacks with sharp, unmixed interfaces.</p>
+      <p>Surface pressure, AFM and X-ray absorption (NEXAFS) showed that all LS films are edge-on (IT4F a little less ordered). UPS was measured after 1, 2, 3, 6 and 10 monolayers of the bottom material, then after 1, 2, 3, 6 and 10 monolayers of the top one. Two stacking orders were built: donor on gold with acceptor on top, and acceptor on AlO<sub>x</sub> with donor on top.</p>
+      <p class="note">Schematic. One monolayer is taken as 3 nm, as in Fig. 2. Pressures from Methods.</p></section>
+    <section class="step" data-s="4"><span class="n">5 / 9 · THE DEPTH PROFILE</span><h2>The work function jumps; the IP does not drift</h2>
+      <p>At the substrate the films behave as established models predict, with any WF change complete after one or two monolayers. At the donor/acceptor interface the WF jumps again, within 1–2 monolayers. It goes up when the acceptor is on top and down when the donor is on top. After that it stays flat.</p>
+      <p>The IP is already at its bulk value in the very first monolayer next to the interface, and stays there up to 10 monolayers. That holds for every donor and every acceptor, in both stacking orders. So the HOMO does not bend, and by inference the LUMO does not either. What is left is an abrupt vacuum level shift: the second picture.</p>
+      <p class="note">Measured data from the paper's Source Data for Fig. 2 (all four pairs; one highlighted at a time). The 0 nm point is the bare substrate's WF.</p></section>
+    <section class="step" data-s="5"><span class="n">6 / 9 · ALWAYS THE SAME SIGN</span><h2>A dipole that points from acceptor to donor</h2>
+      <p>Four ways of making the bilayer, each giving different molecular orientations, all gave the same sign. Acceptor on top of donor: the WF rises (ΔWF from +0.32 to +0.71 eV). Donor on top of acceptor: it falls (−0.10 to −0.36 eV). So every interface carries a dipole that points from the acceptor side to the donor side, with its positive end on the donor.</p>
+      <p>Its size depends on how the bilayer was made. Spin-coated/spin-coated films, which contain face-on/face-on contacts as in real blends, give the largest shifts. Donor-bottom films show larger steps than acceptor-bottom ones; the authors tentatively relate this to the small acceptor molecules finding their best position at the interface more easily than the bulky polymers. Bilayers on ITO/PEDOT:PSS and ITO/ZnO gave similar values.</p>
+      <p class="note">Values from Table 1. The paper's Table 1 labels the A/D column of the first method SC/SS (spin-coating, then surface-spreading of the donor).</p></section>
+    <section class="step" data-s="6"><span class="n">7 / 9 · THE CORRECTED DIAGRAM</span><h2>Offsets shrink, the interfacial gap grows</h2>
+      <p>Using the spin-coated shifts (closest to device morphology), the authors redrew all four diagrams. Before contact, every pair shows ΔHOMO and ΔLUMO above 0.6 eV and a Γ of only 0.78–1.21 eV. After the vacuum level shift, the acceptor levels move up rigidly by Δ.</p>
+      <p>For PM6/ITIC, ΔHOMO drops from 0.68 to 0.08 eV and Γ grows from 1.21 to 1.81 eV. For PM6/IT4F, ΔHOMO becomes 0.02 eV. For the two PBDB-T pairs, 0.26 eV is left. The HOMO offset that the earlier study inferred from neat films is largely cancelled by the dipole at the interface. The authors see this as largely confirming the earlier photoelectron study, with one important difference: there is no level bending, but a dipole step that turns a large neat-film ΔHOMO into a near-zero one at the interface.</p>
+      <p class="note">Values from Table 2 (diagram after Fig. 3). Level positions as in step 1.</p></section>
+    <section class="step" data-s="7"><span class="n">8 / 9 · CHECKED AGAINST DEVICES</span><h2>Γ′, then E<sub>CT</sub>, then qV<sub>OC</sub></h2>
+      <p>To test the corrected diagrams, the four blends were made into solar cells (inverted, ITO/ZnO/blend/MoO<sub>3</sub>/Ag). The CT energy of each device was obtained by fitting the reduced EQE<sub>PV</sub> and electroluminescence spectra and taking their crossing point. In the author list, this CT-energy determination is Huotian Zhang's contribution.</p>
+      <p>Without the correction, Γ (0.78–1.21 eV) lies below E<sub>CT</sub> (1.31–1.59 eV) for every blend. With it, Γ′ (1.43–1.81 eV) lies 0.12–0.22 eV above E<sub>CT</sub>, and qV<sub>OC</sub> another 0.59–0.64 eV below that. Every blend shows the same cascade, Γ′ &gt; E<sub>CT</sub> &gt; qV<sub>OC</sub>. The blend with the largest Γ′ (PM6:ITIC, 1.81 eV) has the highest V<sub>OC</sub> (1.00 V); the one with the smallest (PBDB-T:IT4F, 1.43 eV) has the lowest (0.69 V). A large photovoltaic gap with a near-zero HOMO offset fits efficient charge generation together with small voltage loss.</p>
+      <p class="note">Γ, Γ′, E<sub>CT</sub>, qV<sub>OC</sub> and E<sub>g</sub><sup>PV</sup> from the Source Data for Fig. 4 (also Table 2 and Supplementary Table 5).</p></section>
+    <section class="step" data-s="8"><span class="n">9 / 9 · WHERE DOES THE DIPOLE COME FROM?</span><h2>Push–pull molecules and a large neat-film offset</h2>
+      <p>The usual model for organic interfaces (integer charge transfer, ICT) predicts much smaller steps. The authors subtracted the ICT estimate from the measured shift to get an "enhanced" vacuum level shift, for 25 donor/acceptor combinations including Y6, Y11, IEICO, fullerenes, D18, TQ1, P3HT and PFO. Enhanced shifts above 0.1 eV appear only when the neat-film HOMO offset exceeds 0.3 eV, and mainly when both partners are push–pull (alternating donor–acceptor) molecules. P3HT:ITIC is the one exception without a push–pull donor. The C<sub>60</sub> pairs show essentially none.</p>
+      <p>The tentative explanation is electrostatic. Push–pull molecules have strongly varying surface potentials: donors mostly negative, acceptors mostly positive. Calculations on donor and acceptor units stacked face to face (3.5 Å apart) give dipoles of 0.73–0.93 Debye pointing from the A unit to the D unit. A dense layer of such dipoles shifts the vacuum level by ΔVL = q·μ₀/(ε₀ε<sub>r</sub>A). With A = 20 Å² and ε<sub>r</sub> = 3 this gives 0.45–0.58 eV, against 0.60–0.71 eV measured.</p>
+      <p class="note">Scatter from the Source Data for Fig. 5 (all 29 points, including repeated pairs made by a second method); dipoles and ΔVL from Table 3.</p></section>
+  </div>
+  <div class="stick"><canvas id="story" role="img" aria-label="Animated illustration that changes with each section of the story"></canvas></div>
+</div>
+
+<section class="lab" id="lab">
+  <span class="kicker">Try it</span>
+  <h2>How big a step does a dipole layer make?</h2>
+  <p class="intro">A calculator, not a simulation from the paper. It takes the paper's dipole-layer formula, ΔVL = q·μ₀/(ε₀ε<sub>r</sub>A), with whatever dipole per D–A contact μ₀, contact area A and relative permittivity ε<sub>r</sub> you choose. Then it shifts the acceptor's neat-film levels rigidly up by ΔVL and reads off the new HOMO offset and interfacial gap. Real interfaces are not uniform dipole sheets, so treat the result as an order-of-magnitude estimate. For comparison, the panel also shows the step the paper measured and the device CT energy.</p>
+  <div class="labgrid">
+    <canvas id="labcv" role="img" aria-label="Energy level diagram of the selected donor/acceptor pair, shifted by the calculated vacuum level step"></canvas>
+    <div class="ctrl">
+      <label for="lp"><span class="row"><span>Donor / acceptor pair</span></span><select id="lp"><option value="0">PBDB-T / ITIC</option><option value="1">PBDB-T / IT4F</option><option value="2" selected>PM6 / ITIC</option><option value="3">PM6 / IT4F</option></select></label>
+      <label for="lm"><span class="row"><span>Dipole per contact μ₀</span><output id="lmv">0.74 D</output></span><input id="lm" type="range" min="0" max="1.5" step="0.01" value="0.74"></label>
+      <label for="la"><span class="row"><span>Area per dipole A</span><output id="lav">20 Å²</output></span><input id="la" type="range" min="10" max="60" step="1" value="20"></label>
+      <label for="le"><span class="row"><span>Relative permittivity ε<sub>r</sub></span><output id="lev">3.0</output></span><input id="le" type="range" min="2" max="6" step="0.1" value="3"></label>
+      <div class="read"><div><b id="r0">–</b><span>calculated step ΔVL</span></div><div><b id="r1">–</b><span>HOMO offset after the step</span></div><div><b id="r2">–</b><span>interfacial gap after the step</span></div></div>
+      <p class="note">Try this: choosing a pair loads the paper's calculated dipole for it (Table 3); with A = 20 Å² and ε<sub>r</sub> = 3 you get the paper's ΔVL<sub>cal</sub>. Push μ₀ up until the step matches the measured one and the HOMO offset nearly vanishes. Doubling A, or using a higher ε<sub>r</sub>, shrinks the step. A step larger than the neat-film HOMO offset would flip the offset's sign.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn" href="https://doi.org/10.1038/s41467-022-29702-w">Read the paper in Nature Communications ↗</a>
+  <span class="note">Numbers quoted from the paper (main text, Supplementary Information and Source Data): neat-film IPs ITIC 5.74, IT4F 5.79 eV (± 0.1 eV), PBDB-T 4.88, PM6 5.06 eV; quasi-bilayer WF shifts 0.60–0.71 eV; LS deposition at 25/30 mN m⁻¹; layer-resolved WF and IP of the eight LS/LS stacks (Fig. 2 Source Data); ΔWF values of Table 1; ΔHOMO, ΔLUMO, Γ, Γ′, E<sub>CT</sub> and V<sub>OC</sub> of Table 2; E<sub>g</sub><sup>PV</sup> (Fig. 4 Source Data); the 29 points of Fig. 5 (Source Data); dipoles 0.73–0.93 D, A = 20 Å², ε<sub>r</sub> = 3, ΔVL<sub>cal</sub> 0.45–0.58 eV vs ΔVL<sub>exp</sub> 0.60–0.71 eV (Table 3); 3.5 Å stacking distance. LUMO energies are those implied by Table 2 (literature IPES values, CV for PBDB-T). Schematic: the two-scenario sketch (after Fig. 1), the UPS and Langmuir–Schäfer sketches and the energy diagrams' widths and spacing. The Try-it panel applies the paper's eq. 1 to inputs you choose; it is not a simulation from the paper.</span>
+  <a href="../index.html">← Back to homepage</a>
+</footer>
+
+<script>
+const TAU=Math.PI*2,ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),lerp=(a,b,t)=>a+(b-a)*t;
+function rgba(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${(n>>8)&255},${n&255},${a})`}
+const C={blue:'#7db8ff',amber:'#ffb85c',green:'#62e0a8',red:'#ff7a7a',violet:'#cfa2ff',ink:'#e8eef7',pink:'#ff9fb8',teal:'#4fd1c5',tan:'#d9b38a',grey:'#8a8f98',white:'#f4f1e6'};
+function Tk(ctx){const g={
+  line(p,col,w=2,glow=0,a=1,dash){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.lineJoin='round';if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}if(dash)ctx.setLineDash(dash);ctx.beginPath();p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()},
+  fn(f,x0,x1,col,w,glow,a,dash,n=160){const p=[];for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;p.push([x,f(x)])}g.line(p,col,w,glow,a,dash)},
+  fill(f,x0,x1,yb,col,a,n=120){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(x0,yb);for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n;ctx.lineTo(x,f(x))}ctx.lineTo(x1,yb);ctx.closePath();ctx.fill();ctx.restore()},
+  dot(x,y,r,col,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.restore()},
+  ring(x,y,r,col,w=1.5,a=1,glow=0){if(r<=0)return;ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=w;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();ctx.restore()},
+  halo(x,y,r,col,a=.5){if(!(r>0))return;const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,rgba(col,Math.max(0,a)));gr.addColorStop(1,rgba(col,0));ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,2*r,2*r)},
+  rect(x,y,w,h,col,a=1,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.fillRect(x,y,w,h);ctx.restore()},
+  rr(x,y,w,h,r,col,a=1,fa=.25,glow=0){ctx.save();ctx.globalAlpha=Math.max(0,a*fa);ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.globalAlpha=Math.max(0,a);ctx.strokeStyle=col;ctx.lineWidth=1.8;if(glow){ctx.shadowColor=col;ctx.shadowBlur=glow}ctx.stroke();ctx.restore()},
+  text(s,x,y,al='left',a=.75,size=14,col=C.ink,font='"Source Code Pro",ui-monospace,monospace'){if(PH&&size<=11&&a<.48)return;if(PH&&s in SHORT){const v=SHORT[s];if(!v)return;if(Array.isArray(v)){s=v[0];x+=v[1];y+=v[2]}else s=v}ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.fillStyle=col;ctx.font=`${size*TB}px ${font}`;if(PH){const w=ctx.measureText(s).width,x0=al=='center'?x-w/2:al=='right'?x-w:x;if(x0<4)x+=4-x0;else if(x0+w>596)x-=x0+w-596;if(y<size*TB+2)y=size*TB+2};ctx.textAlign=al;ctx.fillText(s,x,y);ctx.restore()},
+  arrow(x0,y0,x1,y1,col,w=2,a=1,glow=0){g.line([[x0,y0],[x1,y1]],col,w,glow,a);const an=Math.atan2(y1-y0,x1-x0),h=8;g.line([[x1-h*Math.cos(an-.45),y1-h*Math.sin(an-.45)],[x1,y1],[x1-h*Math.cos(an+.45),y1-h*Math.sin(an+.45)]],col,w,glow,a)},
+  axes(x0,y0,x1,y1){g.line([[x0,y1],[x0,y0],[x1,y0]],C.ink,1,0,.3)},
+  wave(x,y,ang,len,col,a=1){const p=[];for(let i=0;i<=24;i++){const s=i/24*len,o=Math.sin(i/24*TAU*2.5)*3;p.push([x+Math.cos(ang)*s-Math.sin(ang)*o,y+Math.sin(ang)*s+Math.cos(ang)*o])}g.line(p,col,1.8,8,a)}
+};return g}
+// wavelength (nm) -> display colour
+function wl(n){if(n<380)return'#9a8cff';const s=[[380,'#7b5cff'],[440,'#4d6bff'],[480,'#2fb8f0'],[510,'#3fe08a'],[560,'#c8e84a'],[590,'#ffc23c'],[620,'#ff8a3c'],[700,'#ff4d4d'],[800,'#c03030']];for(let i=0;i<s.length-1;i++)if(n<=s[i+1][0])return s[i+1][1];return'#c03030'}
+const G1=(x,m,s)=>Math.exp(-.5*((x-m)/s)**2);
+const L10=Math.log10,fmtE=(v,d=1)=>{const e=Math.floor(L10(v)),m=v/10**e;return (m.toFixed(d)=='1.0'||m.toFixed(d)=='1'?'':m.toFixed(d)+'×')+'10'+sup(e)};
+function sup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'['0123456789'.indexOf(c)]||(c=='-'?'⁻':c)).join('')}
+
+
+// story canvas
+const cv=document.getElementById('story'),ctx=cv.getContext('2d'),g=Tk(ctx);const VW=600,VH=450;let sc=1,ox=0,oy=0;
+let TB=1,PH=false; // phones: larger canvas text, footnotes dropped (the text column carries them)
+const SHORT={"electron energy ↑":"energy ↑","vacuum level (assumed flat)":"vacuum level","PM6 (donor)":"PM6","IT4F (acceptor)":"IT4F","measured in the PM6:IT4F device: E_CT = 1.46 eV > Γ":"device: E_CT 1.46 eV > Γ","a  energy level bending":"a  bending","b  vacuum level shift":"b  VL shift","levels bend near the interface":"","rigid step, no bending":"","secondary-electron cut-off":"cut-off","kinetic energy above E_F →":"E_kin →","donor only":"donor","after acceptor on top":"+ acceptor","ΔWF = 0.60–0.71 eV":"ΔWF 0.6–0.7 eV","UPS probes the top layer":"probes top layer","He I, 21.22 eV":"","WF = hν − E_cutoff · IP = WF + E_VB":"","Langmuir–Schäfer trough":"LS trough","floating monolayer":"monolayer","substrate picks it up":"","acceptor × 10 ML":"A × 10","donor × 10 ML":"D × 10","1 ML ≈ 3 nm":"","UPS after 1, 2, 3, 6, 10 ML":"","edge-on":"","thickness (nm) →":"nm →","energy (eV)":"eV","bottom":"","top":"","D bottom, A top → vacuum level up (ΔWF > 0)":"A on top: ΔWF > 0","A bottom, D top → vacuum level down (ΔWF < 0)":"D on top: ΔWF < 0","before contact":"before","after contact (measured Δ)":"after","flat vacuum level":"","interface dipole":"dipole","energy (eV) ↑":"eV ↑","E_g (PV)":"E_g","Γ (flat VL)":"Γ","Γ′ (with VL shift)":"Γ′","qV_OC":"qV_OC","neat-film HOMO offset (eV) →":"ΔHOMO (eV) →","enhanced VL shift (eV)":"enh. shift","C₆₀ pairs →":"C₆₀ →","eq. 1: calc. vs measured":"calc vs meas.","calc.":"calc","meas.":"meas","push–pull pairs":"","SC/SC · crosslinked · SC/LS · SC/evap.":"","SC/SC (A/D: SC/SS)":"SC/SC"};
+function fit(){const d=Math.min(2,devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;{const s0=Math.min(w/VW,h/VH);PH=w<520;TB=PH?Math.min(1.45,9.5/(11*s0)):1}sc=Math.min(w/VW,h/VH);ox=(w-VW*sc)/2;oy=(h-VH*sc)/2;ctx.setTransform(d*sc,0,0,d*sc,d*ox,d*oy)}
+fit();addEventListener('resize',fit);
+const DON=C.amber,ACC=C.blue,VLc=C.ink,DIP=C.green,WFc=C.teal,IPc=C.pink;
+// ---- data from the paper ----
+// neat-film levels as used in Table 2 (IP from UPS; EA implied by Table 2's ΔLUMO and Γ)
+const LV={'PBDB-T':[4.88,2.92],'PM6':[5.06,3.10],'ITIC':[5.74,3.85],'IT4F':[5.79,4.10]};
+// Table 2 / Fig. 4 Source Data: [donor, acceptor, Δ (SC/SC), Γ, Γ', E_CT, qVoc, Eg_PV]
+const PR=[['PBDB-T','ITIC',.60,1.03,1.63,1.50,.891,1.65],['PBDB-T','IT4F',.65,.78,1.43,1.31,.690,1.56],['PM6','ITIC',.60,1.21,1.81,1.59,1.000,1.64],['PM6','IT4F',.71,.96,1.67,1.46,.818,1.56]];
+// Fig. 2 Source Data: thickness 0,3,6,9,18,30 | 33,36,39,48,60 nm; WF and IP (eV); index 0 = bare substrate (WF only)
+const F2X=[0,3,6,9,18,30,33,36,39,48,60];
+const F2A={n:['Au/PBDB-T/ITIC','Au/PBDB-T/IT4F','Au/PM6/ITIC','Au/PM6/IT4F'],
+ wf:[[4.51,4.36,4.43,4.28,4.27,4.22,4.57,4.70,4.75,4.80,4.73],[4.51,4.48,4.46,4.43,4.44,4.30,4.68,4.83,4.86,4.94,4.92],[4.59,4.52,4.46,4.45,4.37,4.36,4.61,4.73,4.83,4.86,4.94],[4.65,4.74,4.63,4.57,4.48,4.47,4.79,5.00,4.95,5.05,4.88]],
+ ip:[[0,4.84,5.01,4.88,4.85,4.86,5.67,5.74,5.85,5.84,5.79],[0,4.77,4.84,4.92,4.89,4.91,5.76,5.75,5.89,5.98,5.95],[0,5.16,5.18,5.12,5.08,5.05,5.69,5.74,5.68,5.73,5.71],[0,4.91,4.93,4.99,4.96,4.89,5.80,6.01,5.85,5.98,5.84]]};
+const F2B={n:['AlOx/ITIC/PBDB-T','AlOx/IT4F/PBDB-T','AlOx/ITIC/PM6','AlOx/IT4F/PM6'],
+ wf:[[3.79,4.23,4.34,4.38,4.40,4.37,4.26,4.29,4.22,4.20,4.12],[3.90,4.47,4.48,4.52,4.56,4.52,4.44,4.41,4.43,4.33,4.39],[3.95,4.21,4.32,4.33,4.36,4.36,4.26,4.28,4.30,4.29,4.27],[3.85,4.47,4.54,4.56,4.56,4.57,4.44,4.37,4.36,4.33,4.40]],
+ ip:[[0,5.66,5.78,5.72,5.72,5.70,4.94,4.91,4.85,4.74,4.78],[0,5.83,5.69,5.73,5.87,5.72,4.89,4.79,4.90,4.86,4.82],[0,5.62,5.56,5.57,5.67,5.70,4.95,4.97,5.06,5.11,5.07],[0,5.65,5.81,5.83,5.76,5.81,4.96,5.02,5.04,5.02,4.97]]};
+// Table 1: ΔWF (eV) per pair: [SC/SC D/A, SC/SS A/D, LS/LS D/A, LS/LS A/D, SC/LS D/A, SC/LS A/D]
+const T1=[['PBDB-T:ITIC',[.60,-.33,.48,-.10,.48,-.32]],['PBDB-T:IT4F',[.65,-.36,.41,-.18,.39,-.33]],['PM6:ITIC',[.60,-.16,.32,-.25,.49,-.35]],['PM6:IT4F',[.71,-.20,.57,-.16,.42,-.34]]];
+// Fig. 5 Source Data: [pair, method (0 SC/SC, 1 crosslinked-SC/SC, 2 SC/LS, 3 SC/evaporation), neat ΔHOMO, enhanced VL shift, fullerene?]
+const F5=[['PBDB-T:ITIC',0,.86,.52],['PBDB-T:IT4F',0,.91,.44],['PM6:ITIC',0,.68,.60],['PM6:IT4F',0,.73,.66],['P3HT:ITIC',0,1.18,.30],['P3HT:IT4F',0,1.23,.07],['TQ1:ITIC',0,.94,.58],['TQ1:IT4F',0,.99,.44],['PFO:ITIC',0,-.07,-.01],
+ ['PBDB-T:Y6',1,.70,.24],['PBDB-T:Y11',1,.58,.23],['PM6:Y6',1,.52,.16],['PM6:Y11',1,.40,.24],['PBDB-T:C60',3,.96,.02,1],['PM6:C60',3,.78,.01,1],['P3HT:C60',3,1.28,0,1],['PBDB-T:PC70BM',0,.90,.20,1],['PM6:PC70BM',0,.72,.20,1],
+ ['PBDB-T:IEICO',0,.36,.33],['PBDB-T:IEICO-4F',0,.52,.39],['PM6:IEICO',0,.18,.10],['PM6:IEICO-4F',0,.34,.21],['PFO:PC70BM',0,-.03,.03,1],['D18:IT4F',0,.59,.56],['D18:IEICO',0,.04,.06],
+ ['PBDB-T:Y6',2,.70,.21],['PBDB-T:Y11',2,.58,.50],['PM6:Y6',2,.52,.35],['PM6:Y11',2,.40,.45]];
+// Table 3: dipole (D), ΔVL calc, ΔVL exp (eV)
+const T3=[['PBDB-T:ITIC',.9326,.58,.60],['PBDB-T:IT4F',.9275,.58,.65],['PM6:ITIC',.7402,.46,.60],['PM6:IT4F',.7292,.45,.71]];
+function level(x0,x1,y,col,a,w=2.6){g.line([[x0,y],[x1,y]],col,w,8,a)}
+function varrow(x,y0,y1,col,a,w=1.6){g.arrow(x,y0,x,y1,col,w,a);g.arrow(x,y1,x,y0,col,w,a)}
+function shape(m,x,y,r,col,a){if(m==0)g.rect(x-r,y-r,2*r,2*r,col,a);else if(m==3)g.dot(x,y,r,col,a);else{ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.beginPath();ctx.moveTo(x,y-r*1.2);ctx.lineTo(x+r*1.1,y+r*.8);ctx.lineTo(x-r*1.1,y+r*.8);ctx.closePath();if(m==1){ctx.fillStyle=col;ctx.fill()}else{ctx.strokeStyle=col;ctx.lineWidth=1.8;ctx.stroke()}ctx.restore()}}
+// one energy diagram: donor block [xd, xd+w], acceptor block [xa, xa+w]; shift = acceptor VL step (eV); EY maps eV below vacuum to y
+function diagram(EY,xd,xa,w,D,A,shift,a,vly){const [di,de]=LV[D],[ai,ae]=LV[A],k=EY(1)-EY(0),s=shift*k;
+  g.line([[xd-10,vly],[xd+w+(xa-xd-w)/2,vly]],VLc,1.4,0,.7*a,[5,4]);g.line([[xd+w+(xa-xd-w)/2,vly-s],[xa+w+10,vly-s]],VLc,1.4,0,.7*a,[5,4]);
+  if(s>1){g.line([[xd+w+(xa-xd-w)/2,vly],[xd+w+(xa-xd-w)/2,vly-s]],DIP,2,8,a)}
+  level(xd,xd+w,EY(de),DON,a);level(xd,xd+w,EY(di),DON,a);level(xa,xa+w,EY(ae)-s,ACC,a);level(xa,xa+w,EY(ai)-s,ACC,a);
+  return{dh:EY(di),de:EY(de),ah:EY(ai)-s,ae:EY(ae)-s}}
+const SC=[
+ // 0 contradiction: neat-film diagram of PM6/IT4F, flat vacuum level
+ (t,a)=>{const EY=e=>70+(e-2.6)/3.6*320,xd=110,xa=330,w=140;
+  g.text('electron energy ↑',20,30,'left',.65*a,11);
+  const L=diagram(EY,xd,xa,w,'PM6','IT4F',0,a,46);g.text('vacuum level (assumed flat)',xa+w+10,40,'right',.65*a,11);
+  g.text('PM6 (donor)',xd+w/2,L.de-12,'center',.9*a,12,DON);g.text('IT4F (acceptor)',xa+w/2,L.ae-12,'center',.9*a,12,ACC);
+  g.text('LUMO',xd-8,L.de+4,'right',.6*a,10.5);g.text('HOMO',xd-8,L.dh+4,'right',.6*a,10.5);
+  g.line([[xd+w,L.dh],[505,L.dh]],DON,1,0,.45*a,[3,4]);g.line([[xd+w,L.de],[505,L.de]],DON,1,0,.45*a,[3,4]);
+  varrow(515,L.dh,L.ah,C.ink,.85*a);g.text('ΔHOMO',525,(L.dh+L.ah)/2-3,'left',.85*a,11);g.text('0.73 eV',525,(L.dh+L.ah)/2+12,'left',.85*a,11);
+  varrow(515,L.de,L.ae,C.ink,.85*a);g.text('ΔLUMO',525,(L.de+L.ae)/2-3,'left',.85*a,11);g.text('1.00 eV',525,(L.de+L.ae)/2+12,'left',.85*a,11);
+  const p=.5+.5*Math.sin(t*2.2);varrow(290,L.dh,L.ae,C.violet,a,2);g.halo(290,(L.dh+L.ae)/2,30,C.violet,.25*p*a);g.text('Γ 0.96 eV',298,(L.dh+L.ae)/2+4,'left',.95*a,12,C.violet);
+  g.text('measured in the PM6:IT4F device: E_CT = 1.46 eV > Γ',300,418,'center',(.6+.4*p)*a,12.5,C.amber);
+  g.text('neat-film levels as used in Table 2',590,444,'right',.4*a,11)},
+ // 1 two scenarios (schematic after Fig. 1)
+ (t,a)=>{const p=.5+.5*Math.sin(t*2);
+  const panel=(x0,mode,title)=>{const xi=x0+135,x1=x0+270,vl=96,st=mode?44:0;g.text(title,x0,28,'left',.9*a,12.5);
+   g.line([[xi,70],[xi,370]],C.ink,1,0,.25*a,[2,4]);g.text('D',x0+60,395,'center',.8*a,13,DON);g.text('A',x1-60,395,'center',.8*a,13,ACC);
+   g.line([[x0,vl],[xi,vl]],VLc,1.4,0,.75*a,[5,4]);g.line([[xi,vl-st],[x1,vl-st]],VLc,1.4,0,.75*a,[5,4]);g.text('VL',x0+4,vl-8,'left',.6*a,10.5);
+   const b=mode?0:34,bend=(x,side)=>b*Math.exp(-Math.abs(x-xi)/22)*side;
+   g.fn(x=>140+bend(x,1),x0,xi-1,DON,2.4,8,a);g.fn(x=>270+bend(x,1),x0,xi-1,DON,2.4,8,a);
+   g.fn(x=>220-st-bend(x,1),xi+1,x1,ACC,2.4,8,a);g.fn(x=>320-st-bend(x,1),xi+1,x1,ACC,2.4,8,a);
+   const yH=270+b,yL=220-st-b;varrow(xi,yH,yL,C.violet,a,1.8);g.text('Γ′',xi+8,(yH+yL)/2+4,'left',.95*a,13,C.violet);
+   if(mode){g.line([[xi,vl],[xi,vl-st]],DIP,2.4,10,a);g.text('Δ',xi+8,vl-st/2+4,'left',.95*a,13,DIP);
+     g.text('+',xi-14,vl+40,'center',(.6+.4*p)*a,15,DIP);g.text('−',xi+14,vl+40,'center',(.6+.4*p)*a,15,DIP);g.text('rigid step, no bending',(x0+x1)/2,425,'center',.7*a,11)}
+   else{g.halo(xi,270+b,26,DON,.25*p*a);g.halo(xi,220-b,26,ACC,.25*p*a);g.text('levels bend near the interface',(x0+x1)/2,425,'center',.7*a,11)}};
+  panel(20,0,'a  energy level bending');panel(310,1,'b  vacuum level shift');
+  g.text('schematic, after Fig. 1',590,444,'right',.4*a,11)},
+ // 2 UPS (schematic after Supplementary Figs. 1, 3)
+ (t,a)=>{const x0=50,x1=300,yb=330,yt=90,X=e=>x0+(e-3.6)/2.0*(x1-x0);
+  g.axes(x0,yb,x1,yt);g.text('kinetic energy above E_F →',x1,yb+22,'right',.6*a,10.5);g.text('secondary-electron cut-off',x0,yt-20,'left',.7*a,11);
+  const sp=(c,amp)=>x=>{const e=3.6+(x-x0)/(x1-x0)*2.0;return e<c?yb:yb-amp*(1-Math.exp(-(e-c)/.05))*Math.exp(-(e-c)/.9)};
+  g.fn(sp(4.3,190),x0,x1,DON,2.2,6,a);g.fn(sp(4.95,170),x0,x1,ACC,2.4,8,a);
+  g.text('donor only',X(4.3)-6,yb-200,'right',.85*a,11,DON);g.text('after acceptor on top',X(4.95)+8,yb-182,'left',.85*a,11,ACC);
+  const p=.5+.5*Math.sin(t*2);g.arrow(X(4.3),yb+40,X(4.95),yb+40,DIP,2,(.6+.4*p)*a);g.text('ΔWF = 0.60–0.71 eV',(X(4.3)+X(4.95))/2,yb+62,'center',.95*a,12,DIP);
+  // right: stack and probe
+  const sx=370,sw=190;g.rect(sx,330,sw,30,C.grey,.6*a);g.text('Au',sx+sw/2,350,'center',.8*a,11,'#0b0e14');
+  g.rect(sx,250,sw,80,DON,.35*a);g.text('donor',sx+sw/2,295,'center',.85*a,11);g.rect(sx,190,sw,60,ACC,.4*a);g.text('acceptor',sx+sw/2,224,'center',.85*a,11);
+  g.rect(sx,190,sw,10,C.white,(.25+.25*p)*a);g.text('UPS probes the top layer',sx+sw/2,180,'center',.8*a,11);
+  for(let k=0;k<3;k++){const q=(t*.5+k/3)%1;g.wave(sx+20+q*40,70+q*100,1.1,20,C.violet,(1-q)*.9*a);g.dot(sx+120+q*30,190-q*110,3,C.white,(1-q)*a,8)}
+  g.text('He I, 21.22 eV',sx+10,60,'left',.6*a,10.5);
+  g.text('WF = hν − E_cutoff · IP = WF + E_VB',sx+sw/2,410,'center',.7*a,11);
+  g.text('schematic, after Supplementary Figs. 1, 3',590,444,'right',.4*a,11)},
+ // 3 Langmuir–Schäfer build-up (schematic)
+ (t,a)=>{const p=.5+.5*Math.sin(t*1.2);
+  g.text('Langmuir–Schäfer trough',140,50,'center',.85*a,12);
+  g.rect(20,250,240,80,C.blue,.18*a);g.line([[20,250],[260,250]],C.blue,1.5,0,.6*a);
+  const bl=45+30*p,br=235-30*p;g.rect(bl-6,230,8,50,C.ink,.6*a);g.rect(br-2,230,8,50,C.ink,.6*a);
+  const n=14;for(let i=0;i<n;i++){const x=bl+8+(br-bl-14)*(i+.5)/n;g.line([[x,248],[x,236]],ACC,2.2,4,.9*a)}
+  g.text('floating monolayer',140,350,'center',.7*a,11);
+  g.rect(90,150+20*p,100,14,C.grey,.6*a);g.arrow(140,120+20*p,140,145+20*p,C.ink,1.6,.6*a);g.text('substrate picks it up',140,110+20*p,'center',.7*a,10.5);
+  // stack
+  const sx=320,sw=140,ml=11;g.rect(sx,390,sw,18,C.grey,.6*a);g.text('Au',sx+sw/2,403,'center',.85*a,11,'#0b0e14');
+  const hl=Math.floor(t*1.6)%20;
+  for(let L=0;L<20;L++){const y=390-(L+1)*ml,col=L<10?DON:ACC,on=L==hl;g.rect(sx,y+1,sw,ml-2,col,(on?.85:.4)*a,on?10:0);
+   for(let j=0;j<10;j++)g.line([[sx+8+j*13.5,y+2.5],[sx+8+j*13,y+ml-2.5]],'#0b0e14',1.2,0,.35*a)}
+  [1,2,3,6,10].forEach(k=>{[0,10].forEach(o=>{const y=390-(o+k)*ml+ml/2;g.dot(sx-12,y,3,C.green,.85*a,6)})});
+  g.text('donor × 10 ML',sx+sw+8,390-5*ml+4,'left',.85*a,11,DON);g.text('acceptor × 10 ML',sx+sw+8,390-15*ml+4,'left',.85*a,11,ACC);
+  g.text('UPS after 1, 2, 3, 6, 10 ML',sx-20,150,'left',.75*a,11,C.green);g.text('1 ML ≈ 3 nm',sx+sw/2,425,'center',.6*a,11);
+  g.text('schematic',590,444,'right',.4*a,11)},
+ // 4 Fig. 2 Source Data
+ (t,a)=>{const k=Math.floor(t/2.6)%4;
+  const panel=(D,x0,x1,botc,topc,title)=>{const yt=80,yb=380,X=n=>x0+n/60*(x1-x0),Y=e=>yb-(e-3.7)/2.4*(yb-yt);
+   g.rect(X(0),yt,X(30)-X(0),yb-yt,botc,.07*a);g.rect(X(30),yt,X(60)-X(30),yb-yt,topc,.07*a);
+   g.axes(x0,yb,x1,yt);[4,4.5,5,5.5,6].forEach(e=>g.text(e.toFixed(1),x0-6,Y(e)+4,'right',.5*a,10));[0,30,60].forEach(n=>g.text(String(n),X(n),yb+16,'center',.5*a,10));
+   g.text('bottom',X(15),yt+16,'center',.55*a,10.5,botc);g.text('top',X(45),yt+16,'center',.55*a,10.5,topc);
+   D.wf.forEach((w,i)=>{if(i==k)return;g.line(F2X.map((x,j)=>[X(x),Y(w[j])]),WFc,1.2,0,.18*a);g.line(F2X.slice(1).map((x,j)=>[X(x),Y(D.ip[i][j+1])]),IPc,1.2,0,.18*a)});
+   const w=D.wf[k],ip=D.ip[k];g.line(F2X.map((x,j)=>[X(x),Y(w[j])]),WFc,2.4,8,a);F2X.forEach((x,j)=>g.dot(X(x),Y(w[j]),3.4,WFc,a,4));
+   g.line(F2X.slice(1).map((x,j)=>[X(x),Y(ip[j+1])]),IPc,2.4,8,a);F2X.slice(1).forEach((x,j)=>g.dot(X(x),Y(ip[j+1]),3.4,IPc,a,4));
+   g.text(D.n[k],(x0+x1)/2,yt-14,'center',.95*a,12);
+   const m5=(arr,i0)=>arr.slice(i0,i0+3).reduce((s,v)=>s+v,0)/3,dw=m5(w,8)-m5(w,3);const ya=Y(m5(w,3)),yb2=Y(m5(w,8));
+   g.arrow(X(30),ya,X(30),yb2,DIP,2,a);g.text((dw>0?'+':'−')+Math.abs(dw).toFixed(2),X(30)-6,(ya+yb2)/2+4,'right',.95*a,11,DIP)};
+  panel(F2A,70,290,DON,ACC,'');panel(F2B,360,580,ACC,DON,'');
+  g.text('WF',300,250,'left',.9*a,12,WFc);g.text('IP',300,140,'left',.9*a,12,IPc);
+  g.text('energy (eV)',20,40,'left',.6*a,11);g.text('thickness (nm) →',580,420,'right',.6*a,11);
+  g.text('Source Data, Fig. 2; arrow: step in the mean of three points',590,444,'right',.4*a,11)},
+ // 5 Table 1
+ (t,a)=>{const Y=v=>230-v*250,M=[[C.green,'SC/SC (A/D: SC/SS)'],[C.violet,'LS/LS'],[C.amber,'SC/LS']],k=Math.floor(t/1.8)%3;
+  g.line([[50,230],[580,230]],C.ink,1.2,0,.5*a);[.6,.3,-.3].forEach(v=>{g.line([[50,Y(v)],[580,Y(v)]],C.ink,1,0,.12*a,[2,4]);g.text((v>0?'+':'')+v.toFixed(1),44,Y(v)+4,'right',.5*a,10)});g.text('0',44,234,'right',.5*a,10);
+  g.text('ΔWF (eV)',20,52,'left',.6*a,11);
+  T1.forEach(([n,v],i)=>{const gx=90+i*125;for(let m=0;m<3;m++){const x=gx+m*30,on=m==k,[col]=M[m];
+    [v[2*m],v[2*m+1]].forEach(val=>{const y0=Y(0),y1=Y(val);g.rect(x,Math.min(y0,y1),24,Math.abs(y1-y0),col,(on?.9:.4)*a,on?10:0);if(on)g.text((val>0?'+':'−')+Math.abs(val).toFixed(2),x+12,val>0?y1-6:y1+14,'center',.95*a,10,col)})}
+   const [nd,na]=n.split(':');g.text(nd,gx+42,348,'center',.8*a,11);g.text(na,gx+42,363,'center',.8*a,11)});
+  g.text('D bottom, A top → vacuum level up (ΔWF > 0)',315,30,'center',.85*a,12);g.text('A bottom, D top → vacuum level down (ΔWF < 0)',315,412,'center',.85*a,12);
+  M.forEach(([c,l],m)=>{const x=80+m*170;g.rect(x,374,12,12,c,(m==k?.9:.5)*a);g.text(l,x+18,384,'left',(m==k?.95:.6)*a,11,c)});
+  g.text('values from Table 1',590,444,'right',.4*a,11)},
+ // 6 before / after contact (Table 2, diagram after Fig. 3)
+ (t,a)=>{const f=t/3.2,i0=Math.floor(f)%4,i1=(i0+1)%4,u=ss((f%1-.8)/.2),L=(j)=>lerp(PR[i0][j],PR[i1][j],u),EY=e=>135+(e-2.7)/3.4*240,w=80;
+  const P0=PR[u<.5?i0:i1],D=P0[0],A=P0[1];const lv=(n,j)=>lerp(LV[PR[i0][j==0?0:1]][n],LV[PR[i1][j==0?0:1]][n],u);
+  const draw=(x0,shift,title)=>{const xd=x0+30,xa=x0+150,s=shift*(EY(1)-EY(0)),vl=110;g.text(title,x0+130,28,'center',.9*a,12);
+   g.line([[xd-10,vl],[x0+140,vl]],VLc,1.4,0,.7*a,[5,4]);g.line([[x0+140,vl-s],[xa+w+10,vl-s]],VLc,1.4,0,.7*a,[5,4]);if(s>1){g.line([[x0+140,vl],[x0+140,vl-s]],DIP,2.4,10,a);g.text('Δ '+shift.toFixed(2),x0+146,vl-s/2+4,'left',.9*a,11,DIP)}
+   const dh=EY(lv(0,0)),de=EY(lv(1,0)),ah=EY(lv(0,1))-s,ae=EY(lv(1,1))-s;level(xd,xd+w,de,DON,a);level(xd,xd+w,dh,DON,a);level(xa,xa+w,ae,ACC,a);level(xa,xa+w,ah,ACC,a);
+   g.text(D,xd+w/2,de-10,'center',.85*a,11,DON);g.text(A,xa+w/2,ae-10,'center',.85*a,11,ACC);
+   g.line([[xd+w,dh],[xa,dh]],DON,1,0,.4*a,[3,4]);varrow(xa+w+14,dh,ah,C.ink,.8*a,1.4);varrow(x0+140,dh,ae,C.violet,a,1.8);return{dh,ah,ae}};
+  draw(20,0,'before contact');draw(310,L(2),'after contact (measured Δ)');
+  g.line([[300,70],[300,390]],C.ink,1,0,.15*a);
+  const dH=LV[PR[i0][0]][0],tx=(x,s1,s2,c)=>{g.text(s1,x,398,'center',.9*a,11.5,c);g.text(s2,x,416,'center',.9*a,11.5,C.violet)};
+  const dho=lerp(LV[PR[i0][1]][0]-LV[PR[i0][0]][0],LV[PR[i1][1]][0]-LV[PR[i1][0]][0],u);
+  tx(150,'ΔHOMO '+dho.toFixed(2)+' eV','Γ '+L(3).toFixed(2)+' eV',C.ink);tx(440,'ΔHOMO′ '+(dho-L(2)).toFixed(2)+' eV','Γ′ '+L(4).toFixed(2)+' eV',C.ink);
+  g.text('values from Table 2; level spacing to scale',590,444,'right',.4*a,11)},
+ // 7 Fig. 4: Γ, Γ', E_CT, qVoc, Eg
+ (t,a)=>{const X=i=>130+i*115,Y=e=>380-(e-.6)/1.3*300,k=Math.floor(t/1.8)%4;
+  g.axes(70,380,560,70);[.6,.8,1,1.2,1.4,1.6,1.8].forEach(e=>g.text(e.toFixed(1),64,Y(e)+4,'right',.5*a,10));g.text('energy (eV) ↑',20,52,'left',.6*a,11);
+  const LG=[['Γ (flat VL)',C.grey],['Γ′ (with VL shift)',C.violet],['E_g (PV)',C.ink],['E_CT',C.amber],['qV_OC',C.blue]];
+  PR.forEach((p,i)=>{const x=X(i),on=i==k,al=(on?1:.6)*a;
+   g.arrow(x-14,Y(p[3]),x-14,Y(p[4])+6,C.violet,1.4,.5*al);g.ring(x-14,Y(p[3]),5,C.grey,1.8,al);
+   g.line([[x,Y(p[4])],[x,Y(p[5])],[x,Y(p[6])]],C.ink,1,0,.35*al,[2,3]);
+   g.dot(x,Y(p[4]),6,C.violet,al,on?10:0);g.line([[x+10,Y(p[7])],[x+26,Y(p[7])]],C.ink,2,0,.8*al);
+   ctx.save();ctx.globalAlpha=al;ctx.fillStyle=C.amber;ctx.beginPath();ctx.moveTo(x,Y(p[5])-7);ctx.lineTo(x+7,Y(p[5]));ctx.lineTo(x,Y(p[5])+7);ctx.lineTo(x-7,Y(p[5]));ctx.fill();ctx.restore();
+   g.rect(x-5,Y(p[6])-5,10,10,C.blue,al);
+   g.text(p[0],x,400,'center',(on?.95:.6)*a,10.5);g.text(p[1],x,415,'center',(on?.95:.6)*a,10.5);
+   if(on){g.text(p[4].toFixed(2),x+12,Y(p[4])+4,'left',.95*a,10.5,C.violet);g.text(p[5].toFixed(2),x+12,Y(p[5])+4,'left',.95*a,10.5,C.amber);g.text(p[6].toFixed(2),x+12,Y(p[6])+4,'left',.95*a,10.5,C.blue);g.text(p[3].toFixed(2),x-24,Y(p[3])+4,'right',.95*a,10.5,C.grey)}});
+  LG.forEach(([l,c],i)=>{const x=[70,160,300,380,450][i];g.text(l,x,28,'left',.85*a,10.5,c)});
+  g.text('Source Data, Fig. 4',590,444,'right',.4*a,11)},
+ // 8 Fig. 5 scatter + Table 3
+ (t,a)=>{const x0=60,x1=370,yt=80,yb=370,X=h=>x0+(h+.1)/1.45*(x1-x0),Y=v=>yb-(v+.05)/.75*(yb-yt),k=Math.floor(t/1.5)%F5.length;
+  g.axes(x0,yb,x1,yt);[0,.4,.8,1.2].forEach(h=>g.text(h.toFixed(1),X(h),yb+16,'center',.5*a,10));[0,.2,.4,.6].forEach(v=>g.text(v.toFixed(1),x0-6,Y(v)+4,'right',.5*a,10));
+  g.text('neat-film HOMO offset (eV) →',x1,yb+36,'right',.6*a,11);g.text('enhanced VL shift (eV)',x0-40,60,'left',.6*a,11);
+  g.line([[X(.3),yt],[X(.3),yb]],C.ink,1.2,0,.45*a);g.line([[x0,Y(.1)],[x1,Y(.1)]],C.ink,1.2,0,.45*a);
+  F5.forEach(([n,m,h,v,fu],i)=>{const col=fu?C.violet:C.green,on=i==k;shape(m,X(h),Y(v),on?6:4.2,col,(on?1:.75)*a);if(on){g.halo(X(h),Y(v),18,col,.4*a);g.text(n,Math.min(X(h)+10,x1-4),Y(v)-10,X(h)+10>x1-90?'right':'left',.95*a,11,col)}});
+  g.text('push–pull pairs',X(.75),Y(.66),'center',.75*a,11,C.green);g.text('C₆₀ pairs →',X(.74),Y(.01)+4,'right',.75*a,11,C.violet);
+  g.text('SC/SC · crosslinked · SC/LS · SC/evap.',x0,yb+56,'left',.55*a,10);
+  // Table 3 inset
+  const bx=420,IY=v=>330-v*280;g.text('eq. 1: calc. vs measured',505,70,'center',.85*a,11);g.text('ΔVL = q·μ₀ /(ε₀ε_r A)',505,92,'center',.8*a,11,C.ink);
+  g.line([[bx-6,330],[590,330]],C.ink,1,0,.4*a);
+  T3.forEach(([n,mu,c,e],i)=>{const x=bx+i*44;g.rect(x,IY(c),16,330-IY(c),C.teal,.8*a);g.rect(x+18,IY(e),16,330-IY(e),C.amber,.8*a);g.text(n.split(':')[1],x+17,362,'center',.6*a,9.5)});g.text('PBDB-T',bx+39,346,'center',.6*a,9.5);g.text('PM6',bx+127,346,'center',.6*a,9.5);
+  g.text('calc.',bx,392,'left',.85*a,11,C.teal);g.text('meas.',bx+70,392,'left',.85*a,11,C.amber);g.text('A = 20 Å², ε_r = 3',505,412,'center',.6*a,10.5);
+  g.text('Source Data, Fig. 5; Table 3',590,444,'right',.4*a,11)},
+];
+let cur=0,prev=0,fadeT=1;const steps=[...document.querySelectorAll('.step')];
+function pick(){const mid=innerHeight*.5;let best=0,bd=1e9;steps.forEach((s,i)=>{const r=s.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-mid);if(d<bd){bd=d;best=i}});
+  steps.forEach((s,i)=>s.classList.toggle('on',i==best));const sidx=+steps[best].dataset.s;if(sidx!=cur){prev=cur;cur=sidx;fadeT=0}}
+addEventListener('scroll',pick,{passive:true});pick();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let t0=performance.now(),last=t0;
+function frame(now){const t=(now-t0)/1000+(window.__T||5),dt=Math.min(.05,(now-last)/1000);last=now;
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#0b0e14';ctx.fillRect(0,0,cv.width,cv.height);ctx.restore();
+  fadeT=Math.min(1,fadeT+dt*2.5);if(fadeT<1)try{SC[prev](t,1-fadeT)}catch(e){}try{SC[cur](t,fadeT)}catch(e){console.error(e)}
+  if(!reduce&&storyOn)requestAnimationFrame(frame)}
+let storyOn=true;new IntersectionObserver(e=>{const was=storyOn;storyOn=e[0].isIntersecting;if(storyOn&&!was&&!reduce){last=performance.now();requestAnimationFrame(frame)}}).observe(cv);
+requestAnimationFrame(frame);if(reduce)addEventListener('scroll',()=>requestAnimationFrame(frame),{passive:true});
+
+// ---- lab: the paper's eq. 1 applied to inputs you choose (not a simulation from the paper) ----
+const lc=document.getElementById('labcv'),lx=lc.getContext('2d'),lg=Tk(lx);
+function lfit(){const d=Math.min(2,devicePixelRatio||1);lc.width=lc.clientWidth*d;lc.height=lc.clientHeight*d;lx.setTransform(d*lc.clientWidth/600,0,0,d*lc.clientHeight/450,0,0)}
+lfit();addEventListener('resize',()=>{lfit();lab()});
+const $=id=>document.getElementById(id);
+const dVL=(mu,A,er)=>mu*3.33564e-30/(8.8541878e-12*er*A*1e-20); // volts = eV per elementary charge
+function lab(){const i=+$('lp').value,P=PR[i],D=P[0],Ac=P[1],mu=+$('lm').value,A=+$('la').value,er=+$('le').value,s=dVL(mu,A,er);
+  const [di,de]=LV[D],[ai,ae]=LV[Ac],dh0=ai-di,G0=di-ae,dh1=dh0-s,G1=G0+s;
+  $('lmv').value=mu.toFixed(2)+' D';$('lav').value=A+' Å²';$('lev').value=er.toFixed(1);
+  $('r0').textContent=s.toFixed(2)+' eV';$('r1').textContent=dh1.toFixed(2)+' eV';$('r2').textContent=G1.toFixed(2)+' eV';
+  lx.fillStyle='#0b0e14';lx.fillRect(0,0,600,450);
+  const EY=e=>150+(e-2.6)/3.6*270,k=EY(1)-EY(0),vl=126,xd=70,xa=270,w=130,xi=235,sp=Math.min(s,1.6)*k;
+  lg.text('electron energy ↑',16,26,'left',.6,11);
+  lg.line([[xd-10,vl],[xi,vl]],VLc,1.4,0,.75,[5,4]);lg.line([[xi,vl-sp],[xa+w+10,vl-sp]],VLc,1.4,0,.75,[5,4]);lg.line([[xi,vl],[xi,vl-sp]],DIP,2.4,10,1);lg.text('vacuum level',xd-10,vl-8,'left',.6,10.5);
+  if(sp>8)lg.text('ΔVL',xi-6,vl-sp/2+4,'right',.9,11,DIP);
+  lg.line([[xa,EY(ae)],[xa+w,EY(ae)]],ACC,1.2,0,.35,[4,4]);lg.line([[xa,EY(ai)],[xa+w,EY(ai)]],ACC,1.2,0,.35,[4,4]);lg.text('neat (flat VL)',xa+w+8,EY(ai)+4,'left',.5,10);
+  [[de,DON,xd],[di,DON,xd]].forEach(([e,c,x])=>{lg.line([[x,EY(e)],[x+w,EY(e)]],c,2.6,8,1)});
+  [[ae,ACC],[ai,ACC]].forEach(([e,c])=>{lg.line([[xa,EY(e)-sp],[xa+w,EY(e)-sp]],c,2.6,8,1)});
+  lg.text(D,xd+w/2,EY(de)-10,'center',.9,12,DON);lg.text(Ac,xa+w/2,EY(ae)-sp-10,'center',.9,12,ACC);
+  lg.line([[xd+w,EY(di)],[xa+w+40,EY(di)]],DON,1,0,.4,[3,4]);
+  const x2=xa+w+30;lg.arrow(x2,EY(di),x2,EY(ai)-sp,C.ink,1.6,.85);lg.arrow(x2,EY(ai)-sp,x2,EY(di),C.ink,1.6,.85);lg.text('ΔHOMO′',x2+8,(EY(di)+EY(ai)-sp)/2+4,'left',.85,11);
+  const yG=EY(ae)-sp;lg.arrow(xi,EY(di),xi,yG,C.violet,1.8,1);lg.arrow(xi,yG,xi,EY(di),C.violet,1.8,1);lg.text('Γ′',xi+6,(EY(di)+yG)/2+4,'left',.95,12,C.violet);
+  lg.rect(xi-18,EY(di)-P[5]*k,5,P[5]*k,C.amber,.85);lg.text('E_CT',xi-22,EY(di)-P[5]*k+10,'right',.85,10.5,C.amber);
+  lg.text('device E_CT '+P[5].toFixed(2)+' eV · measured step '+P[2].toFixed(2)+' eV · paper’s calc. '+T3[i][2].toFixed(2)+' eV',300,436,'center',.65,10.5);
+  lg.text('eq. 1 calculator',590,20,'right',.45,11)}
+$('lp').addEventListener('change',()=>{$('lm').value=T3[+$('lp').value][1].toFixed(2);lab()});
+['lm','la','le'].forEach(id=>$(id).addEventListener('input',lab));$('lm').value=T3[2][1].toFixed(2);lab();
+</script>
+</body></html>
